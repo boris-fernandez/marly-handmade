@@ -35,7 +35,7 @@ El objetivo es mantener un historial claro, coherente y fácil de seguir 🧭.
 ## 🏷️🌿 Formato de Nombre de Ramas
 
 ```text
-<prefijo>/sNN-#ISSUE-<descripcion-corta>
+<prefijo>/<descripcion-corta>
 ```
 
 ### 📖 Significado:
