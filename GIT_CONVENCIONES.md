@@ -17,7 +17,7 @@ El objetivo es mantener un historial claro, coherente y fácil de seguir 🧭.
 
 | 🌱 Tipo de rama        | 🏷️ Prefijo  | 📌 Uso |
 |------------------------|-------------|-------|
-| **🚀 Funcionalidad**   | `feature/`  | Desarrollo de nuevas funciones ✨ |
+| **🚀 Funcionalidad**   | `feat/`  | Desarrollo de nuevas funciones ✨ |
 | **🐞 Corrección**      | `fix/`      | Solución de errores en producción 🔧 |
 | **🚨 Hotfix**          | `hotfix/`   | Correcciones urgentes en producción 🩹 |
 | **📦 Lanzamiento**     | `release/`  | Preparación para pasar de `developer` a `main` 📤 |
@@ -40,13 +40,13 @@ El objetivo es mantener un historial claro, coherente y fácil de seguir 🧭.
 
 ### 📖 Significado:
 
-- `prefijo` → Tipo de rama (ej. `feature`, `fix`, `hotfix`, etc.)
+- `prefijo` → Tipo de rama (ej. `feat`, `fix`, `hotfix`, etc.)
 - `descripcion-corta` → Breve descripción en *kebab-case* (ej. `mejora-filtrado-tabla`) ✏️
 
 ### 💡 Ejemplos:
 
 ```text
-feature/gestion-inventario
+feat/gestion-inventario
 fix/error-calculo-descuento
 hotfix/fallo-carga-dashboard
 ```
@@ -61,7 +61,7 @@ hotfix/fallo-carga-dashboard
 
 ### 📖 Significado:
 
-- **tipo**: feature | fix | hotfix  | release | refactor | chore | docs  |  test  | style 🔤
+- **tipo**: feat | fix | hotfix  | release | refactor | chore | docs  |  test  | style 🔤
 - **scope**: módulo/área . Ej: api, pagos, usuarios, inventario 📦
 - **resumen**: En imperativo con un máximo de 72 caracteres aprox ✏️
 
@@ -69,7 +69,7 @@ hotfix/fallo-carga-dashboard
 ### 💡 Ejemplos:
 
 ```text
-feature(inventario): agrega control de stock mínimo
+feat(inventario): agrega control de stock mínimo
 fix(formulario): corrige bug en formulario de registro
 docs(guia): añade ejemplos de configuración
 refactor(servicios): optimiza consultas a la base de datos
@@ -88,7 +88,7 @@ refactor(servicios): optimiza consultas a la base de datos
 ### 💡 Ejemplos:
 
 ```text
-- feature(productos): implementa búsqueda avanzada en productos
+- feat(productos): implementa búsqueda avanzada en productos
 - fix(auth): soluciona error en validación de credenciales
 ```
 
