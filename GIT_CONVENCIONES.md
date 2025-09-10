@@ -17,7 +17,7 @@ El objetivo es mantener un historial claro, coherente y fácil de seguir 🧭.
 
 | 🌱 Tipo de rama        | 🏷️ Prefijo  | 📌 Uso |
 |------------------------|-------------|-------|
-| **🚀 Funcionalidad**   | `feat/`  | Desarrollo de nuevas funciones ✨ |
+| **🚀 Funcionalidad**   | `feature/`  | Desarrollo de nuevas funciones ✨ |
 | **🐞 Corrección**      | `fix/`      | Solución de errores en producción 🔧 |
 | **🚨 Hotfix**          | `hotfix/`   | Correcciones urgentes en producción 🩹 |
 | **📦 Lanzamiento**     | `release/`  | Preparación para pasar de `developer` a `main` 📤 |
@@ -46,7 +46,7 @@ El objetivo es mantener un historial claro, coherente y fácil de seguir 🧭.
 ### 💡 Ejemplos:
 
 ```text
-feat/gestion-inventario
+feature/gestion-inventario
 fix/error-calculo-descuento
 hotfix/fallo-carga-dashboard
 ```
