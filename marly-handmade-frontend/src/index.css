@@ -1,8 +1,9 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
 
-body {
-  @apply bg-white text-gray-900;
-  font-family: 'Inter', serif;
+@layer base {
+  body {
+    background-color: #fff;
+    color: #040F2E;
+    font-family: 'Inter', serif;
+  }
 }
