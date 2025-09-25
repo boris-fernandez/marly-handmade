@@ -1,8 +1,8 @@
-import { Facebook, Linkedin, Youtube, Instagram, Pinterest } from "lucide-react";
+import { Facebook, Linkedin, Youtube, Instagram } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white border-t border-gray-200 font-serif">
+    <footer className="w-full bg-white border-t border-gray-200 font-sans">
       <div className="max-w-7xl mx-auto px-10 py-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm text-[#2C3E5E]">
 
         {/* POLICY LINKS */}
@@ -63,7 +63,6 @@ export default function Footer() {
             <Facebook className="w-5 h-5 cursor-pointer hover:text-gray-600" />
             <Linkedin className="w-5 h-5 cursor-pointer hover:text-gray-600" />
             <Youtube className="w-5 h-5 cursor-pointer hover:text-gray-600" />
-            <Pinterest className="w-5 h-5 cursor-pointer hover:text-gray-600" />
             <Instagram className="w-5 h-5 cursor-pointer hover:text-gray-600" />
           </div>
         </div>
