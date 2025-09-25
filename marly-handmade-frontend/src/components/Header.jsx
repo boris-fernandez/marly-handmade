@@ -7,7 +7,7 @@ export default function Header() {
 
         {/* NAV */}
         <nav>
-          <ul className="flex items-center space-x-10 font-sans font-medium">
+          <ul className="flex items-center space-x-10 font-serif font-medium">
             {/* SHOP */}
             <li className="relative group cursor-pointer">
               <a
