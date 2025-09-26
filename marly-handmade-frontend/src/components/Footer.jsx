@@ -1,13 +1,13 @@
-import { Facebook, Instagram, Youtube } from "lucide-react";
+import { Facebook, Linkedin, Youtube, Instagram } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-10 py-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm text-[#2C3E5E]">
+    <footer className="w-full bg-white border-t border-gray-200 font-serif">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm text-[#2C3E5E]">
 
         {/* POLICY LINKS */}
         <div>
-          <h3 className="font-semibold mb-4 text-[#1B2A40]">POLICY LINKS</h3>
+          <h3 className="font-semibold mb-4 text-[#040F2E]">POLICY LINKS</h3>
           <ul className="space-y-2">
             <li><a href="/terms" className="hover:text-[#040F2E]">Terms and Conditions</a></li>
             <li><a href="/privacy" className="hover:text-[#040F2E]">Privacy Policy</a></li>
@@ -51,7 +51,7 @@ export default function Footer() {
         {/* NEWSLETTER + SOCIALS */}
         <div>
           <h3 className="font-semibold mb-4 text-[#1B2A40]">BE AN INSIDER</h3>
-          <p className="mb-2">Join us for 10% off your first order +<br />the latest updates and sales!</p>
+          <p className="mb-2">Join us for 10% off your first order + the latest updates and sales!</p>
           <div className="flex items-center border-b border-gray-400 mb-4">
             <input
               type="email"
@@ -61,9 +61,9 @@ export default function Footer() {
           </div>
           <div className="flex space-x-4 text-[#040F2E]">
             <Facebook className="w-5 h-5 cursor-pointer hover:text-gray-600" />
-            <Instagram className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+            <Linkedin className="w-5 h-5 cursor-pointer hover:text-gray-600" />
             <Youtube className="w-5 h-5 cursor-pointer hover:text-gray-600" />
-
+            <Instagram className="w-5 h-5 cursor-pointer hover:text-gray-600" />
           </div>
         </div>
       </div>
