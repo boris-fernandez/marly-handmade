@@ -36,26 +36,26 @@ export default function Header() {
                   <div>
                     <h3 className="font-semibold mb-2 text-[#1B2A40]">Category</h3>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li>Bracelets</li>
-                      <li>Earrings</li>
-                      <li>Necklaces</li>
-                      <li>Rings</li>
+                      <li><a href="/Bracelets" className="hover:text-[#040F2E]">Bracelets</a></li>
+                      <li><a href="/Earrings" className="hover:text-[#040F2E]">Earrings</a></li>
+                      <li><a href="/Necklaces" className="hover:text-[#040F2E]">Necklaces</a></li>
+                      <li><a href="/Rings" className="hover:text-[#040F2E]">Rings</a></li>
                     </ul>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2 text-[#1B2A40]">Material</h3>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li>Polymer Clay</li>
-                      <li>Copper Wire</li>
-                      <li>Resin</li>
-                      <li>Textile</li>
+                      <li><a href="/Polymer Clay" className="hover:text-[#040F2E]">Polymer Clay</a></li>
+                      <li><a href="/Copper Wire" className="hover:text-[#040F2E]">Copper Wire</a></li>
+                      <li><a href="/Resin" className="hover:text-[#040F2E]">Resin</a></li>
+                      <li><a href="/Textile" className="hover:text-[#040F2E]">Textile</a></li>
                     </ul>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2 text-[#1B2A40]">Featured</h3>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li>Best Sellers</li>
-                      <li>Marly's Favorites</li>
+                      <li><a href="/Best Sellers" className="hover:text-[#040F2E]">Best Sellers</a></li>
+                      <li><a href="/Marly's Favorites" className="hover:text-[#040F2E]">Marly's Favorites</a></li>
                     </ul>
                   </div>
                   <div className="relative flex justify-center items-center">
@@ -85,8 +85,8 @@ export default function Header() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li>SEA COLLECTION</li>
-                      <li>MATARITA COLLECTION</li>
+                      <li><a href="/SEA COLLECTION" className="hover:text-[#040F2E]">SEA COLLECTION</a></li>
+                      <li><a href="/MATARITA COLLECTION" className="hover:text-[#040F2E]">MATARITA COLLECTION</a></li>
                     </ul>
                   </div>
                   <div className="flex flex-col items-center">
@@ -118,9 +118,9 @@ export default function Header() {
         </nav>
 
         {/* LOGO */}
-        <div className="flex justify-center items-center px-6 py-4">
+        <div className="flex justify-center items-center px-2 sm:px-6 py-2 sm:py-4">
           <a href="/" className="flex items-center">
-            <img src="/logoMarly.png" alt="Marly logo" className="h-10 w-auto cursor-pointer" />
+            <img src="/logoMarly.png" alt="Marly logo" className="h-10 w-auto cursor-pointer flex-shrink-0" />
           </a>
         </div>
 
