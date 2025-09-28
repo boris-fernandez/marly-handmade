@@ -1,16 +1,20 @@
-import { useState } from 'react'
-import Header from './components/Header';
-import Footer from "./components/Footer";
-import Register from './pages/Register';
-
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ComplaintsBook from "./pages/ComplaintsBook";
+import TermsConditions from "./pages/TermsConditions";
 
 function App() {
   return (
     <>
-      <Header />
-      <Footer />
+      <Routes>
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/complaints-book' element={<ComplaintsBook />} />
+        <Route path='/terms-conditions' element={<TermsConditions />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
