@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/Register.css";
+import "../styles/Login.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-export default function Register() {
+export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -12,15 +12,11 @@ export default function Register() {
   return (
     <>
       <Header />
-      <div className='register-container'>
-        <div className='register-box'>
-          <h2 className='register-title'>Register</h2>
+      <div className='login-container'>
+        <div className='login-box'>
+          <h2 className='login-title'>Login</h2>
 
-          <form className='register-form' onSubmit={handleSubmit}>
-            <div className='form-group'>
-              <input id='name' type='text' placeholder='Name' required />
-            </div>
-
+          <form className='login-form' onSubmit={handleSubmit}>
             <div className='form-group'>
               <input id='email' type='email' placeholder='Email' required />
             </div>
@@ -35,13 +31,18 @@ export default function Register() {
             </div>
 
             <div className='form-links'>
-              <Link to='/login'>Already have an account? Sign In</Link>
+              <Link to='/forgot-password'>Forgot your password?</Link>
             </div>
 
-            <button type='submit' className='register-btn'>
-              Create Account
+            <button type='submit' className='login-btn'>
+              SIGN IN
             </button>
           </form>
+
+          <div className='login-links'>
+            <Link to='/register'>Create account</Link>
+            <Link to='/'>Return to Store</Link>
+          </div>
         </div>
       </div>
       <Footer />
