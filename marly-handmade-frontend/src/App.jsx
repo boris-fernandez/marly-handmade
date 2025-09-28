@@ -1,4 +1,7 @@
+import { useState } from 'react'
 import { Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/landing";
+import CartPage from "./pages/cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ComplaintsBook from "./pages/ComplaintsBook";
@@ -8,6 +11,8 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/cart" element={<CartPage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/complaints-book' element={<ComplaintsBook />} />
