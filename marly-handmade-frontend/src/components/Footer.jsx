@@ -9,9 +9,9 @@ export default function Footer() {
         <div>
           <h3 className="font-semibold mb-4 text-[#040F2E]">POLICY LINKS</h3>
           <ul className="space-y-2">
-            <li><a href="/terms" className="hover:text-[#040F2E]">Terms and Conditions</a></li>
+            <li><a href="/terms-conditions" className="hover:text-[#040F2E]">Terms and Conditions</a></li>
             <li><a href="/privacy" className="hover:text-[#040F2E]">Privacy Policy</a></li>
-            <li><a href="/shipping" className="hover:text-[#040F2E]">Shipping Policy</a></li>
+            <li><a href="/complaints-book" className="hover:text-[#040F2E]">Complaints Book</a></li>
             <li><a href="/exchange" className="hover:text-[#040F2E]">Exchange & Repair Policy</a></li>
             <li><a href="/faq" className="hover:text-[#040F2E]">FAQ</a></li>
           </ul>
