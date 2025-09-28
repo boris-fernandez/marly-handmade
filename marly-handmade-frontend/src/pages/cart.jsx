@@ -8,7 +8,7 @@ export default function Cart() {
     <>
       <Header />
 
-      <main style={{ backgroundColor: "#EBEBEB", minHeight: "100vh", padding: "2rem" }}>
+    <main className="bg-[#EBEBEB] min-h-screen overflow-auto">
         <OrderCard
           status="Shipped"
           image={img24}

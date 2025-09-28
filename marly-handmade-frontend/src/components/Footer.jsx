@@ -11,7 +11,7 @@ export default function Footer() {
           <ul className="space-y-2">
             <li><a href="/terms-conditions" className="hover:text-[#040F2E]">Terms and Conditions</a></li>
             <li><a href="/privacy" className="hover:text-[#040F2E]">Privacy Policy</a></li>
-            <li><a href="/complaints-book" className="hover:text-[#040F2E]">Complaints Book</a></li>
+            <li><a href="/shipping-policy" className="hover:text-[#040F2E]">Shipping Policy</a></li>
             <li><a href="/exchange" className="hover:text-[#040F2E]">Exchange & Repair Policy</a></li>
             <li><a href="/faq" className="hover:text-[#040F2E]">FAQ</a></li>
           </ul>
@@ -25,7 +25,7 @@ export default function Footer() {
             <li><a href="/contact" className="hover:text-[#040F2E]">Contact Us</a></li>
             <li><a href="/returns" className="hover:text-[#040F2E]">Returns + Exchanges + Repairs</a></li>
             <li><a href="/shop" className="hover:text-[#040F2E]">SHOP ALL</a></li>
-            <li><a href="/order-lookup" className="hover:text-[#040F2E]">Order Lookup</a></li>
+            <li><a href="/complaints-book" className="hover:text-[#040F2E]">Complaints Book</a></li>
           </ul>
         </div>
 
