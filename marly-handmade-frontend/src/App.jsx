@@ -1,19 +1,16 @@
-import { useState } from 'react'
-import Header from './components/Header';
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import Footer from "./components/Footer";
+import { Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/landing";
+import CartPage from "./pages/cart";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <Header />
-      
-      <Footer />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/cart" element={<CartPage />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

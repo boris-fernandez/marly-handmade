@@ -1,3 +1,5 @@
+import { BrowserRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Globe, Search, User, ShoppingCart, Menu, X } from "lucide-react";
 
@@ -20,7 +22,6 @@ export default function Header() {
   return (
     <header className="w-full border-b border-gray-200">
       <div className="flex items-center justify-between px-6 md:px-10 py-4">
-
         {/* NAV DESKTOP */}
         <nav className="hidden md:block">
           <ul className="flex items-center space-x-10 font-serif font-medium">
@@ -34,7 +35,9 @@ export default function Header() {
               <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-20 max-w-[95vw] w-[700px]">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                   <div>
-                    <h3 className="font-semibold mb-2 text-[#1B2A40]">Category</h3>
+                    <h3 className="font-semibold mb-2 text-[#1B2A40]">
+                      Category
+                    </h3>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
                       <li>Bracelets</li>
                       <li>Earrings</li>
@@ -43,7 +46,9 @@ export default function Header() {
                     </ul>
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-2 text-[#1B2A40]">Material</h3>
+                    <h3 className="font-semibold mb-2 text-[#1B2A40]">
+                      Material
+                    </h3>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
                       <li>Polymer Clay</li>
                       <li>Copper Wire</li>
@@ -52,7 +57,9 @@ export default function Header() {
                     </ul>
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-2 text-[#1B2A40]">Featured</h3>
+                    <h3 className="font-semibold mb-2 text-[#1B2A40]">
+                      Featured
+                    </h3>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
                       <li>Best Sellers</li>
                       <li>Marly's Favorites</li>
@@ -90,23 +97,33 @@ export default function Header() {
                     </ul>
                   </div>
                   <div className="flex flex-col items-center">
-                    <a href="/sea-collection" className="block text-center text-[#2C3E5E] hover:text-[#040F2E]">
+                    <a
+                      href="/sea-collection"
+                      className="block text-center text-[#2C3E5E] hover:text-[#040F2E]"
+                    >
                       <img
                         src="/sea-collection.jpg"
                         alt="Sea Collection"
                         className="w-40 h-32 object-cover rounded-lg transition-transform duration-300 hover:scale-105"
                       />
-                      <span className="mt-2 text-sm font-medium">SEA COLLECTION</span>
+                      <span className="mt-2 text-sm font-medium">
+                        SEA COLLECTION
+                      </span>
                     </a>
                   </div>
                   <div className="flex flex-col items-center">
-                    <a href="/matarita-collection" className="block text-center text-[#2C3E5E] hover:text-[#040F2E]">
+                    <a
+                      href="/matarita-collection"
+                      className="block text-center text-[#2C3E5E] hover:text-[#040F2E]"
+                    >
                       <img
                         src="/matarita-collection.jpg"
                         alt="Matarita Collection"
                         className="w-40 h-32 object-cover rounded-lg transition-transform duration-300 hover:scale-105"
                       />
-                      <span className="mt-2 text-sm font-medium">MATARITA COLLECTION</span>
+                      <span className="mt-2 text-sm font-medium">
+                        MATARITA COLLECTION
+                      </span>
                     </a>
                   </div>
                 </div>
@@ -120,7 +137,11 @@ export default function Header() {
         {/* LOGO */}
         <div className="flex justify-center items-center px-6 py-4">
           <a href="/" className="flex items-center">
-            <img src="/logoMarly.png" alt="Marly logo" className="h-10 w-auto cursor-pointer" />
+            <img
+              src="/logoMarly.png"
+              alt="Marly logo"
+              className="h-10 w-auto cursor-pointer"
+            />
           </a>
         </div>
 
@@ -140,9 +161,19 @@ export default function Header() {
           </select>
           <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
           <User className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-          <ShoppingCart className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-          <button className="md:hidden p-2 text-[#040F2E]" onClick={toggleMenu} aria-label="Toggle menu">
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          <Link to="/cart">
+            <ShoppingCart className="w-5 h-5 cursor-pointer text-[#040F2E]" />
+          </Link>
+          <button
+            className="md:hidden p-2 text-[#040F2E]"
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -186,7 +217,11 @@ export default function Header() {
                   </ul>
                 </div>
                 <a href="/marly-favorites" className="block mt-2">
-                  <img src="/nayblueear.jpg" alt="Marly's favorites" className="w-36 h-28 object-cover rounded-lg" />
+                  <img
+                    src="/nayblueear.jpg"
+                    alt="Marly's favorites"
+                    className="w-36 h-28 object-cover rounded-lg"
+                  />
                 </a>
               </div>
             )}
@@ -203,11 +238,19 @@ export default function Header() {
             {collectionsOpen && (
               <div className="mt-2 pl-4 border-l border-gray-200 space-y-3">
                 <a href="/sea-collection" className="block">
-                  <img src="/sea-collection.jpg" alt="Sea" className="w-36 h-28 object-cover rounded-lg" />
+                  <img
+                    src="/sea-collection.jpg"
+                    alt="Sea"
+                    className="w-36 h-28 object-cover rounded-lg"
+                  />
                   <div className="mt-1 text-sm">SEA COLLECTION</div>
                 </a>
                 <a href="/matarita-collection" className="block">
-                  <img src="/matarita-collection.jpg" alt="Matarita" className="w-36 h-28 object-cover rounded-lg" />
+                  <img
+                    src="/matarita-collection.jpg"
+                    alt="Matarita"
+                    className="w-36 h-28 object-cover rounded-lg"
+                  />
                   <div className="mt-1 text-sm">MATARITA COLLECTION</div>
                 </a>
               </div>
@@ -215,7 +258,9 @@ export default function Header() {
           </div>
 
           <div className="mt-3">
-            <a href="/our-story" className="block py-2 hover:text-[#040F2E]">Our Story</a>
+            <a href="/our-story" className="block py-2 hover:text-[#040F2E]">
+              Our Story
+            </a>
           </div>
         </div>
       )}
