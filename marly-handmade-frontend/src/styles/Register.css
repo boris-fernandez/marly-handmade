@@ -1,22 +1,22 @@
 /* Contenedor principal */
-.login-container {
+.register-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 90vh;
+  min-height: 80vh;
   background-color: #fff;
 }
 
 /* Caja del formulario */
-.login-box {
+.register-box {
   width: 100%;
   max-width: 425px;
   padding: 30px;
-  background-color: #ffffff00;
+  background-color: #fff;
 }
 
 /* Título */
-.login-title {
+.register-title {
   text-align: center;
   font-size: 44px;
   font-weight: bold;
@@ -26,19 +26,19 @@
 }
 
 /* Formularios */
-.login-form {
+.register-form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.login-form .form-group {
+.register-form .form-group {
   width: 100%;
   max-width: 425px;
   margin-bottom: 16px;
 }
 
-.login-form label {
+.register-form label {
   display: block;
   font-size: 14px;
   font-weight: 500;
@@ -46,7 +46,7 @@
   color: #555;
 }
 
-.login-form input {
+.register-form input {
   width: 100%;
   padding: 12px;
   border: 1px solid #000;
@@ -55,12 +55,12 @@
   outline: none;
 }
 
-.login-form input:focus {
+.register-form input:focus {
   border-color: #000;
 }
 
 /* Botón */
-.login-btn {
+.register-btn {
   display: block;
   width: 100%;
   max-width: 425px;
@@ -76,31 +76,11 @@
   font-family: 'Inter', sans-serif;
 }
 
-.login-btn:hover {
+.register-btn:hover {
   background-color: #333;
 }
 
-/* Links inferiores */
-.login-links {
-  text-align: center;
-  margin-top: 33px;
-}
-
-.login-links a {
-  display: block;
-  font-size: 24px;
-  color: #1B2A40;
-  margin-bottom: 5px;
-  text-decoration: none;
-  font-family: 'Irian Serif', serif;
-  font-style: italic;
-}
-
-.login-links a:hover {
-  text-decoration: underline;
-}
-
-/* Link de "forgot password" */
+/* Links */
 .form-links {
   margin-top: 22px;
   margin-bottom: 32px;
