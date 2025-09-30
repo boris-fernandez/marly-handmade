@@ -3,16 +3,19 @@ import { Link } from "react-router-dom";
 import "../styles/Login.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useParams } from "react-router-dom";
 import { AuthContext } from "../contexts/Auth.context";
 
-export default function Login() {
-  const { login, token } = useContext(AuthContext);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export default function RecoverPassword() {
+  const { updatePassword } = useContext(AuthContext);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmarNewPassword, setConfirmarNewPassword] = useState("");
+  const token = useParams().token;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login({ username, password });
+    if (newPassword != confirmarNewPassword) return; //falta dar un aviso
+    updatePassword({ token, newPassword });
   };
 
   return (
@@ -20,39 +23,35 @@ export default function Login() {
       <Header />
       <div className='login-container'>
         <div className='login-box'>
-          <h2 className='login-title'>Login</h2>
+          <h2 className='login-title'>New Password</h2>
 
           <form className='login-form' onSubmit={handleSubmit}>
             <div className='form-group'>
               <input
-                id='email'
-                type='text'
-                placeholder='Email'
-                required
+                id='password'
+                type='password'
+                placeholder='New Password'
                 onChange={(e) => {
-                  setUsername(e.target.value);
+                  setNewPassword(e.target.value);
                 }}
+                required
               />
             </div>
 
             <div className='form-group'>
               <input
-                id='password'
+                id='id-password'
                 type='password'
-                placeholder='Password'
-                required
+                placeholder='Confirm New Password'
                 onChange={(e) => {
-                  setPassword(e.target.value);
+                  setConfirmarNewPassword(e.target.value);
                 }}
+                required
               />
             </div>
 
-            <div className='form-links'>
-              <Link to='/recover-password'>Forgot your password?</Link>
-            </div>
-
             <button type='submit' className='login-btn'>
-              SIGN IN
+              UPDATE
             </button>
           </form>
 
