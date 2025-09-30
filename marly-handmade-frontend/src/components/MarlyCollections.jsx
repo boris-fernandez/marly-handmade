@@ -2,23 +2,22 @@ export default function MarlyCollections() {
     const products = [
         {
             name: "BEST SELLERS",
-            image:
-                "/public/BestSellers.png",
+            image: "/BestSellers.png",
             link: "/product/best-sellers",
         },
         {
             name: "SEA COLLECTION",
-            image:
-                "/public/SeaCollection.png",
+            image: "/SeaCollection.png",
             link: "/product/wild-flowers",
         },
         {
             name: "MATARITA COLLECTION",
-            image:
-                "/public/MataritaCollection.png",
+            image: "/MataritaCollection.png",
             link: "/product/interplanets",
         },
     ];
+
+
 
     return (
         <div className="px-6 py-10">
