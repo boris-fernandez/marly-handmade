@@ -23,7 +23,7 @@ function App() {
         <Route path="/terms-conditions" element={<TermsConditions />} />
         <Route path="/recover-password" element={<RecoverPassword />} /> 
         <Route path="/product" element={<Product />} />
-        <Route path="/confirm-new-password" element={<ConfirmNewPassword />} />
+        <Route path="/confirm-new-password/:token" element={<ConfirmNewPassword />} />
       </Routes>
     </>
   );
