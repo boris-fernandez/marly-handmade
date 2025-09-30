@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Login.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "../contexts/Auth.context";
 
 export default function RecoverPassword() {
-  const params = useParams();
+  const { updatePassword } = useContext(AuthContext);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmarNewPassword, setConfirmarNewPassword] = useState("");
+  const token = useParams().token;
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (newPassword != confirmarNewPassword) return; //falta dar un aviso
+    updatePassword({ token, newPassword });
   };
 
   return (
@@ -25,15 +31,21 @@ export default function RecoverPassword() {
                 id='password'
                 type='password'
                 placeholder='New Password'
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                }}
                 required
               />
             </div>
 
             <div className='form-group'>
               <input
-                id='password'
+                id='id-password'
                 type='password'
                 placeholder='Confirm New Password'
+                onChange={(e) => {
+                  setConfirmarNewPassword(e.target.value);
+                }}
                 required
               />
             </div>
