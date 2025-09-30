@@ -1,6 +1,6 @@
 package com.marly.handmade.domain.usuario.data.request;
 
-import com.marly.handmade.domain.cliente.data.ClienteDto;
+import com.marly.handmade.domain.cliente.data.request.ClienteDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
