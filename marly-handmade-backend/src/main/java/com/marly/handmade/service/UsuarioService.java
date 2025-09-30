@@ -26,6 +26,7 @@ public class UsuarioService {
     private final ClienteRepository clienteRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final EmailApiConsumer emailApiConsumer;
 
     public RespuestaRegistro registrar(RegistrarUsuario registrarUsuario) {
         if (usuarioRepository.existsByUsername(registrarUsuario.username())) {
@@ -49,6 +50,7 @@ public class UsuarioService {
                 .identificacion(registrarUsuario.cliente().identificacion())
                 .correo(registrarUsuario.cliente().correo())
                 .telefono(registrarUsuario.cliente().telefono())
+                .puntosFidelizacion(0)
                 .usuario(usuario)
                 .build();
 
@@ -60,9 +62,9 @@ public class UsuarioService {
 
     public RespuestaForgotPassword forgotPassword(@Valid ForgetPassword forgetPassword) throws Exception {
         Cliente cliente = clienteRepository.findByCorreo(forgetPassword.email());
-        Usuario usuario = usuarioRepository.findById(clienteRepository.idClientefindByCorreo(forgetPassword.email())).orElseThrow(() -> new RuntimeException("El correo no tiene una cuenta registrada"));
+        Usuario usuario = cliente.getUsuario();
         String token = tokenService.generarTokenResetPassword(usuario);
-        new EmailApiConsumer().sendCorreo(forgetPassword.email(), token, cliente.getNombres());
+        emailApiConsumer.sendCorreo(forgetPassword.email(), token, cliente.getNombres());
         return new RespuestaForgotPassword("Si este correo existe en nuestro sistema, recibirás un enlace para restablecer la contraseña.");
     }
 
@@ -76,8 +78,21 @@ public class UsuarioService {
 
         String username = decodedJWT.getSubject();
         Usuario usuario = usuarioRepository.findByUsername(username);
-        usuario.setPassword(resetPasswordRequest.newPassword());
+        
+        if (usuario == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+
+        String newEncodedPassword = passwordEncoder.encode(resetPasswordRequest.newPassword());
+        usuario.setPassword(newEncodedPassword);
+        
         usuarioRepository.save(usuario);
+        
+        usuarioRepository.flush();
+        
+        usuarioRepository.findByUsername(username);
+
         return new RespuestaForgotPassword("Contraseña actualizada correctamente");
     }
+
 }
