@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import "../styles/Login.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useParams } from "react-router-dom";
 
 export default function RecoverPassword() {
+  const params = useParams();
+
   const handleSubmit = (e) => {
     e.preventDefault();
   };
