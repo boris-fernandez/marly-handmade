@@ -10,7 +10,6 @@ import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
 import ConfirmNewPassword from "./pages/ConfirnNewPassword"
 
-
 function App() {
   return (
     <>
