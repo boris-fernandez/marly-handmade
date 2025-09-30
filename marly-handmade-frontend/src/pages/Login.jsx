@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Login.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { AuthContext } from "../contexts/Auth.context";
 
 export default function Login() {
+  const { login, token } = useContext(AuthContext);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    login({ username, password });
   };
 
   return (
@@ -18,7 +24,15 @@ export default function Login() {
 
           <form className='login-form' onSubmit={handleSubmit}>
             <div className='form-group'>
-              <input id='email' type='email' placeholder='Email' required />
+              <input
+                id='email'
+                type='text'
+                placeholder='Email'
+                required
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+              />
             </div>
 
             <div className='form-group'>
@@ -27,11 +41,14 @@ export default function Login() {
                 type='password'
                 placeholder='Password'
                 required
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
               />
             </div>
 
             <div className='form-links'>
-              <Link to='/forgot-password'>Forgot your password?</Link>
+              <Link to='/recover-password'>Forgot your password?</Link>
             </div>
 
             <button type='submit' className='login-btn'>
