@@ -1,22 +1,22 @@
 package com.marly.handmade.controller;
 
+import com.marly.handmade.domain.cliente.data.request.ForgetPassword;
+import com.marly.handmade.domain.cliente.data.request.ResetPasswordRequest;
+import com.marly.handmade.domain.cliente.data.response.RespuestaForgotPassword;
 import com.marly.handmade.domain.usuario.data.request.AutenticacionDto;
 import com.marly.handmade.domain.usuario.data.request.RegistrarUsuario;
 import com.marly.handmade.domain.usuario.data.responst.RespuestaRegistro;
 import com.marly.handmade.domain.usuario.modal.Usuario;
-import com.marly.handmade.domain.usuario.service.UsuarioService;
-import com.marly.handmade.infra.security.DatosJWTToken;
-import com.marly.handmade.infra.security.TokenService;
+import com.marly.handmade.service.UsuarioService;
+import com.marly.handmade.infrastructure.security.DatosJWTToken;
+import com.marly.handmade.infrastructure.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -48,5 +48,17 @@ public class AutenticacionController {
         RespuestaRegistro usuarioCreado =  usuarioService.registrar(registrarUsuario);
         URI uri = builder.path("/usuario/{id}").buildAndExpand(usuarioCreado.id()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PostMapping("forgot-password")
+    public ResponseEntity<RespuestaForgotPassword> resetPassword(@RequestBody @Valid ForgetPassword forgetPassword) throws Exception {
+        RespuestaForgotPassword respuestaForgotPassword =  usuarioService.forgotPassword(forgetPassword);
+        return ResponseEntity.ok(respuestaForgotPassword);
+    }
+
+    @PatchMapping("update-password")
+    public ResponseEntity<RespuestaForgotPassword> updatePassword(@RequestBody @Valid ResetPasswordRequest resetPasswordRequest){
+        RespuestaForgotPassword forgotPassword = usuarioService.updatePassword(resetPasswordRequest);
+        return ResponseEntity.ok(forgotPassword);
     }
 }

@@ -1,6 +1,5 @@
-package com.marly.handmade.infra.security;
+package com.marly.handmade.infrastructure.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
