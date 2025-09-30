@@ -25,16 +25,11 @@ export default function Register() {
 
           <form className='register-form' onSubmit={handleSubmit}>
             <div className='form-group'>
-              <input
-                id='username'
-                type='text'
-                placeholder='Username'
-                required
-              />
+              <input id='name' type='text' placeholder='Name' required />
             </div>
 
             <div className='form-group'>
-              <input id='correo' type='email' placeholder='Email' required />
+              <input id='email' type='email' placeholder='Email' required />
             </div>
 
             <div className='form-group'>
