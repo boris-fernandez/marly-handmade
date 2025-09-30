@@ -5,14 +5,14 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { AuthContext } from "../contexts/Auth.context";
 
-export default function Login() {
-  const { login, token } = useContext(AuthContext);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export default function RecoverPassword() {
+  const { forgotPassword } = useContext(AuthContext);
+  const [email, setEmail] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login({ username, password });
+    console.log(email);
+    forgotPassword({ email });
   };
 
   return (
@@ -20,39 +20,23 @@ export default function Login() {
       <Header />
       <div className='login-container'>
         <div className='login-box'>
-          <h2 className='login-title'>Login</h2>
+          <h2 className='login-title'>Recover Password</h2>
 
           <form className='login-form' onSubmit={handleSubmit}>
             <div className='form-group'>
               <input
                 id='email'
-                type='text'
+                type='email'
                 placeholder='Email'
-                required
                 onChange={(e) => {
-                  setUsername(e.target.value);
+                  setEmail(e.target.value);
                 }}
-              />
-            </div>
-
-            <div className='form-group'>
-              <input
-                id='password'
-                type='password'
-                placeholder='Password'
                 required
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
               />
-            </div>
-
-            <div className='form-links'>
-              <Link to='/recover-password'>Forgot your password?</Link>
             </div>
 
             <button type='submit' className='login-btn'>
-              SIGN IN
+              UPDATE
             </button>
           </form>
 

@@ -19,7 +19,6 @@ export default function CartPage() {
       <MostLoved />
 
       <MarlyCollections />
-
       <Footer />
     </>
   );

@@ -1,4 +1,4 @@
-package com.marly.handmade.domain.cliente.data;
+package com.marly.handmade.domain.cliente.data.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
