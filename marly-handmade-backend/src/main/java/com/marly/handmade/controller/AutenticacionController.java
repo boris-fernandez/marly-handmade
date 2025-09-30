@@ -57,6 +57,7 @@ public class AutenticacionController {
     }
 
     @PatchMapping("update-password")
+    @Transactional
     public ResponseEntity<RespuestaForgotPassword> updatePassword(@RequestBody @Valid ResetPasswordRequest resetPasswordRequest){
         RespuestaForgotPassword forgotPassword = usuarioService.updatePassword(resetPasswordRequest);
         return ResponseEntity.ok(forgotPassword);

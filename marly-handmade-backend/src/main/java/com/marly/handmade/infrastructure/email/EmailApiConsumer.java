@@ -20,7 +20,7 @@ public class EmailApiConsumer {
     private String keySend;
 
     public void sendCorreo (String correo, String token, String nombres) throws Exception {
-        String resetUrl = "http://localhost:8090/recover-password/" + token;
+        String resetUrl = "http://localhost:5173/confirm-new-password/" + token;
         String html = cargarHtml(nombres, resetUrl);
         try {
             MailerooClient client = new MailerooClient(keySend, Duration.ofSeconds(30));
