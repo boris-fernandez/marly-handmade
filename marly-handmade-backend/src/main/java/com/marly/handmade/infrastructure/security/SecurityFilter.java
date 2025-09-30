@@ -1,4 +1,4 @@
-package com.marly.handmade.infra.security;
+package com.marly.handmade.infrastructure.security;
 
 import com.marly.handmade.domain.usuario.modal.Usuario;
 import com.marly.handmade.domain.usuario.repository.UsuarioRepository;

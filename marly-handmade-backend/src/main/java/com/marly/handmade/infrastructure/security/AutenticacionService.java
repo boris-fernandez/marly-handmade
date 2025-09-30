@@ -1,5 +1,6 @@
-package com.marly.handmade.infra.security;
+package com.marly.handmade.infrastructure.security;
 
+import com.marly.handmade.domain.usuario.modal.Usuario;
 import com.marly.handmade.domain.usuario.repository.UsuarioRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +17,10 @@ public class AutenticacionService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usuarioRepository.findByUsername(username);
+        Usuario usuario = usuarioRepository.findByUsername(username);
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado: " + username);
+        }
+        return usuario;
     }
 }
