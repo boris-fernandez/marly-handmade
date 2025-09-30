@@ -20,19 +20,19 @@ public class EmailApiConsumer {
     private String keySend;
 
     public void sendCorreo (String correo, String token, String nombres) throws Exception {
-        String resetUrl = "http://localhost:5174/recover-password/" + token;
+        String resetUrl = "http://localhost:8090/recover-password/" + token;
         String html = cargarHtml(nombres, resetUrl);
         try {
             MailerooClient client = new MailerooClient(keySend, Duration.ofSeconds(30));
 
             Map<String,Object> email = new HashMap<>();
             email.put("from", new EmailAddress("marlyhandmade@72fb112e6b2acd80.maileroo.org", "Marly Handmade"));
-            email.put("to", new EmailAddress(correo, "Boris"));
+            email.put("to", new EmailAddress(correo, nombres));
             email.put("subject", "Hello from Marly Handmade!");
             email.put("html", html);
             email.put("plain", "Visita el siguiente enlace para restablecer tu contraseña: " + resetUrl);
 
-            String refId = client.sendBasicEmail(email);
+            client.sendBasicEmail(email);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
