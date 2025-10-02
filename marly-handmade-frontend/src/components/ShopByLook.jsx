@@ -8,21 +8,21 @@ export default function ShopByLook() {
             name: "Ocean Blue Monk Tree",
             price: 37,
             image: "/ShopByLook-tree.png",
-            position: "top-[78%] left-[55%]", // posición del ícono más cerca del collar
+            position: "top-[78%] left-[55%]", 
         },
         {
             id: 2,
             name: "Golden Star Necklace",
             price: 35,
             image: "/ShopByLook-star.png",
-            position: "top-[60%] left-[48%]", // posición del ícono más cerca del collar
+            position: "top-[60%] left-[48%]", 
         },
         {
             id: 3,
             name: "Golden Thin Necklace",
             price: 25,
             image: "/ShopByLook-thin.png",
-            position: "top-[30%] left-[35%]", // posición del ícono más cerca del collar
+            position: "top-[30%] left-[35%]", 
         },
     ];
 
@@ -43,7 +43,7 @@ export default function ShopByLook() {
                         <img
                             src="/ShopByLook.png"
                             alt="Shop by look"
-                            className="rounded-xl shadow-md max-w-full h-auto"
+                            className="rounded-xl shadow-md max-w-140 h-auto"
                         />
                         {products.map((product) => (
                             <button
@@ -80,4 +80,4 @@ export default function ShopByLook() {
             </div>
         </div>
     );
-}
+}  
