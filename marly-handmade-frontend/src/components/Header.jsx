@@ -223,7 +223,9 @@ export default function Header() {
             <option>EUR</option>
           </select>
           <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
+          <Link to="/login">
           <User className="w-5 h-5 cursor-pointer text-[#040F2E]" />
+          </Link>
           <Link to="/cart">
             <ShoppingCart className="w-5 h-5 cursor-pointer text-[#040F2E]" />
           </Link>

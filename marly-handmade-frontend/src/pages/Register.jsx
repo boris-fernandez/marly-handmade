@@ -16,9 +16,20 @@ export default function Register() {
   const [identificacion, setIdentificacion] = useState("");
   const [correo, setCorreo] = useState("");
   const [telefono, setTelefono] = useState("");
+  
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+    setErrorMessage("Las contraseñas no coinciden.");
+    return;
+  }
+  setErrorMessage("");
+
     register({
       username,
       password,
@@ -32,6 +43,7 @@ export default function Register() {
         telefono,
       },
     });
+    
   };
 
   return (
@@ -42,7 +54,7 @@ export default function Register() {
           <h2 className='register-title'>Register</h2>
 
           <form className='register-form' onSubmit={handleSubmit}>
-            <div className='form-group'>
+            <div className='form-group-register'>
               <input
                 id='name'
                 type='text'
@@ -53,7 +65,7 @@ export default function Register() {
                 required
               />
             </div>
-            <div className='form-group'>
+            <div className='form-group-register'>
               <input
                 id='email'
                 type='email'
@@ -64,26 +76,43 @@ export default function Register() {
                 required
               />
             </div>
-            <div className='form-group'>
+            <div className='form-group-register'>
+              <div className="input-wrapper-register">
               <input
                 id='password'
-                type='password'
+                type={showPassword ? "text" : "password"}
                 placeholder='Password'
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
                 required
               />
+               <button type="button" className="toggle-password-register" onClick={() => setShowPassword(!showPassword)}>
+               <i className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
+              </button>
+              </div>
             </div>
-            <div className='form-group'>
-              <input
-                id='confirmPassword'
-                type='password'
-                placeholder='Confirm Password'
-                required
-              />
-            </div>
-            <div className='form-group'>
+              <div className="form-group-register">
+                <div className="input-wrapper-register">
+                  <input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirm Password"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="toggle-password-register"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    <i className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
+                  </button>
+                </div>
+                <p className="error-message">{errorMessage || "\u00A0"}</p>
+              </div>
+            
+            <div className='form-group-register'>
               <input
                 id='nombres'
                 type='text'
@@ -94,7 +123,7 @@ export default function Register() {
                 required
               />
             </div>
-            <div className='form-group'>
+            <div className='form-group-register'>
               <input
                 id='apellidos'
                 type='text'
@@ -105,7 +134,7 @@ export default function Register() {
                 required
               />
             </div>
-            <div className='form-group'>
+            <div className='form-group-register'>
               <input
                 id='direccion'
                 type='text'
@@ -116,7 +145,7 @@ export default function Register() {
                 required
               />
             </div>
-            <div className='form-group'>
+            <div className='form-group-register'>
               <input
                 id='fechaNacimiento'
                 type='date'
@@ -126,7 +155,7 @@ export default function Register() {
                 required
               />
             </div>
-            <div className='form-group'>
+            <div className='form-group-register'>
               <input
                 id='identificacion'
                 type='text'
@@ -137,7 +166,7 @@ export default function Register() {
                 required
               />
             </div>
-            <div className='form-group'>
+            <div className='form-group-register'>
               <input
                 id='telefono'
                 type='tel'
