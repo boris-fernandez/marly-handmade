@@ -51,7 +51,7 @@ export default function RecoverPassword() {
             </div>
 
             <button type='submit' className='login-btn'>
-              UPDATE
+              <Link to={"/login"}>UPDATE</Link>
             </button>
           </form>
 
