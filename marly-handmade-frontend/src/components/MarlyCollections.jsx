@@ -17,12 +17,15 @@ export default function MarlyCollections() {
         },
     ];
 
-
-
     return (
-        <div className="px-6 py-10">
-            <h2 className="text-2xl font-semibold mb-6 text-center">MARLY Collections</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="px-6 py-6">
+            {/* mt-16 = más espacio arriba del título */}
+            <h2 className="text-2xl font-semibold text-center mt-16 mb-10">
+                MARLY Collections
+            </h2>
+
+            {/* mt-8 = más espacio entre el título y las tarjetas */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
                 {products.map((product) => (
                     <div
                         key={product.name}
