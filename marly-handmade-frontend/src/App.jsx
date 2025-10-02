@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/landing";
+import LandingPage from "./pages/Landing";
 import CartPage from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
