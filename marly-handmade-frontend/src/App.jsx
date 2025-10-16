@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
+
 import LandingPage from "./pages/Landing";
 import CartPage from "./pages/Cart";
 import Login from "./pages/Login";
@@ -9,6 +9,8 @@ import TermsConditions from "./pages/TermsConditions";
 import CollectionDetail from "./pages/ColletionDetail";
 import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
+import { CartDrawer } from "./components/CartDrawer";
+import { useCart } from "./contexts/CartContext.jsx";
 import ConfirmNewPassword from "./pages/ConfirnNewPassword";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
@@ -20,9 +22,14 @@ import ProductGallery from "./pages/ProductGallery";
 import UserManagement from "./pages/UserManagement";
 import ProductRegister from "./pages/ProductRegister";
 
+
 function App() {
+  const { open, closeCart } = useCart(); // <-- contexto
+
   return (
     <>
+      <CartDrawer open={open} onClose={closeCart} />
+
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/cart" element={<CartPage />} />
