@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
+
 import LandingPage from "./pages/Landing";
 import CartPage from "./pages/Cart";
 import Login from "./pages/Login";
@@ -9,12 +9,18 @@ import TermsConditions from "./pages/TermsConditions";
 import CollectionDetail from "./pages/ColletionDetail";
 import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
-import ConfirmNewPassword from "./pages/ConfirnNewPassword"
+import ConfirmNewPassword from "./pages/ConfirmNewPassword";
 
+import { CartDrawer } from "./components/CartDrawer";
+import { useCart } from "./contexts/CartContext.jsx";
 
 function App() {
+  const { open, closeCart } = useCart(); // <-- contexto
+
   return (
     <>
+      <CartDrawer open={open} onClose={closeCart} />
+
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/cart" element={<CartPage />} />
