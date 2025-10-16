@@ -9,6 +9,8 @@ import MeetTheMaker from "../components/MeetTheMaker";
 import ShopInPerson from "../components/ShopInPerson";
 import heroImg from "../assets/hero.png";
 
+import { Link } from 'react-router-dom';
+
 export default function CartPage() {
   return (
     <>
@@ -29,6 +31,11 @@ export default function CartPage() {
       <ShopInPerson />
 
       <Footer />
+
+      <Link to="/admin/dashboard">
+  <button>Admin Dashboard</button>
+</Link>
+
     </>
   );
 }
