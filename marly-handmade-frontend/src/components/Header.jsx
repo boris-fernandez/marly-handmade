@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Globe, Search, User, ShoppingCart, Menu, X } from "lucide-react";
-import { useCart } from "../contexts/CartContext.jsx"; // <-- contexto
+import { useCart } from "../contexts/CartContext.jsx";
+import { AuthContext } from "../contexts/AuthContext.jsx";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
 
-  const { openCart } = useCart(); // <-- función para abrir carrito
+  const { openCart } = useCart();
+  const { token, logout } = useContext(AuthContext);
+
 
   const toggleMenu = () => {
     setMenuOpen(v => {
@@ -42,19 +46,52 @@ export default function Header() {
 
         {/* ICONS + HAMBURGER */}
         <div className="flex flex-1 justify-end items-center space-x-4">
-          <Globe className="w-5 h-5 text-[#040F2E]" />
+          <div className="relative inline-block">
+            <select className="w-5 h-5 opacity-0 absolute inset-0 cursor-pointer">
+              <option>Spanish</option>
+              <option>English</option>
+            </select>
+            <Globe className="w-5 h-5 text-[#040F2E] pointer-events-none" />
+          </div>
+          <select className="rounded px-2 py-1 text-sm hidden sm:block cursor-pointer">
+            <option>USD</option>
+            <option>PEN</option>
+            <option>EUR</option>
+          </select>
           <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-          <Link to="/login">
-            <User className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-          </Link>
+          {/* CONDICIONAL PARA TOKEN DE LOGIN */}
+          {token ? (
+            <button
+              onClick={logout}
+              className="text-[#040F2E] font-medium cursor-pointer"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link to="/login">
+              <User className="w-5 h-5 cursor-pointer text-[#040F2E]" />
+            </Link>
+          )}
 
           {/* CART */}
-          <button onClick={openCart} className="relative" aria-label="Abrir carrito">
+          <button
+            onClick={openCart}
+            className="relative"
+            aria-label="Abrir carrito"
+          >
             <ShoppingCart className="w-5 h-5 cursor-pointer text-[#040F2E]" />
           </button>
 
-          <button className="md:hidden p-2 text-[#040F2E]" onClick={toggleMenu} aria-label="Toggle menu">
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          <button
+            className="md:hidden p-2 text-[#040F2E]"
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>

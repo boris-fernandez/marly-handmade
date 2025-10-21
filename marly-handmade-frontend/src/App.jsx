@@ -1,4 +1,9 @@
+// App.jsx
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
+import { AuthProviderWrapper } from "./contexts/AuthContext.jsx";
+import { useCart } from "./contexts/CartContext.jsx";
+import { CartDrawer } from "./components/CartDrawer";
 
 import LandingPage from "./pages/Landing";
 import CartPage from "./pages/Cart";
@@ -9,9 +14,11 @@ import TermsConditions from "./pages/TermsConditions";
 import CollectionDetail from "./pages/ColletionDetail";
 import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
+
+import ConfirmNewPassword from "./pages/ConfirmNewPassword";
 import { CartDrawer } from "./components/CartDrawer";
 import { useCart } from "./contexts/CartContext.jsx";
-import ConfirmNewPassword from "./pages/ConfirnNewPassword";
+
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import ReportsAnalytics from "./pages/ReportsAnalytics";
@@ -24,10 +31,10 @@ import ProductRegister from "./pages/ProductRegister";
 
 
 function App() {
-  const { open, closeCart } = useCart(); // <-- contexto
+  const { open, closeCart } = useCart();
 
   return (
-    <>
+    <AuthProviderWrapper>
       <CartDrawer open={open} onClose={closeCart} />
 
       <Routes>
@@ -41,6 +48,8 @@ function App() {
         <Route path="/recover-password" element={<RecoverPassword />} />
         <Route path="/product" element={<Product />} />
 
+        {/* ADMIN */}
+        <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/profile" element={<Profile />} />
         <Route path="/admin/reports" element={<ReportsAnalytics />} />
         <Route path="/admin/orders" element={<Orders />} />
@@ -50,13 +59,12 @@ function App() {
         <Route path="/admin/product-gallery" element={<ProductGallery />} />
         <Route path="/admin/products" element={<ProductRegister />} />
 
-        <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route
           path="/confirm-new-password/:token"
           element={<ConfirmNewPassword />}
         />
       </Routes>
-    </>
+    </AuthProviderWrapper>
   );
 }
 
