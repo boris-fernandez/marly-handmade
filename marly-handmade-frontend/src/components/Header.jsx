@@ -1,29 +1,18 @@
-<<<<<<< Updated upstream
 import { BrowserRouter } from "react-router-dom";
-=======
-import { useState } from "react";
-import { useContext } from "react";
->>>>>>> Stashed changes
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { Globe, Search, User, ShoppingCart, Menu, X } from "lucide-react";
-<<<<<<< Updated upstream
-=======
-import { useCart } from "../contexts/CartContext.jsx"; // <-- contexto
+import { useCart } from "../contexts/CartContext.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
->>>>>>> Stashed changes
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
 
-<<<<<<< Updated upstream
-=======
   const { openCart } = useCart();
   const { token, logout } = useContext(AuthContext);
 
->>>>>>> Stashed changes
   const toggleMenu = () => {
     setMenuOpen((v) => {
       const newV = !v;
@@ -233,24 +222,12 @@ export default function Header() {
             </select>
             <Globe className="w-5 h-5 text-[#040F2E] pointer-events-none" />
           </div>
-<<<<<<< Updated upstream
-          <select className="rounded px-2 py-1 text-sm hidden sm:block">
-=======
           <select className="rounded px-2 py-1 text-sm hidden sm:block cursor-pointer">
->>>>>>> Stashed changes
             <option>USD</option>
             <option>PEN</option>
             <option>EUR</option>
           </select>
           <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-<<<<<<< Updated upstream
-          <Link to="/login">
-          <User className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-          </Link>
-          <Link to="/cart">
-            <ShoppingCart className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-          </Link>
-=======
           {/* CONDICIONAL PARA TOKEN DE LOGIN */}
           {token ? (
             <button
@@ -274,7 +251,6 @@ export default function Header() {
             <ShoppingCart className="w-5 h-5 cursor-pointer text-[#040F2E]" />
           </button>
 
->>>>>>> Stashed changes
           <button
             className="md:hidden p-2 text-[#040F2E]"
             onClick={toggleMenu}
