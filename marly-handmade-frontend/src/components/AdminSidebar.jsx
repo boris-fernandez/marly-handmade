@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 function Sidebar() {
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { to: "/admin/dashboard", label: "Dashboard", icon: "home" },
@@ -71,28 +72,22 @@ function Sidebar() {
   };
 
   return (
-    <aside
-      style={{
-        width: "230px",
-        backgroundColor: "#ffffffff",
-        color: "white",
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh", // altura exacta de la ventana
-        position: "fixed", // fija el sidebar
-        top: 0, // se ancla arriba
-        left: 0, // se ancla a la izquierda
-        overflowY: "auto", // permite desplazamiento interno si el contenido es largo
-      }}
-    >
-      <div
-        style={{
-          padding: "30px 20px",
-          borderBottom: "1px solid #040F2F",
-        }}
+    <>
+      {/* Botón de menú visible solo en móvil */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="lg:hidden fixed top-4 left-4 z-50 bg-[#040F2F] text-white p-2 rounded-md"
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div className="flex justify-center items-center">
+        {isOpen ? "✕" : "☰"}
+      </button>
+
+      <aside
+        className={`fixed top-0 left-0 h-full w-[230px] bg-white text-[#040F2F] flex flex-col shadow-md transform transition-transform duration-300 z-40
+          ${isOpen ? "translate-x-0" : "-translate-x-full"} 
+          lg:translate-x-0`}
+      >
+        {/* Logo */}
+        <div className="p-6 border-b border-[#040F2F] flex justify-center">
           <a href="/" className="flex items-center">
             <img
               src="/logoMarly.png"
@@ -101,74 +96,69 @@ function Sidebar() {
             />
           </a>
         </div>
-        </div>
-      </div>
 
-      <nav style={{ flex: 1, padding: "20px 0" }}>
-        {navItems.map((item) => (
-          <Link
-            key={item.to}
-            to={item.to}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "14px 20px",
-              color: "#040F2F",
-              textDecoration: "none",
-              backgroundColor:
+        {/* Navegación */}
+        <nav className="flex-1 py-4 overflow-y-auto">
+          {navItems.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={() => setIsOpen(false)} // cerrar al seleccionar en móvil
+              className={`flex items-center gap-3 px-5 py-3 text-sm transition-colors 
+              ${
                 location.pathname === item.to
-                  ? "rgba(151, 170, 255, 0.25)"
-                  : "transparent",
-              borderLeft:
-                location.pathname === item.to ? "4px solid white" : "none",
-            }}
-          >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#040F2F"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+                  ? "bg-[#040F2F]/10 border-l-4 border-[#040F2F]"
+                  : "hover:bg-[#040F2F]/5"
+              }`}
             >
-              {getIcon(item.icon)}
-            </svg>
-            <span>{item.label}</span>
-          </Link>
-        ))}
-      </nav>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#040F2F"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {getIcon(item.icon)}
+              </svg>
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </nav>
 
-      <Link
-        to="/admin/profile"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "12px",
-          padding: "20px",
-          color: "#040F2F",
-          textDecoration: "none",
-          borderTop: "1px solid #040F2F",
-        }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#040F2F"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        {/* Perfil */}
+        <Link
+          to="/admin/profile"
+          onClick={() => setIsOpen(false)}
+          className="flex items-center gap-3 px-5 py-4 border-t border-[#040F2F]/30"
         >
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-        <span>Profile</span>
-      </Link>
-    </aside>
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#040F2F"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span>Profile</span>
+        </Link>
+      </aside>
+
+      {/* Fondo semitransparente para móvil */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 z-30 lg:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+    </>
   );
 }
 
