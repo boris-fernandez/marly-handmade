@@ -36,7 +36,6 @@ export function CartDrawer({ open, onClose }) {
     );
 
   const { token, logout } = useContext(AuthContext);
-
   const subtotal = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0

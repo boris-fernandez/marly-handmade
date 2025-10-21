@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
+
 export default function RecoverPassword() {
   const { updatePassword } = useContext(AuthContext);
   const [newPassword, setNewPassword] = useState("");
