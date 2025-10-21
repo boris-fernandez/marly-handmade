@@ -16,6 +16,9 @@ import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
 
 import ConfirmNewPassword from "./pages/ConfirmNewPassword";
+import { CartDrawer } from "./components/CartDrawer";
+import { useCart } from "./contexts/CartContext.jsx";
+
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import ReportsAnalytics from "./pages/ReportsAnalytics";
@@ -26,12 +29,14 @@ import ProductGallery from "./pages/ProductGallery";
 import UserManagement from "./pages/UserManagement";
 import ProductRegister from "./pages/ProductRegister";
 
+
 function App() {
   const { open, closeCart } = useCart();
 
   return (
     <AuthProviderWrapper>
       <CartDrawer open={open} onClose={closeCart} />
+
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/cart" element={<CartPage />} />
