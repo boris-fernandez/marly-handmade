@@ -35,7 +35,7 @@ export default function Landing() {
         <ShortMarlyDescriptionLanding />
       </div>
 
-      <div data-aos="fade-up">
+      <div data-aos="fade-left">
         <MostLoved />
       </div>
 
@@ -54,12 +54,6 @@ export default function Landing() {
       <ShopInPerson />
 
       <Footer />
-
-      {/* <div data-aos="fade-up" style={{ textAlign: "center", margin: "2rem 0" }}>
-        <Link to="/admin/dashboard">
-          <button>Admin Dashboard</button>
-        </Link>
-      </div> */}
     </>
   );
 }
