@@ -16,9 +16,6 @@ import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
 
 import ConfirmNewPassword from "./pages/ConfirmNewPassword";
-import { CartDrawer } from "./components/CartDrawer";
-import { useCart } from "./contexts/CartContext.jsx";
-
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import ReportsAnalytics from "./pages/ReportsAnalytics";
