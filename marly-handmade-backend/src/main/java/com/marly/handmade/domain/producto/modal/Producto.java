@@ -41,5 +41,6 @@ public class Producto {
         if (productoUpdate.fotoPrincipal() != null)  setFotoPrincipal(productoUpdate.fotoPrincipal());
         if (productoUpdate.fotoSecundario() != null)  setFotoSecundario(productoUpdate.fotoSecundario());
         if (productoUpdate.fotoTerciario() != null)  setFotoTerciario(productoUpdate.fotoTerciario());
+        if (productoUpdate.categoria() != null) setCategoria(productoUpdate.categoria());
     }
 }

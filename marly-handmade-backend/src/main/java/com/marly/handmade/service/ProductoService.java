@@ -19,6 +19,9 @@ public class ProductoService {
     }
 
     public ProductoResponse crearProducto(ProductoRequest productoRequest){
+        if(productoRepository.findByNombre(productoRequest.nombre()) != null){
+            throw new RuntimeException("Ya existe un producto con este nombre: " + productoRequest.nombre());
+        }
         Producto producto = Producto.builder()
                 .nombre(productoRequest.nombre())
                 .precio(productoRequest.precio())
