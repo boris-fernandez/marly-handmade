@@ -23,7 +23,7 @@ services:
       - USER_BD=${USER_BD}
       - PASSWORD_BD=${PASSWORD_BD}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
-      - KEY_SEND_CORREO=4e422f467cea2dcd328903e1969c7ebae7680cb9946f73b6269e31d76890ef37
+      - KEY_SEND_CORREO=${KEY_SEND_CORREO}
 
 networks:
   app-networks:
