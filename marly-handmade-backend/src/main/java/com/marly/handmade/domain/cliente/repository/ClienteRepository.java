@@ -13,4 +13,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     Long idClientefindByCorreo(String correo);
 
     Cliente findByCorreo(String correo);
+
+    Cliente findByUsuario_Id(Long id);
 }
