@@ -19,7 +19,7 @@ public class Producto {
 
     private String nombre;
 
-    private Float precio;
+    private Double precio;
 
     private Integer stock;
 
