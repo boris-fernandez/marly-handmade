@@ -55,15 +55,10 @@ public class PromocionesController {
         return ResponseEntity.ok(promocionesService.mostrarPorId(id));
     }
 
-    @DeleteMapping("/eliminar/id/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarPromocionPorId(@PathVariable long id) {
         promocionesService.eliminarPromocionPorId(id);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/eliminar/nombre/{nombre}")
-    public ResponseEntity<Void> eliminarPromocionPorNombre(@PathVariable String nombre) {
-        promocionesService.eliminarPromocionPorNombre(nombre);
-        return ResponseEntity.noContent().build();
-    }
 }
