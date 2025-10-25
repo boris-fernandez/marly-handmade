@@ -5,7 +5,7 @@ import com.marly.handmade.domain.producto.modal.Producto;
 public record ProductoResponse(
         Long id,
         String nombre,
-        Float precio,
+        Double precio,
         Integer stock,
         String fotoPrincipal,
         String fotoSecundario,
