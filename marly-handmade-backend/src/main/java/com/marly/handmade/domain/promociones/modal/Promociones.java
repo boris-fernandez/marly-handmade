@@ -1,5 +1,6 @@
 package com.marly.handmade.domain.promociones.modal;
 
+import com.marly.handmade.domain.promociones.data.PromocionesUpdate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -7,8 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,7 +21,7 @@ import com.marly.handmade.domain.producto.modal.Producto;
 
 
 @Entity
-@Table (name = "Promocion")
+@Table (name = "promociones")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -34,7 +33,7 @@ public class Promociones {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @Column (name = "id_promocion")
     private Long idPromociones;
 
     private String nombre;
@@ -54,5 +53,18 @@ public class Promociones {
     @JoinColumn(name = "id_producto")
 
     private Producto producto;
-    
+
+    public void update(PromocionesUpdate promocionesUpdate) {
+        if (promocionesUpdate.nombre() != null) setNombre(promocionesUpdate.nombre());
+        if (promocionesUpdate.descripcion() != null) setDescripcion(promocionesUpdate.descripcion());
+        if (promocionesUpdate.fechaInicio() != null) setFechaInicio(promocionesUpdate.fechaInicio());
+        if (promocionesUpdate.fechaFin() != null) setFechaFin(promocionesUpdate.fechaFin());
+        if (promocionesUpdate.porcentajeDescuento() != null) setPorcentajeDescuento(promocionesUpdate.porcentajeDescuento());
+
+        if (promocionesUpdate.producto() != null) {
+            if (producto == null) producto = new Producto();
+            producto.setIdProducto(promocionesUpdate.producto().id());
+        }
+    }
+
 }
