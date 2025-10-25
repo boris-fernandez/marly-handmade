@@ -1,4 +1,4 @@
-package com.marly.handmade.service;
+package com.marly.handmade.domain.producto.service;
 
 import com.marly.handmade.domain.producto.data.ProductoRequest;
 import com.marly.handmade.domain.producto.data.ProductoResponse;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductoService {
+public class ProductoService implements IProductoService{
 
     private ProductoRepository productoRepository;
 
@@ -40,15 +40,11 @@ public class ProductoService {
         return productoRepository.findAll().stream().map(ProductoResponse::new).toList();
     }
 
-
-    public ProductoResponse mostrarPorNombre(String nombre) {
-        Producto producto = productoRepository.findByNombre(nombre);
-        if (producto == null) throw new RuntimeException("El producto con ese nombre no existe");
-        return new ProductoResponse(producto);
-    }
-
-    public ProductoResponse mostrarPorId(long id) {
-        return new ProductoResponse(productoRepository.findById(id).orElseThrow(() -> new RuntimeException("El producto con ese id no existe")));
+    @Override
+    public ProductoResponse buscar(String nombre, Long id) {
+        if(id != null) return mostrarPorId(id);
+        if(nombre != null) return mostrarPorNombre(nombre);
+        else throw new RuntimeException("Debe enviar un parámetro id o nombre");
     }
 
     public ProductoResponse update(long id, ProductoUpdate productoUpdate) {
@@ -57,4 +53,16 @@ public class ProductoService {
         productoRepository.save(producto);
         return new ProductoResponse(producto);
     }
+
+    private ProductoResponse mostrarPorNombre(String nombre) {
+        Producto producto = productoRepository.findByNombre(nombre);
+        if (producto == null) throw new RuntimeException("El producto con ese nombre no existe");
+        return new ProductoResponse(producto);
+    }
+
+    private ProductoResponse mostrarPorId(long id) {
+        return new ProductoResponse(productoRepository.findById(id).orElseThrow(() -> new RuntimeException("El producto con ese id no existe")));
+    }
+
+
 }
