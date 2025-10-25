@@ -3,7 +3,6 @@ package com.marly.handmade.controller;
 import java.net.URI;
 import java.util.List;
 
-import com.marly.handmade.domain.producto.data.ProductoResponse;
 import com.marly.handmade.domain.promociones.data.PromocionesUpdate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +35,8 @@ public class PromocionesController {
 
     @PatchMapping("{id}")
     public ResponseEntity<PromocionesResponse> update(@PathVariable long id, @RequestBody PromocionesUpdate promocionesUpdate){
-        return ResponseEntity.ok(promocionesService.update(id, promocionesUpdate));
+        PromocionesResponse response = promocionesService.update(id, promocionesUpdate);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping

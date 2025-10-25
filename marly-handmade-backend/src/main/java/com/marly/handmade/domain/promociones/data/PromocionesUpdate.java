@@ -1,7 +1,5 @@
 package com.marly.handmade.domain.promociones.data;
 
-import com.marly.handmade.domain.producto.data.ProductoResponse;
-
 import java.time.LocalDate;
 
 public record PromocionesUpdate(
@@ -10,7 +8,6 @@ public record PromocionesUpdate(
         LocalDate fechaInicio,
         LocalDate fechaFin,
         Float porcentajeDescuento,
-        ProductoResponse producto,
         Long productoId
 ) {
 
