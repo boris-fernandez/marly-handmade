@@ -1,5 +1,6 @@
 package com.marly.handmade.service;
 
+import com.marly.handmade.domain.promociones.data.PromocionesUpdate;
 import org.springframework.stereotype.Service;
 
 import com.marly.handmade.domain.producto.modal.Producto;
@@ -8,6 +9,9 @@ import com.marly.handmade.domain.promociones.data.PromocionesRequest;
 import com.marly.handmade.domain.promociones.data.PromocionesResponse;
 import com.marly.handmade.domain.promociones.modal.Promociones;
 import com.marly.handmade.domain.promociones.repository.PromocionesRepository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -22,7 +26,7 @@ public class PromocionesService {
     }
 
     public PromocionesResponse crearPromociones(PromocionesRequest promocionesRequest){
-        Producto producto = productoRepository.findById(promocionesRequest.id_producto()).orElseThrow(()->new RuntimeException("NO EXISTE UN PRODUCTO CON EL ID:"+ promocionesRequest.id_producto()));
+        Producto producto = productoRepository.findById(promocionesRequest.idProducto()).orElseThrow(()->new RuntimeException("NO EXISTE UN PRODUCTO CON EL ID:"+ promocionesRequest.idProducto()));
         Promociones promociones = Promociones.builder()
         .nombre(promocionesRequest.nombre())
         .descripcion(promocionesRequest.descripcion())
@@ -36,5 +40,46 @@ public class PromocionesService {
         return new PromocionesResponse(promociones, producto);
     }
 
+    public PromocionesResponse update(long id, PromocionesUpdate promocionesUpdate) {
+        Promociones promociones = promocionesRepository.findById(id).orElseThrow(() -> new RuntimeException("El promocion con ese id no existe"));
+        promociones.update(promocionesUpdate);
+        promocionesRepository.save(promociones);
+        return new PromocionesResponse(promociones, promociones.getProducto());
+    }
+
+    public List<PromocionesResponse> listarPromociones(){
+        return promocionesRepository.findAll().stream().map(promocion -> new PromocionesResponse(promocion, promocion.getProducto())).toList();
+    }
+
+    public PromocionesResponse mostrarPorNombre(String nombre) {
+        Producto producto = productoRepository.findByNombre(nombre);
+        if (producto == null) {
+            throw new RuntimeException("El producto con ese nombre no existe");
+        }
+
+        Promociones promociones = promocionesRepository.findByProducto(producto);
+        if (promociones == null) {
+            throw new RuntimeException("No existe una promoción para ese producto");
+        }
+
+        return new PromocionesResponse(promociones, producto);
+    }
+
+    public PromocionesResponse mostrarPorId(long id) {
+        Promociones promociones = promocionesRepository.findById(id).orElseThrow(() -> new RuntimeException("La promoción con ese id no existe"));
+        Producto producto = promociones.getProducto();
+        return new PromocionesResponse(promociones, producto);
+    }
+    @Transactional
+    public void eliminarPromocionPorId(long id) {
+        Promociones promociones = promocionesRepository.findById(id).orElseThrow(() -> new RuntimeException("La promoción con ese ID no existe"));
+        promocionesRepository.delete(promociones);
+    }
+
+    @Transactional
+    public void eliminarPromocionPorNombre(String nombre) {
+        Promociones promociones = promocionesRepository.findByNombre(nombre).orElseThrow(() -> new RuntimeException("La promoción con ese nombre no existe"));
+        promocionesRepository.delete(promociones);
+    }
 
 }

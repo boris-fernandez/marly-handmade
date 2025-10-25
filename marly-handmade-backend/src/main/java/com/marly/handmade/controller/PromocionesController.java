@@ -1,6 +1,10 @@
 package com.marly.handmade.controller;
 
 import java.net.URI;
+import java.util.List;
+
+import com.marly.handmade.domain.producto.data.ProductoResponse;
+import com.marly.handmade.domain.promociones.data.PromocionesUpdate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,4 +34,36 @@ public class PromocionesController {
         return ResponseEntity.created(uri).body(promocionesResponse);
     }
 
+    @PatchMapping("{id}")
+    public ResponseEntity<PromocionesResponse> update(@PathVariable long id, @RequestBody PromocionesUpdate promocionesUpdate){
+        return ResponseEntity.ok(promocionesService.update(id, promocionesUpdate));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PromocionesResponse>> listarPromociones (){
+        return ResponseEntity.ok(promocionesService.listarPromociones());
+    }
+
+    @GetMapping("{nombre}")
+    public ResponseEntity<PromocionesResponse> mostrarPorNombre(@PathVariable String nombre){
+        return ResponseEntity.ok(promocionesService.mostrarPorNombre(nombre));
+    }
+
+
+    @GetMapping("mostrar/{id}")
+    public ResponseEntity<PromocionesResponse> mostrarPorId(@PathVariable long id){
+        return ResponseEntity.ok(promocionesService.mostrarPorId(id));
+    }
+
+    @DeleteMapping("/eliminar/id/{id}")
+    public ResponseEntity<Void> eliminarPromocionPorId(@PathVariable long id) {
+        promocionesService.eliminarPromocionPorId(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/eliminar/nombre/{nombre}")
+    public ResponseEntity<Void> eliminarPromocionPorNombre(@PathVariable String nombre) {
+        promocionesService.eliminarPromocionPorNombre(nombre);
+        return ResponseEntity.noContent().build();
+    }
 }
