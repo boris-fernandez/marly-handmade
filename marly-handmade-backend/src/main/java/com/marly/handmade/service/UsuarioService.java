@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.marly.handmade.util.GuavaUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +30,8 @@ public class UsuarioService {
     private final EmailApiConsumer emailApiConsumer;
 
     public RespuestaRegistro registrar(RegistrarUsuario registrarUsuario) {
-        if (usuarioRepository.existsByUsername(registrarUsuario.username())) {
-            throw new IllegalArgumentException("El username ya está en uso");
-        }
-        if (clienteRepository.existsByCorreo(registrarUsuario.cliente().correo())) {
-            throw new IllegalArgumentException("El correo ya está en uso");
-        }
+        GuavaUtils.checkArgumentRuntime(usuarioRepository.existsByUsername(registrarUsuario.username()), "El username ya está en uso");
+        GuavaUtils.checkArgumentRuntime(usuarioRepository.existsByUsername(registrarUsuario.username()), "El correo ya está en uso");
 
         Usuario usuario = Usuario.builder()
                 .username(registrarUsuario.username())
@@ -72,16 +69,14 @@ public class UsuarioService {
         DecodedJWT decodedJWT = tokenService.verifyToken(resetPasswordRequest.token());
 
         String tipo = decodedJWT.getClaim("tipo").asString();
-        if (tipo == null || !tipo.equals("reset-password")) {
-            throw new RuntimeException("Token inválido para resetear contraseña");
-        }
+
+        GuavaUtils.requireNonNullRuntime(tipo, "Token inválido para resetear contraseña");
+        GuavaUtils.checkArgumentRuntime(!"reset-password".equals(tipo), "Token inválido para resetear contraseña");
 
         String username = decodedJWT.getSubject();
         Usuario usuario = usuarioRepository.findByUsername(username);
         
-        if (usuario == null) {
-            throw new RuntimeException("Usuario no encontrado");
-        }
+        GuavaUtils.requireNonNullRuntime(usuario, "Usuario no encontrado");
 
         String newEncodedPassword = passwordEncoder.encode(resetPasswordRequest.newPassword());
         usuario.setPassword(newEncodedPassword);
