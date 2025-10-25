@@ -5,6 +5,7 @@ import com.marly.handmade.domain.producto.data.ProductoResponse;
 import com.marly.handmade.domain.producto.data.ProductoUpdate;
 import com.marly.handmade.domain.producto.modal.Producto;
 import com.marly.handmade.domain.producto.repository.ProductoRepository;
+import com.marly.handmade.domain.producto.service.ProductoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ class ProductoServiceTest {
     @Test
     void crearProducto() {
         ProductoRequest request = new ProductoRequest("Collar", 20.0, 10, "", "", "", "");
-        BDDMockito.given(productoRepository.save(Mockito.any(Producto.class))).willAnswer(invocation -> invocation.getArgument(0));
+        BDDMockito.given(productoRepository.save(any(Producto.class))).willReturn(null);
         BDDMockito.given(productoRepository.findByNombre(Mockito.anyString())).willReturn(null);
 
         ProductoResponse response = productoService.crearProducto(request);
@@ -64,36 +65,49 @@ class ProductoServiceTest {
 
     }
 
-    @DisplayName("Test para verificar que sale una exception cuando no existe un producot con ese nombre")
+    @DisplayName("Test para comprobar que devuelve producto buscado por id")
     @Test
-    void mostrarPorNombre() {
-        Producto producto = new Producto();
-        producto.setNombre("Collar");
-        BDDMockito.given(productoRepository.findByNombre(anyString())).willReturn(null);
-
-        Assertions.assertThrows(RuntimeException.class, () ->
-                productoService.mostrarPorNombre("Collar")
-        );
-    }
-
-    @DisplayName("Test para verificar que me trae un producto con un id existente")
-    @Test
-    void mostrarPorId() {
+    void buscarPorId(){
         Producto producto = new Producto(1L,"Collar", 10.0, 3, "", "", "", "");
         BDDMockito.given(productoRepository.findById(anyLong())).willReturn(Optional.of(producto));
 
-        ProductoResponse productoResponse = productoService.mostrarPorId(1L);
+        ProductoResponse productoResponse = productoService.buscar(null, anyLong());
 
         assertThat(productoResponse).isNotNull();
         assertThat(productoResponse.nombre()).isEqualTo("Collar");
+        verify(productoRepository, never()).findByNombre(anyString());
     }
 
-    @DisplayName("Test para comprbar que se actualizan los datos y no salen exceptiones")
+    @DisplayName("Test para comprobar que devuelve producto buscado por nombre")
+    @Test
+    void buscarPorNombre(){
+        Producto producto = new Producto(1L,"Collar", 10.0, 3, "", "", "", "");
+        BDDMockito.given(productoRepository.findByNombre(anyString())).willReturn(producto);
+
+        ProductoResponse productoResponse = productoService.buscar(anyString(), null);
+
+        assertThat(productoResponse).isNotNull();
+        assertThat(productoResponse.nombre()).isEqualTo("Collar");
+        verify(productoRepository, never()).findById(anyLong());
+    }
+
+    @DisplayName("Test para comprobar que devuelve error si no pasan ningun parametro")
+    @Test
+    void buscarSinParametros(){
+        Assertions.assertThrows(RuntimeException.class, ()->{
+            productoService.buscar(null, null);
+        });
+
+        verify(productoRepository, never()).findByNombre(anyString());
+        verify(productoRepository, never()).findById(anyLong());
+    }
+
+    @DisplayName("Test para comprbar que se actualizan los datos")
     @Test
     void update() {
         Producto producto = new Producto(1L,"Collar", 10.0, 3, "", "", "", "");
         BDDMockito.given(productoRepository.findById(anyLong())).willReturn(Optional.of(producto));
-        BDDMockito.given(productoRepository.save(Mockito.any(Producto.class))).willAnswer(invocation -> invocation.getArgument(0));
+        BDDMockito.given(productoRepository.save(any(Producto.class))).willReturn(null);
 
         ProductoUpdate productoUpdate = new ProductoUpdate( "hola", 20.0, 5, "foto1", "foto2", "foto3", "CategoriaX");
         ProductoResponse productoResponse = productoService.update(1L, productoUpdate);

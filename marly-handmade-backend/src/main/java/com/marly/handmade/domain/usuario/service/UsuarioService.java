@@ -1,4 +1,4 @@
-package com.marly.handmade.service;
+package com.marly.handmade.domain.usuario.service;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.marly.handmade.domain.cliente.data.request.ForgetPassword;
@@ -11,28 +11,32 @@ import com.marly.handmade.domain.usuario.data.responst.RespuestaRegistro;
 import com.marly.handmade.domain.usuario.modal.Rol;
 import com.marly.handmade.domain.usuario.modal.Usuario;
 import com.marly.handmade.domain.usuario.repository.UsuarioRepository;
-import com.marly.handmade.infrastructure.email.EmailApiConsumer;
+import com.marly.handmade.infrastructure.email.EmailSender;
 import com.marly.handmade.infrastructure.security.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioService {
+@Slf4j
+public class UsuarioService implements IUsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final ClienteRepository clienteRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
-    private final EmailApiConsumer emailApiConsumer;
+    private final EmailSender emailApiConsumer;
 
     public RespuestaRegistro registrar(RegistrarUsuario registrarUsuario) {
         if (usuarioRepository.existsByUsername(registrarUsuario.username())) {
+            log.warn("Intento de registro fallido: username ya en uso: {}", registrarUsuario.username());
             throw new IllegalArgumentException("El username ya está en uso");
         }
         if (clienteRepository.existsByCorreo(registrarUsuario.cliente().correo())) {
+            log.warn("Intento de registro fallido: correo ya en uso: {}", registrarUsuario.cliente().correo());
             throw new IllegalArgumentException("El correo ya está en uso");
         }
 
@@ -56,15 +60,20 @@ public class UsuarioService {
 
         usuarioRepository.save(usuario);
         clienteRepository.save(cliente);
-
         return new RespuestaRegistro(usuario.getId(), usuario.getUsername(), cliente.getCorreo());
     }
 
     public RespuestaForgotPassword forgotPassword(@Valid ForgetPassword forgetPassword) throws Exception {
         Cliente cliente = clienteRepository.findByCorreo(forgetPassword.email());
+        if (cliente == null){
+            log.warn("Solicitud de reset de contraseña para email no registrado: {}", forgetPassword.email());
+            throw new RuntimeException("No existe un cliente con ese email");
+        }
         Usuario usuario = cliente.getUsuario();
         String token = tokenService.generarTokenResetPassword(usuario);
         emailApiConsumer.sendCorreo(forgetPassword.email(), token, cliente.getNombres());
+
+        log.info("Correo de reset de contraseña enviado a: {}", forgetPassword.email());
         return new RespuestaForgotPassword("Si este correo existe en nuestro sistema, recibirás un enlace para restablecer la contraseña.");
     }
 
@@ -73,6 +82,7 @@ public class UsuarioService {
 
         String tipo = decodedJWT.getClaim("tipo").asString();
         if (tipo == null || !tipo.equals("reset-password")) {
+            log.error("Token inválido para reset de contraseña: {}", resetPasswordRequest.token());
             throw new RuntimeException("Token inválido para resetear contraseña");
         }
 
@@ -80,6 +90,7 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findByUsername(username);
         
         if (usuario == null) {
+            log.error("Usuario no encontrado para username: {}", username);
             throw new RuntimeException("Usuario no encontrado");
         }
 
@@ -87,11 +98,9 @@ public class UsuarioService {
         usuario.setPassword(newEncodedPassword);
         
         usuarioRepository.save(usuario);
-        
         usuarioRepository.flush();
-        
-        usuarioRepository.findByUsername(username);
 
+        log.info("Contraseña actualizada correctamente para usuario: {}", username);
         return new RespuestaForgotPassword("Contraseña actualizada correctamente");
     }
 

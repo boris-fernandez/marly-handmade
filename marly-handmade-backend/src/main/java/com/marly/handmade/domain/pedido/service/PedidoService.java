@@ -1,4 +1,4 @@
-package com.marly.handmade.service;
+package com.marly.handmade.domain.pedido.service;
 
 import com.marly.handmade.domain.cliente.modal.Cliente;
 import com.marly.handmade.domain.cliente.repository.ClienteRepository;
@@ -18,12 +18,12 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class PedidoService {
+public class PedidoService implements IPedidoService{
 
-    private PedidoRepository pedidoRepository;
-    private DetallePedidoRepository detallePedidoRepository;
-    private ProductoRepository productoRepository;
-    private ClienteRepository clienteRepository;
+    private final PedidoRepository pedidoRepository;
+    private final DetallePedidoRepository detallePedidoRepository;
+    private final ProductoRepository productoRepository;
+    private final ClienteRepository clienteRepository;
 
     public PedidoService(PedidoRepository pedidoRepository, DetallePedidoRepository detallePedidoRepository, ProductoRepository productoRepository, ClienteRepository clienteRepository) {
         this.pedidoRepository = pedidoRepository;
@@ -38,6 +38,38 @@ public class PedidoService {
         Cliente cliente = clienteRepository.findByUsuario_Id(usuario.getId());
         if (cliente == null) throw new RuntimeException("No existe el cliente con ese id");
         return cliente;
+    }
+
+    private List<DetallePedido> saveDetallesPedido(List<Producto> productoList, PedidoRequest request, Pedido pedido) {
+        return java.util.stream.IntStream.range(0, productoList.size())
+                .mapToObj(i -> {
+                    DetallePedido detalle = DetallePedido.builder()
+                            .cantidad(request.detallePedido().get(i).cantidad())
+                            .precioUnitario(productoList.get(i).getPrecio())
+                            .pedido(pedido)
+                            .producto(productoList.get(i))
+                            .build();
+                    detallePedidoRepository.save(detalle);
+                    return detalle;
+                })
+                .toList();
+    }
+
+
+    private double totalPedido(List<Producto> productoList, PedidoRequest request){
+        double total = 0;
+        for (int i = 0; i < productoList.size(); i++) {
+            total += productoList.get(i).getPrecio() * request.detallePedido().get(i).cantidad();
+        }
+        return total;
+    }
+
+    private void reducirStockProducto(List<Producto> productoList, PedidoRequest request){
+        for (int i = 0; i < productoList.size(); i++) {
+            Producto producto = productoList.get(i);
+            producto.setStock(producto.getStock() - request.detallePedido().get(i).cantidad());
+            productoRepository.save(producto);
+        }
     }
 
     public PedidoResponse createPedido(PedidoRequest request) {
@@ -73,38 +105,6 @@ public class PedidoService {
         reducirStockProducto(productoList, request);
 
         return new PedidoResponse(pedido, cliente, detallePedidos);
-    }
-
-    private List<DetallePedido> saveDetallesPedido(List<Producto> productoList, PedidoRequest request, Pedido pedido) {
-        return java.util.stream.IntStream.range(0, productoList.size())
-                .mapToObj(i -> {
-                    DetallePedido detalle = DetallePedido.builder()
-                            .cantidad(request.detallePedido().get(i).cantidad())
-                            .precioUnitario(productoList.get(i).getPrecio())
-                            .pedido(pedido)
-                            .producto(productoList.get(i))
-                            .build();
-                    detallePedidoRepository.save(detalle);
-                    return detalle;
-                })
-                .toList();
-    }
-
-
-    private double totalPedido(List<Producto> productoList, PedidoRequest request){
-        double total = 0;
-        for (int i = 0; i < productoList.size(); i++) {
-            total += productoList.get(i).getPrecio() * request.detallePedido().get(i).cantidad();
-        }
-        return total;
-    }
-
-    private void reducirStockProducto(List<Producto> productoList, PedidoRequest request){
-        for (int i = 0; i < productoList.size(); i++) {
-            Producto producto = productoList.get(i);
-            producto.setStock(producto.getStock() - request.detallePedido().get(i).cantidad());
-            productoRepository.save(producto);
-        }
     }
 
 }
