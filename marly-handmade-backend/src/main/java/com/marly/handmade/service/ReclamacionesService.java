@@ -10,6 +10,7 @@ import com.marly.handmade.domain.usuario.modal.Usuario;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.marly.handmade.util.GuavaUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -28,9 +29,9 @@ public class ReclamacionesService {
     private Cliente obtenerCliente(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Usuario usuario = (Usuario) authentication.getPrincipal();
-        Cliente cliente = clienteRepository.findByUsuario_Id(usuario.getId());
-        if (cliente == null) throw new RuntimeException("No existe el cliente con ese id");
-        return cliente;
+    Cliente cliente = clienteRepository.findByUsuario_Id(usuario.getId());
+    GuavaUtils.requireNonNullRuntime(cliente, "No existe el cliente con ese id");
+    return cliente;
     }
 
 

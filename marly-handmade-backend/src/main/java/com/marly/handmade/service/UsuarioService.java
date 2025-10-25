@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.marly.handmade.util.GuavaUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -72,16 +73,16 @@ public class UsuarioService {
         DecodedJWT decodedJWT = tokenService.verifyToken(resetPasswordRequest.token());
 
         String tipo = decodedJWT.getClaim("tipo").asString();
-        if (tipo == null || !tipo.equals("reset-password")) {
+        // comprobar que el claim "tipo" existe y que es el esperado
+        GuavaUtils.requireNonNullRuntime(tipo, "Token inválido para resetear contraseña");
+        if (!"reset-password".equals(tipo)) {
             throw new RuntimeException("Token inválido para resetear contraseña");
         }
 
         String username = decodedJWT.getSubject();
         Usuario usuario = usuarioRepository.findByUsername(username);
         
-        if (usuario == null) {
-            throw new RuntimeException("Usuario no encontrado");
-        }
+        GuavaUtils.requireNonNullRuntime(usuario, "Usuario no encontrado");
 
         String newEncodedPassword = passwordEncoder.encode(resetPasswordRequest.newPassword());
         usuario.setPassword(newEncodedPassword);

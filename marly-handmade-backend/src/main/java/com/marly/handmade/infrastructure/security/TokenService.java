@@ -9,6 +9,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.marly.handmade.domain.usuario.modal.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.marly.handmade.util.GuavaUtils;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -35,7 +36,7 @@ public class TokenService {
     }
 
     public String getSubject(String token){
-        if (token == null) throw new RuntimeException();
+        GuavaUtils.requireNonNullRuntime(token, "Token nulo");
 
         DecodedJWT decodedJWT = null;
         try {
@@ -48,7 +49,7 @@ public class TokenService {
         } catch (JWTVerificationException exception){
             throw new RuntimeException(exception);
         }
-        if (decodedJWT.getSubject() == null) throw new RuntimeException("Verificacion invalido");
+        GuavaUtils.requireNonNullRuntime(decodedJWT.getSubject(), "Verificacion invalido");
         return decodedJWT.getSubject();
     }
 
@@ -68,7 +69,7 @@ public class TokenService {
     }
 
     public DecodedJWT verifyToken(String token) {
-        if (token == null) throw new RuntimeException("Token nulo");
+        GuavaUtils.requireNonNullRuntime(token, "Token nulo");
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
             JWTVerifier verifier = JWT.require(algorithm)

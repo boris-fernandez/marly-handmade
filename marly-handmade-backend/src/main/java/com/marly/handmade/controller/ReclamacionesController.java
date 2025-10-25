@@ -2,7 +2,6 @@ package com.marly.handmade.controller;
 
 import com.marly.handmade.domain.reclamaciones.data.ReclamacionesRequest;
 import com.marly.handmade.domain.reclamaciones.data.ReclamacionesResponse;
-import com.marly.handmade.domain.reclamaciones.modal.Reclamaciones;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
