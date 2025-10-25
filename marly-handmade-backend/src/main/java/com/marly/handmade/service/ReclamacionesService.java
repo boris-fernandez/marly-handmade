@@ -52,10 +52,16 @@ public class ReclamacionesService {
                 + " " + r.getCliente().getApellidos())).toList();
     }
 
-    public ReclamacionesResponse mostrarPorNombre(String nombre) {
-    Reclamaciones reclamaciones = reclamacionesRepository.findByCliente_Nombres(nombre);
-    if (reclamaciones == null) throw new RuntimeException("El reclamo con ese nombre no existe");
-    return new ReclamacionesResponse(reclamaciones, nombre);
+    public List<ReclamacionesResponse> mostrarPorNombre(String nombre) {
+        List<Reclamaciones> reclamaciones = reclamacionesRepository.findByCliente_Nombres(nombre);
+        if (reclamaciones.isEmpty()) throw new RuntimeException("No se encontraron reclamos para el cliente: " + nombre);
+        return reclamaciones.stream().map(r -> new ReclamacionesResponse(
+                        r.getIdReclamo(),
+                        r.getDescripcion(),
+                        r.getFechaReclamo(),
+                        r.getCliente().getNombres()
+                ))
+                .toList();
     }
 
     public ReclamacionesResponse mostrarPorId(long id){
