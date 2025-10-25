@@ -10,6 +10,7 @@ import com.marly.handmade.domain.usuario.modal.Usuario;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.marly.handmade.util.GuavaUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ReclamacionesService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Usuario usuario = (Usuario) authentication.getPrincipal();
         Cliente cliente = clienteRepository.findByUsuario_Id(usuario.getId());
-        if (cliente == null) throw new RuntimeException("No existe el cliente con ese id");
+        GuavaUtils.requireNonNullRuntime(cliente, "No existe el cliente con ese id");
         return cliente;
     }
 
@@ -54,7 +55,7 @@ public class ReclamacionesService {
 
     public List<ReclamacionesResponse> mostrarPorNombre(String nombre) {
         List<Reclamaciones> reclamaciones = reclamacionesRepository.findByCliente_Nombres(nombre);
-        if (reclamaciones.isEmpty()) throw new RuntimeException("No se encontraron reclamos para el cliente: " + nombre);
+        GuavaUtils.requireNonNullRuntime(reclamaciones, "No se encontraron reclamos para el cliente: " + nombre);
         return reclamaciones.stream().map(r -> new ReclamacionesResponse(
                         r.getIdReclamo(),
                         r.getDescripcion(),
