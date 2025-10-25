@@ -11,11 +11,13 @@ import com.marly.handmade.domain.pedido.repository.PedidoRepository;
 import com.marly.handmade.domain.producto.modal.Producto;
 import com.marly.handmade.domain.producto.repository.ProductoRepository;
 import com.marly.handmade.domain.usuario.modal.Usuario;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 public class PedidoService {
@@ -75,8 +77,41 @@ public class PedidoService {
         return new PedidoResponse(pedido, cliente, detallePedidos);
     }
 
+    public void updatePedido(long id) {
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(()-> new RuntimeException("No existe un pedido con el id: " + id));
+        pedido.setEstado(true);
+        pedidoRepository.save(pedido);
+        pedidoRepository.flush();
+    }
+
+    public List<PedidoResponse> listarPedidos() {
+        return pedidoRepository.findAll().stream()
+                .map(pedido -> {
+                    Cliente cliente = pedido.getCliente();
+                    List<DetallePedido> detallesPedido = detallePedidoRepository.findByPedido_IdPedido(pedido.getIdPedido());
+                    return new PedidoResponse(pedido, cliente, detallesPedido);
+                })
+                .toList();
+    }
+
+    public List<PedidoResponse> listarPedidoPorCliente(String nombre) {
+        return pedidoRepository.findAllByCliente_Nombres(nombre).stream()
+                .map(pedido -> {
+                    Cliente cliente = pedido.getCliente();
+                    List<DetallePedido> detallePedidos = detallePedidoRepository.findByPedido_IdPedido(pedido.getIdPedido());
+                    return new PedidoResponse(pedido, cliente, detallePedidos);
+                })
+                .toList();
+    }
+
+    public PedidoResponse mostrarPedidosPorId(long id) {
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("No existe un pedido con el id: " + id));
+        List<DetallePedido> detallePedidos = detallePedidoRepository.findByPedido_IdPedido(pedido.getIdPedido());
+        return new PedidoResponse(pedido, pedido.getCliente(), detallePedidos);
+    }
+
     private List<DetallePedido> saveDetallesPedido(List<Producto> productoList, PedidoRequest request, Pedido pedido) {
-        return java.util.stream.IntStream.range(0, productoList.size())
+        return IntStream.range(0, productoList.size())
                 .mapToObj(i -> {
                     DetallePedido detalle = DetallePedido.builder()
                             .cantidad(request.detallePedido().get(i).cantidad())
@@ -90,6 +125,15 @@ public class PedidoService {
                 .toList();
     }
 
+    public List<PedidoResponse> listarPedidoPorestado(boolean estado) {
+        return pedidoRepository.findAllByEstado(estado).stream()
+                .map(pedido -> {
+                    Cliente cliente = pedido.getCliente();
+                    List<DetallePedido> detallePedidos = detallePedidoRepository.findByPedido_IdPedido(pedido.getIdPedido());
+                    return new PedidoResponse(pedido, cliente, detallePedidos);
+                })
+                .toList();
+    }
 
     private double totalPedido(List<Producto> productoList, PedidoRequest request){
         double total = 0;
@@ -106,5 +150,4 @@ public class PedidoService {
             productoRepository.save(producto);
         }
     }
-
 }
