@@ -37,7 +37,7 @@ public class ReclamacionesController {
     }
 
     @GetMapping("{nombre}")
-    public ResponseEntity<ReclamacionesResponse> mostrarPorNombre(@PathVariable String nombre){
+    public ResponseEntity<List<ReclamacionesResponse>> mostrarPorNombre(@PathVariable String nombre){
         return ResponseEntity.ok(reclamacionesService.mostrarPorNombre(nombre));
     }
 
