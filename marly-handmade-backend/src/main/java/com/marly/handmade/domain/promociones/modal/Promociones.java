@@ -1,5 +1,6 @@
 package com.marly.handmade.domain.promociones.modal;
 
+import com.marly.handmade.domain.producto.repository.ProductoRepository;
 import com.marly.handmade.domain.promociones.data.PromocionesUpdate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,16 +55,17 @@ public class Promociones {
 
     private Producto producto;
 
-    public void update(PromocionesUpdate promocionesUpdate) {
+    public void update(PromocionesUpdate promocionesUpdate, ProductoRepository productoRepository) {
         if (promocionesUpdate.nombre() != null) setNombre(promocionesUpdate.nombre());
         if (promocionesUpdate.descripcion() != null) setDescripcion(promocionesUpdate.descripcion());
         if (promocionesUpdate.fechaInicio() != null) setFechaInicio(promocionesUpdate.fechaInicio());
         if (promocionesUpdate.fechaFin() != null) setFechaFin(promocionesUpdate.fechaFin());
         if (promocionesUpdate.porcentajeDescuento() != null) setPorcentajeDescuento(promocionesUpdate.porcentajeDescuento());
 
-        if (promocionesUpdate.producto() != null) {
-            if (producto == null) producto = new Producto();
-            producto.setIdProducto(promocionesUpdate.producto().id());
+        if (promocionesUpdate.productoId() != null) {
+            Producto nuevoProducto = productoRepository.findById(promocionesUpdate.productoId())
+                    .orElseThrow(() -> new RuntimeException("No existe un producto con el ID: " + promocionesUpdate.productoId()));
+            setProducto(nuevoProducto);
         }
     }
 

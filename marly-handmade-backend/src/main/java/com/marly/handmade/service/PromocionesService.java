@@ -27,6 +27,10 @@ public class PromocionesService {
 
     public PromocionesResponse crearPromociones(PromocionesRequest promocionesRequest){
         Producto producto = productoRepository.findById(promocionesRequest.idProducto()).orElseThrow(()->new RuntimeException("NO EXISTE UN PRODUCTO CON EL ID:"+ promocionesRequest.idProducto()));
+        boolean existePromocion = promocionesRepository.existsByProducto(producto);
+        if (existePromocion) {
+            throw new RuntimeException("El producto con ID " + producto.getIdProducto() + " ya tiene una promoción.");
+        }
         Promociones promociones = Promociones.builder()
         .nombre(promocionesRequest.nombre())
         .descripcion(promocionesRequest.descripcion())
@@ -41,10 +45,20 @@ public class PromocionesService {
     }
 
     public PromocionesResponse update(long id, PromocionesUpdate promocionesUpdate) {
-        Promociones promociones = promocionesRepository.findById(id).orElseThrow(() -> new RuntimeException("El promocion con ese id no existe"));
-        promociones.update(promocionesUpdate);
-        promocionesRepository.save(promociones);
-        return new PromocionesResponse(promociones, promociones.getProducto());
+        Promociones promo = promocionesRepository.findById(id).orElseThrow(() -> new RuntimeException("No existe una promoción con ID: " + id));
+        if (promocionesUpdate.productoId() != null) {
+            Long productoId = promocionesUpdate.productoId();
+            Producto producto = productoRepository.findById(productoId).orElseThrow(() -> new RuntimeException("No existe un producto con ID: " + productoId));
+            boolean tienePromocion = promocionesRepository.existsByProducto(producto);
+            if (!tienePromocion) {
+                throw new RuntimeException("El producto con ID " + productoId + " no tiene una promoción existente");
+            }
+            promo.setProducto(producto);
+        }
+
+        promo.update(promocionesUpdate, productoRepository);
+        promocionesRepository.save(promo);
+        return new PromocionesResponse(promo, promo.getProducto());
     }
 
     public List<PromocionesResponse> listarPromociones(){
