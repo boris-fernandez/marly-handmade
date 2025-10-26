@@ -14,8 +14,6 @@ import com.marly.handmade.service.PromocionesService;
 
 import jakarta.validation.Valid;
 
-
-
 @RestController
 @RequestMapping("promociones")
 public class PromocionesController {
