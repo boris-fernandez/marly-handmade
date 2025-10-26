@@ -4,7 +4,6 @@ import com.marly.handmade.domain.cliente.modal.Cliente;
 import com.marly.handmade.domain.usuario.modal.Rol;
 import com.marly.handmade.domain.usuario.modal.Usuario;
 import com.marly.handmade.domain.usuario.repository.UsuarioRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
