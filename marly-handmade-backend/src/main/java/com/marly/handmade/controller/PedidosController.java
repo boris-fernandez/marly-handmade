@@ -55,4 +55,5 @@ public class PedidosController {
     public ResponseEntity<List<PedidoResponse>> listarPedidoPorestado(@PathVariable boolean estado){
         return ResponseEntity.ok(pedidoService.listarPedidoPorestado(estado));
     }
+    
 }
