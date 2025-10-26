@@ -1,11 +1,22 @@
+// ProductGrid.jsx
 import ProductCard from "./ProductCard";
 
-export default function ProductGrid({ products }) {
+export default function ProductGrid({ products = [] }) {
+  if (!products.length) {
+    return (
+      <div className="flex-1 flex items-center justify-center text-[#997C71] font-light text-sm p-6">
+        No products found.
+      </div>
+    );
+  }
+
   return (
-    <div className="w-3/4 p-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-      {products.map((p) => (
-        <ProductCard key={p.id} product={p} />
-      ))}
+    <div className="flex-1 px-4 md:px-6 pt-24 mb-8"> 
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map((p) => (
+          <ProductCard key={p.id} product={p} />
+        ))}
+      </div>
     </div>
   );
 }

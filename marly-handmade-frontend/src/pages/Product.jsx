@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import MostLoved from "../components/MostLoved";
-import ProductSelection from "../assets/image42.png";
+import ProductSelection from "../assets/sea4.png";
 import SelectAmount from "../components/Amount";
 import "../components/Product.css";
 
