@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.marly.handmade.util.ApacheCommonsUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductoService{
@@ -20,7 +21,9 @@ public class ProductoService{
     }
 
     public ProductoResponse crearProducto(ProductoRequest productoRequest){
-    ApacheCommonsUtils.requireNonNullRuntime(productoRepository.findByNombre(productoRequest.nombre()), "Ya existe un producto con ese nombre");
+        Producto productoExistente = productoRepository.findByNombre(productoRequest.nombre());
+
+        ApacheCommonsUtils.requireNonNullRuntime(productoExistente == null ? new Object() : null, "Ya existe un producto con ese nombre");
 
         Producto producto = Producto.builder()
                 .nombre(productoRequest.nombre())
@@ -48,8 +51,7 @@ public class ProductoService{
     }
 
     public ProductoResponse mostrarPorNombre(String nombre) {
-    Producto producto = productoRepository.findByNombre(nombre);
-    ApacheCommonsUtils.requireNonNullRuntime(producto, "El producto con ese nombre no existe");
+    Producto producto = Optional.ofNullable(productoRepository.findByNombre(nombre)).orElseThrow(() -> new RuntimeException("El producto con ese nombre no existe"));
     return new ProductoResponse(producto);
     }
 

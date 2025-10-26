@@ -27,7 +27,7 @@ class UsuarioRepositoryTest {
         usuario = Usuario.builder()
                 .username("Boris")
                 .password("1234")
-                .rol(Rol.Admin)
+                .rol(Rol.ADMIN)
                 .estado(true)
                 .build();
     }
@@ -38,14 +38,14 @@ class UsuarioRepositoryTest {
         Usuario usuario1 = Usuario.builder()
                 .username("Marco")
                 .password("1234")
-                .rol(Rol.Admin)
+                .rol(Rol.ADMIN)
                 .estado(true)
                 .build();
 
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
 
         assertThat(usuarioGuardado).isNotNull();
-        assertThat(usuarioGuardado.getRol()).isEqualTo(Rol.Admin);
+        assertThat(usuarioGuardado.getRol()).isEqualTo(Rol.ADMIN);
     }
 
     @Test
