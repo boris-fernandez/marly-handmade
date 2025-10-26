@@ -11,7 +11,7 @@ import com.marly.handmade.util.GuavaUtils;
 import java.util.List;
 
 @Service
-public class ProductoService {
+public class ProductoService{
 
     private ProductoRepository productoRepository;
 
@@ -41,6 +41,12 @@ public class ProductoService {
     }
 
 
+    public ProductoResponse buscar(String nombre, Long id) {
+        if (id != null) return mostrarPorId(id);
+        if (nombre != null) return mostrarPorNombre(nombre);
+        else throw new RuntimeException("Debe enviar un parámetro id o nombre");
+    }
+
     public ProductoResponse mostrarPorNombre(String nombre) {
     Producto producto = productoRepository.findByNombre(nombre);
     GuavaUtils.requireNonNullRuntime(producto, "El producto con ese nombre no existe");
@@ -57,4 +63,7 @@ public class ProductoService {
         productoRepository.save(producto);
         return new ProductoResponse(producto);
     }
+
+
+
 }
