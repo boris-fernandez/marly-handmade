@@ -32,8 +32,9 @@ public class UsuarioService{
     private final EmailSender emailApiConsumer;
 
     public RespuestaRegistro registrar(RegistrarUsuario registrarUsuario) {
-        GuavaUtils.checkArgumentRuntime(usuarioRepository.existsByUsername(registrarUsuario.username()), "El username ya está en uso");
-        GuavaUtils.checkArgumentRuntime(usuarioRepository.existsByUsername(registrarUsuario.username()), "El correo ya está en uso");
+        GuavaUtils.checkArgumentRuntime(!clienteRepository.existsByIdentificacion(registrarUsuario.cliente().identificacion()), "La identificacion ya está en uso");
+        GuavaUtils.checkArgumentRuntime(!usuarioRepository.existsByUsername(registrarUsuario.username()), "El username ya está en uso");
+        GuavaUtils.checkArgumentRuntime(!clienteRepository.existsByCorreo(registrarUsuario.cliente().correo()), "El correo ya está en uso");
 
         Usuario usuario = Usuario.builder()
                 .username(registrarUsuario.username())
