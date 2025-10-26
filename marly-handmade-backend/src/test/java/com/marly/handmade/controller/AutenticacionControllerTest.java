@@ -10,7 +10,7 @@ import com.marly.handmade.domain.usuario.data.request.RegistrarUsuario;
 import com.marly.handmade.domain.usuario.data.responst.RespuestaRegistro;
 import com.marly.handmade.domain.usuario.modal.Rol;
 import com.marly.handmade.domain.usuario.modal.Usuario;
-import com.marly.handmade.domain.usuario.service.IUsuarioService;
+import com.marly.handmade.service.UsuarioService;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ class AutenticacionControllerTest extends ControllerTestBase {
     private AuthenticationManager authenticationManager;
 
     @MockBean
-    private IUsuarioService usuarioService;
+    private UsuarioService usuarioService;
 
     @Test
     void autenticar() throws Exception {

@@ -7,9 +7,9 @@ import com.marly.handmade.domain.usuario.data.request.AutenticacionDto;
 import com.marly.handmade.domain.usuario.data.request.RegistrarUsuario;
 import com.marly.handmade.domain.usuario.data.responst.RespuestaRegistro;
 import com.marly.handmade.domain.usuario.modal.Usuario;
-import com.marly.handmade.domain.usuario.service.IUsuarioService;
 import com.marly.handmade.infrastructure.security.DatosJWTToken;
 import com.marly.handmade.infrastructure.security.TokenService;
+import com.marly.handmade.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +28,9 @@ import java.net.URI;
 public class AutenticacionController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
-    private final IUsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
-    public AutenticacionController(AuthenticationManager authenticationManager, TokenService tokenService, IUsuarioService usuarioService) {
+    public AutenticacionController(AuthenticationManager authenticationManager, TokenService tokenService, UsuarioService usuarioService) {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         this.usuarioService = usuarioService;

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../styles/Register.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { AuthContext } from "../contexts/Auth.context";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function Register() {
   const { register } = useContext(AuthContext);
@@ -16,7 +16,7 @@ export default function Register() {
   const [identificacion, setIdentificacion] = useState("");
   const [correo, setCorreo] = useState("");
   const [telefono, setTelefono] = useState("");
-  
+
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -25,10 +25,10 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-    setErrorMessage("Las contraseñas no coinciden.");
-    return;
-  }
-  setErrorMessage("");
+      setErrorMessage("Las contraseñas no coinciden.");
+      return;
+    }
+    setErrorMessage("");
 
     register({
       username,
@@ -43,144 +43,155 @@ export default function Register() {
         telefono,
       },
     });
-    
   };
 
   return (
     <>
       <Header />
-      <div className='register-container'>
-        <div className='register-box'>
-          <h2 className='register-title'>Register</h2>
+      <div className="register-container">
+        <div className="register-box">
+          <h2 className="register-title">Register</h2>
 
-          <form className='register-form' onSubmit={handleSubmit}>
-            <div className='form-group-register'>
+          <form className="register-form" onSubmit={handleSubmit}>
+            <div className="form-group-register">
               <input
-                id='name'
-                type='text'
-                placeholder='Name'
+                id="name"
+                type="text"
+                placeholder="Name"
                 onChange={(e) => {
                   setUserName(e.target.value);
                 }}
                 required
               />
             </div>
-            <div className='form-group-register'>
+            <div className="form-group-register">
               <input
-                id='email'
-                type='email'
-                placeholder='Email'
+                id="email"
+                type="email"
+                placeholder="Email"
                 onChange={(e) => {
                   setCorreo(e.target.value);
                 }}
                 required
               />
             </div>
-            <div className='form-group-register'>
+            <div className="form-group-register">
               <div className="input-wrapper-register">
-              <input
-                id='password'
-                type={showPassword ? "text" : "password"}
-                placeholder='Password'
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                required
-              />
-               <button type="button" className="toggle-password-register" onClick={() => setShowPassword(!showPassword)}>
-               <i className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
-              </button>
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  required
+                />
+                <button
+                  type="button"
+                  className="toggle-password-register"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <i
+                    className={`fa-solid ${
+                      showPassword ? "fa-eye" : "fa-eye-slash"
+                    }`}
+                  ></i>
+                </button>
               </div>
             </div>
-              <div className="form-group-register">
-                <div className="input-wrapper-register">
-                  <input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm Password"
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="toggle-password-register"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    <i className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
-                  </button>
-                </div>
-                <p className="error-message">{errorMessage || "\u00A0"}</p>
+            <div className="form-group-register">
+              <div className="input-wrapper-register">
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="toggle-password-register"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  <i
+                    className={`fa-solid ${
+                      showConfirmPassword ? "fa-eye" : "fa-eye-slash"
+                    }`}
+                  ></i>
+                </button>
               </div>
-            
-            <div className='form-group-register'>
+              <p className="error-message">{errorMessage || "\u00A0"}</p>
+            </div>
+
+            <div className="form-group-register">
               <input
-                id='nombres'
-                type='text'
-                placeholder='First Name(s)'
+                id="nombres"
+                type="text"
+                placeholder="First Name(s)"
                 onChange={(e) => {
                   setNombres(e.target.value);
                 }}
                 required
               />
             </div>
-            <div className='form-group-register'>
+            <div className="form-group-register">
               <input
-                id='apellidos'
-                type='text'
-                placeholder='Last Name(s)'
+                id="apellidos"
+                type="text"
+                placeholder="Last Name(s)"
                 onChange={(e) => {
                   setApellidos(e.target.value);
                 }}
                 required
               />
             </div>
-            <div className='form-group-register'>
+            <div className="form-group-register">
               <input
-                id='direccion'
-                type='text'
-                placeholder='Address'
+                id="direccion"
+                type="text"
+                placeholder="Address"
                 onChange={(e) => {
                   setDireccion(e.target.value);
                 }}
                 required
               />
             </div>
-            <div className='form-group-register'>
+            <div className="form-group-register">
               <input
-                id='fechaNacimiento'
-                type='date'
+                id="fechaNacimiento"
+                type="date"
                 onChange={(e) => {
                   setFechaNacimiento(e.target.value);
                 }}
                 required
               />
             </div>
-            <div className='form-group-register'>
+            <div className="form-group-register">
               <input
-                id='identificacion'
-                type='text'
-                placeholder='ID Number'
+                id="identificacion"
+                type="text"
+                placeholder="ID Number"
                 onChange={(e) => {
                   setIdentificacion(e.target.value);
                 }}
                 required
               />
             </div>
-            <div className='form-group-register'>
+            <div className="form-group-register">
               <input
-                id='telefono'
-                type='tel'
-                placeholder='Phone Number'
+                id="telefono"
+                type="tel"
+                placeholder="Phone Number"
                 onChange={(e) => {
                   setTelefono(e.target.value);
                 }}
                 required
               />
             </div>
-            <div className='form-links'>
-              <Link to='/login'>Already have an account? Sign In</Link>
+            <div className="form-links">
+              <Link to="/login">Already have an account? Sign In</Link>
             </div>
-            <button type='submit' className='register-btn'>
+            <button type="submit" className="register-btn">
               Create Account
             </button>
           </form>

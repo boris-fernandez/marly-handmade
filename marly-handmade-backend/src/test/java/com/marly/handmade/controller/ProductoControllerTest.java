@@ -1,11 +1,10 @@
 package com.marly.handmade.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marly.handmade.domain.producto.data.ProductoRequest;
 import com.marly.handmade.domain.producto.data.ProductoResponse;
 import com.marly.handmade.domain.producto.data.ProductoUpdate;
-import com.marly.handmade.domain.producto.service.IProductoService;
+import com.marly.handmade.service.ProductoService;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ class ProductoControllerTest extends ControllerTestBase{
     private ObjectMapper objectMapper;
 
     @MockBean
-    private IProductoService productoService;
+    private ProductoService productoService;
 
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
