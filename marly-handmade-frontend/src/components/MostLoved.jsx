@@ -27,10 +27,10 @@ export default function MostLoved() {
   ];
 
   return (
-    <div className="px-6">
+    <div className="px-30">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Most Loved</h2>
-        <button className="mt-4 px-8 py-1 border-none bg-marlyBlue text-black font-bold cursor-pointer">
+        <button className="mt-4 px-8 py-1 border-none bg-marlyBlue text-black font-bold cursor-pointer rounded-md transition-all duration-300 hover:text-[1.1rem]">
           View More
         </button>
       </div>
