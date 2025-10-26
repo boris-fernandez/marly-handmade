@@ -6,7 +6,7 @@ import ProductGrid from "../components/ProductGrid";
 import { products } from "../data/products";
 import SeaCollection from "/src/assets/hero_sea_collection.png";
 
-function ComplaintsBook() {
+function CollectionDetail() {
   return (
     <>
       <Header />
@@ -22,4 +22,4 @@ function ComplaintsBook() {
   );
 }
 
-export default ComplaintsBook;
+export default CollectionDetail;

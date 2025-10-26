@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marly.handmade.domain.detallePedido.data.DetallePedidoRequest;
 import com.marly.handmade.domain.pedido.data.PedidoRequest;
 import com.marly.handmade.domain.pedido.data.PedidoResponse;
-import com.marly.handmade.domain.pedido.service.IPedidoService;
+import com.marly.handmade.service.PedidoService;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ class PedidosControllerTest extends ControllerTestBase {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private IPedidoService pedidoService;
+    private PedidoService pedidoService;
 
     @Test
     void createPedido() throws Exception {

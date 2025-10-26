@@ -5,7 +5,6 @@ import com.marly.handmade.domain.producto.data.ProductoResponse;
 import com.marly.handmade.domain.producto.data.ProductoUpdate;
 import com.marly.handmade.domain.producto.modal.Producto;
 import com.marly.handmade.domain.producto.repository.ProductoRepository;
-import com.marly.handmade.domain.producto.service.ProductoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

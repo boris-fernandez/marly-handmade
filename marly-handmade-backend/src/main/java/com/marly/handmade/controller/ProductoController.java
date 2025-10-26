@@ -3,7 +3,7 @@ package com.marly.handmade.controller;
 import com.marly.handmade.domain.producto.data.ProductoRequest;
 import com.marly.handmade.domain.producto.data.ProductoResponse;
 import com.marly.handmade.domain.producto.data.ProductoUpdate;
-import com.marly.handmade.domain.producto.service.IProductoService;
+import com.marly.handmade.service.ProductoService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ import java.util.List;
 @RequestMapping("producto")
 public class ProductoController {
 
-    private final IProductoService productoService;
+    private final ProductoService productoService;
 
-    public ProductoController(IProductoService productoService) {
+    public ProductoController(ProductoService productoService) {
         this.productoService = productoService;
     }
 

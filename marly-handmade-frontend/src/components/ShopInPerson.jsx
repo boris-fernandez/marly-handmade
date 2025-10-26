@@ -1,5 +1,5 @@
 import React from "react";
-import bgImage from "/ShopIn-person.png"; 
+import bgImage from "/ShopIn-person1.png"; 
 
 export default function ShopInPerson() {
   return (
@@ -10,7 +10,7 @@ export default function ShopInPerson() {
       >
         <div 
           className="absolute left-0 top-0 bottom-0 md:top-1/2 md:-translate-y-1/2 p-8 md:p-12 w-full md:w-1/2 lg:w-2/5 max-w-lg flex flex-col justify-center h-full"
-          style={{ backgroundColor: "#997C71" }}
+          style={{ backgroundColor: "#997c71e0" }}
         >
           <h2 className="text-4xl sm:text-5xl font-serif mb-4" style={{ color: "#F5E3C3", fontFamily: "Georgia, serif" }}>
             Shop in-person
@@ -31,7 +31,7 @@ export default function ShopInPerson() {
             href="https://maps.app.goo.gl/JoW5hEGNivM7D9Sq9" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-fit px-6 py-3 transition duration-300 rounded-sm"
+            className="w-fit px-6 py-3 transition duration-300 rounded-sm animate-[pulse-ri_2s_ease-in-out_infinite]"
             style={{ backgroundColor: "#F5E3C3", color: "#997C71", fontWeight: "bold" }}
           >
             Get directions

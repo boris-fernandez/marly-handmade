@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../styles/Login.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { AuthContext } from "../contexts/Auth.context";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function RecoverPassword() {
   const { forgotPassword } = useContext(AuthContext);
@@ -18,16 +18,16 @@ export default function RecoverPassword() {
   return (
     <>
       <Header />
-      <div className='login-container'>
-        <div className='login-box'>
-          <h2 className='login-title'>Recover Password</h2>
+      <div className="login-container">
+        <div className="login-box">
+          <h2 className="login-title">Recover Password</h2>
 
-          <form className='login-form' onSubmit={handleSubmit}>
-            <div className='form-group'>
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="form-group">
               <input
-                id='email'
-                type='email'
-                placeholder='Email'
+                id="email"
+                type="email"
+                placeholder="Email"
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -35,14 +35,14 @@ export default function RecoverPassword() {
               />
             </div>
 
-            <button type='submit' className='login-btn'>
+            <button type="submit" className="login-btn">
               UPDATE
             </button>
           </form>
 
-          <div className='login-links'>
-            <Link to='/register'>Create account</Link>
-            <Link to='/'>Return to Store</Link>
+          <div className="login-links">
+            <Link to="/register">Create account</Link>
+            <Link to="/">Return to Store</Link>
           </div>
         </div>
       </div>
