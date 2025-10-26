@@ -37,9 +37,9 @@ export default function Login() {
           <form className="login-form" onSubmit={handleSubmit}>
             <div className="form-group-login">
               <input
-                id="email"
+                id="text"
                 type="text"
-                placeholder="Email"
+                placeholder="User"
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}

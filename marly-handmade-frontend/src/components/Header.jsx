@@ -1,17 +1,40 @@
 import { BrowserRouter } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Globe, Search, User, ShoppingCart, Menu, X } from "lucide-react";
 import { useCart } from "../contexts/CartContext.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
+import { jwtDecode } from "jwt-decode";
+import { useMemo } from "react";
+
+function obtenerSubDesdeToken(token) {
+  try {
+    const decoded = jwtDecode(token);
+    console.log(decoded.sub);
+    return decoded.sub || null;
+  } catch (error) {
+    console.error("Error decodificando el token:", error);
+    return null;
+  }
+}
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
 
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
   const { openCart } = useCart();
   const { token, logout } = useContext(AuthContext);
+  console.log("Token en Header:", token, typeof token);
+
+  const userName = useMemo(() => {
+    if (!token) return null;
+    const name = obtenerSubDesdeToken(token.token);
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  }, [token]);
 
   const toggleMenu = () => {
     setMenuOpen((v) => {
@@ -23,6 +46,16 @@ export default function Header() {
       return newV;
     });
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <header className="w-full border-b border-gray-200">
@@ -213,8 +246,56 @@ export default function Header() {
           </a>
         </div>
 
+      
+
         {/* ICONS + HAMBURGER */}
         <div className="flex items-center space-x-4">
+          {/* 🔽 Menú de cuenta */}
+          <div className="relative" ref={menuRef}>
+            {token ? (
+              <div
+                className="flex items-center gap-2 cursor-pointer select-none"
+                onClick={() => setOpen(!open)}
+              >
+                <User className="w-5 h-5 text-[#040F2E]" />
+                <div className="text-sm text-[#040F2E]">
+                  <p>
+                    Hello, <span className="font-medium">{userName}</span>
+                  </p>
+                  <p className="font-bold">My Account</p>
+                </div>
+              </div>
+            ) : (
+              <Link to="/login">
+                <User className="w-5 h-5 text-[#040F2E]" />
+              </Link>
+            )}
+
+            {/* 🔽 Menú desplegable */}
+            {open && token && (
+              <div className="absolute right-0 mt-2 w-44 bg-white shadow-lg rounded-lg py-2 z-50">
+                <Link
+                  to="/perfil"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                >
+                  Ver perfil
+                </Link>
+                <Link
+                  to="/configuracion"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                >
+                  Configuración
+                </Link>
+                <button
+                  onClick={logout}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            )}
+          </div>
+
           <div className="relative inline-block">
             <select className="w-5 h-5 opacity-0 absolute inset-0 cursor-pointer">
               <option>Spanish</option>
@@ -222,21 +303,13 @@ export default function Header() {
             </select>
             <Globe className="w-5 h-5 text-[#040F2E] pointer-events-none cursor-pointer" />
           </div>
+          <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
           <select className="rounded px-2 py-1 text-sm hidden sm:block cursor-pointer">
             <option>USD</option>
             <option>PEN</option>
             <option>EUR</option>
           </select>
-          <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-          {token ? (
-            <button onClick={logout} className="text-[#040F2E] font-medium cursor-pointer">
-              Logout
-            </button>
-          ) : (
-            <Link to="/login">
-              <User className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-            </Link>
-          )}{" "}
+          
           {/* CART */}
           <button
             onClick={openCart}
