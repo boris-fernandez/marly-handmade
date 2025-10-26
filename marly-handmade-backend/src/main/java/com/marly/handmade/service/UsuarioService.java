@@ -39,7 +39,7 @@ public class UsuarioService{
         Usuario usuario = Usuario.builder()
                 .username(registrarUsuario.username())
                 .password(passwordEncoder.encode(registrarUsuario.password()))
-                .rol(Rol.Cliente)
+                .rol(Rol.CLIENTE)
                 .estado(true)
                 .build();
         Cliente cliente = Cliente.builder()
