@@ -1,7 +1,7 @@
 package com.marly.handmade.service;
 
 import com.marly.handmade.domain.promociones.data.PromocionesUpdate;
-import com.marly.handmade.util.GuavaUtils;
+import com.marly.handmade.util.ApacheCommonsUtils;
 import org.springframework.stereotype.Service;
 
 import com.marly.handmade.domain.producto.modal.Producto;
@@ -30,7 +30,7 @@ public class PromocionesService {
         Producto producto = productoRepository.findById(promocionesRequest.idProducto()).orElseThrow(()->new RuntimeException("NO EXISTE UN PRODUCTO CON EL ID:"+ promocionesRequest.idProducto()));
         boolean existePromocion = promocionesRepository.existsByProducto(producto);
 
-        GuavaUtils.requireNonNullRuntime(existePromocion, "El producto con ID " + producto.getIdProducto() + " ya tiene una promoción.");
+    ApacheCommonsUtils.requireNonNullRuntime(existePromocion, "El producto con ID " + producto.getIdProducto() + " ya tiene una promoción.");
 
         Promociones promociones = Promociones.builder()
         .nombre(promocionesRequest.nombre())
@@ -76,10 +76,10 @@ public class PromocionesService {
     public PromocionesResponse mostrarPorNombre(String nombre) {
         Producto producto = productoRepository.findByNombre(nombre);
 
-        GuavaUtils.requireNonNullRuntime(producto, "El producto con ese nombre no existe");
+    ApacheCommonsUtils.requireNonNullRuntime(producto, "El producto con ese nombre no existe");
 
         Promociones promociones = promocionesRepository.findByProducto(producto);
-        GuavaUtils.requireNonNullRuntime(promociones, "No existe una promoción para ese producto");
+    ApacheCommonsUtils.requireNonNullRuntime(promociones, "No existe una promoción para ese producto");
 
         return new PromocionesResponse(promociones, producto);
     }
