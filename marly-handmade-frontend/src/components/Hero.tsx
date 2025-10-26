@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./Hero.module.css";
-import orcaVideo from "../assets/orcaMarly.mp4";
-import heroImg from "../assets/hero.png"; 
+import orcaVideo from "../assets/retorno.mp4";
+import heroImg from "../assets/hero1.png"; 
 
 interface HeroProps {
   texto: boolean;
