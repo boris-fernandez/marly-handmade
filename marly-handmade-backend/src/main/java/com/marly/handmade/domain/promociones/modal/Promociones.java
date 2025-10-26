@@ -1,6 +1,5 @@
 package com.marly.handmade.domain.promociones.modal;
 
-import com.marly.handmade.domain.producto.repository.ProductoRepository;
 import com.marly.handmade.domain.promociones.data.PromocionesUpdate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
