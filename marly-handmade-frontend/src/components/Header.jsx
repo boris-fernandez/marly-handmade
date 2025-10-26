@@ -148,7 +148,7 @@ export default function Header() {
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
                       <li>
                         <a
-                          href="/SEA COLLECTION"
+                          href="/product/sea-collection"
                           className="hover:text-[#040F2E]"
                         >
                           SEA COLLECTION
@@ -166,7 +166,7 @@ export default function Header() {
                   </div>
                   <div className="flex flex-col items-center">
                     <a
-                      href="/sea-collection"
+                      href="/product/sea-collection"
                       className="block text-center text-[#2C3E5E] hover:text-[#040F2E]"
                     >
                       <img
@@ -318,7 +318,7 @@ export default function Header() {
             </button>
             {collectionsOpen && (
               <div className="mt-2 pl-4 border-l border-gray-200 space-y-3">
-                <a href="/sea-collection" className="block">
+                <a href="/product/sea-collection" className="block">
                   <img
                     src="/sea-collection.jpg"
                     alt="Sea"
