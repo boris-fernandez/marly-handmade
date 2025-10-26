@@ -1,3 +1,7 @@
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
@@ -9,22 +13,43 @@ import MeetTheMaker from "../components/MeetTheMaker";
 import ShopInPerson from "../components/ShopInPerson";
 import heroImg from "../assets/hero.png";
 
-export default function CartPage() {
+import { Link } from "react-router-dom";
+
+export default function Landing() {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // duración de la animación (en ms)
+      once: true, // anima solo una vez
+      easing: "ease-in-out", // suavidad del movimiento
+      offset: 100, // distancia en px antes de que empiece la animación
+    });
+  }, []);
+
   return (
     <>
       <Header />
 
-      <Hero imagen={heroImg} texto={true} />
+      <Hero texto={true} />
 
-      <ShortMarlyDescriptionLanding />
+      <div data-aos="fade-up">
+        <ShortMarlyDescriptionLanding />
+      </div>
 
-      <MostLoved />
+      <div data-aos="fade-left">
+        <MostLoved />
+      </div>
 
-      <MarlyCollections />
+      <div data-aos="fade-right">
+        <MarlyCollections />
+      </div>
 
-      <ShopByLook />
+      <div data-aos="fade-left">
+        <ShopByLook />
+      </div>
 
-      <MeetTheMaker />
+      <div data-aos="fade-up">
+        <MeetTheMaker />
+      </div>
 
       <ShopInPerson />
 

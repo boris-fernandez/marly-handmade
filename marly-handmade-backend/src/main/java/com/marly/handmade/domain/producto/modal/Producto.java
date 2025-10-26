@@ -1,0 +1,46 @@
+package com.marly.handmade.domain.producto.modal;
+
+import com.marly.handmade.domain.producto.data.ProductoUpdate;
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "Productos")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Producto {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idProducto;
+
+    private String nombre;
+
+    private Double precio;
+
+    private Integer stock;
+
+    @Column(name = "foto_principal")
+    private String fotoPrincipal;
+
+    @Column(name = "foto_secundario")
+    private String fotoSecundario;
+
+    @Column(name = "foto_terciario")
+    private String fotoTerciario;
+
+    private String categoria;
+
+    public void update(ProductoUpdate productoUpdate) {
+        if (productoUpdate.nombre() != null)  setNombre(productoUpdate.nombre());
+        if (productoUpdate.precio() != null)  setPrecio(productoUpdate.precio());
+        if (productoUpdate.stock() != null)  setStock(productoUpdate.stock());
+        if (productoUpdate.fotoPrincipal() != null)  setFotoPrincipal(productoUpdate.fotoPrincipal());
+        if (productoUpdate.fotoSecundario() != null)  setFotoSecundario(productoUpdate.fotoSecundario());
+        if (productoUpdate.fotoTerciario() != null)  setFotoTerciario(productoUpdate.fotoTerciario());
+        if (productoUpdate.categoria() != null) setCategoria(productoUpdate.categoria());
+    }
+}

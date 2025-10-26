@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class EmailApiConsumer {
+public class EmailApiConsumer implements EmailSender {
 
     @Value("${key.send.correo}")
     private String keySend;
