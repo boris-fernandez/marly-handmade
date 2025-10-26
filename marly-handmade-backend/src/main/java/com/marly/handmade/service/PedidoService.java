@@ -11,7 +11,6 @@ import com.marly.handmade.domain.pedido.repository.PedidoRepository;
 import com.marly.handmade.domain.producto.modal.Producto;
 import com.marly.handmade.domain.producto.repository.ProductoRepository;
 import com.marly.handmade.domain.usuario.modal.Usuario;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,12 +19,12 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 @Service
-public class PedidoService {
+public class PedidoService{
 
-    private PedidoRepository pedidoRepository;
-    private DetallePedidoRepository detallePedidoRepository;
-    private ProductoRepository productoRepository;
-    private ClienteRepository clienteRepository;
+    private final PedidoRepository pedidoRepository;
+    private final DetallePedidoRepository detallePedidoRepository;
+    private final ProductoRepository productoRepository;
+    private final ClienteRepository clienteRepository;
 
     public PedidoService(PedidoRepository pedidoRepository, DetallePedidoRepository detallePedidoRepository, ProductoRepository productoRepository, ClienteRepository clienteRepository) {
         this.pedidoRepository = pedidoRepository;
