@@ -46,17 +46,15 @@ public class PromocionesService {
 
     public PromocionesResponse update(long id, PromocionesUpdate promocionesUpdate) {
         Promociones promo = promocionesRepository.findById(id).orElseThrow(() -> new RuntimeException("No existe una promoción con ID: " + id));
-        if (promocionesUpdate.productoId() != null) {
-            Long productoId = promocionesUpdate.productoId();
-            Producto producto = productoRepository.findById(productoId).orElseThrow(() -> new RuntimeException("No existe un producto con ID: " + productoId));
-            boolean tienePromocion = promocionesRepository.existsByProducto(producto);
-            if (!tienePromocion) {
-                throw new RuntimeException("El producto con ID " + productoId + " no tiene una promoción existente");
-            }
-            promo.setProducto(producto);
-        }
 
-        promo.update(promocionesUpdate, productoRepository);
+        Long productoId = promocionesUpdate.productoId();
+        Producto producto = productoRepository.findById(productoId).orElseThrow(() -> new RuntimeException("No existe un producto con ID: " + productoId));
+
+        promocionesRepository.findByProducto_Id(productoId).ifPresent(p -> {
+                    throw new RuntimeException("Ya existe una promoción con ese producto");
+                });
+
+        promo.update(promocionesUpdate, producto);
         promocionesRepository.save(promo);
         return new PromocionesResponse(promo, promo.getProducto());
     }
