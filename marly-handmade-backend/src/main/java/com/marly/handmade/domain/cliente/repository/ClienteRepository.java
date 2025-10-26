@@ -17,4 +17,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     Cliente findByUsuario_Id(Long id);
 
     boolean existsByIdentificacion(String identificacion);
+
+    Cliente findByUsuario_Username(String username);
 }
