@@ -7,6 +7,7 @@ import com.marly.handmade.service.PedidoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,6 +60,7 @@ public class PedidosController {
     }
 
     @GetMapping("estado/{estado}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PedidoResponse>> listarPedidoPorestado(@PathVariable boolean estado){
         return ResponseEntity.ok(pedidoService.listarPedidoPorestado(estado));
     }
