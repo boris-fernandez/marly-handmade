@@ -75,7 +75,7 @@ public class ReporteService {
 
     private void createHeaderRow(XSSFSheet sheet, XSSFCellStyle headerStyle) {
         XSSFRow header = sheet.createRow(0);
-        String[] headers = {"ID", "Fecha", "Estado", "Dirección de Envío", "Total", "Cliente"};
+        String[] headers = {"ID", "Fecha", "Entregado", "Dirección de Envío", "Total", "Cliente"};
         for (int i = 0; i < headers.length; i++) {
             XSSFCell cell = header.createCell(i);
             cell.setCellValue(headers[i]);
