@@ -6,7 +6,7 @@ import com.marly.handmade.domain.producto.data.ProductoUpdate;
 import com.marly.handmade.domain.producto.modal.Producto;
 import com.marly.handmade.domain.producto.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
-import com.marly.handmade.util.GuavaUtils;
+import com.marly.handmade.util.ApacheCommonsUtils;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class ProductoService{
     }
 
     public ProductoResponse crearProducto(ProductoRequest productoRequest){
-        GuavaUtils.requireNonNullRuntime(productoRepository.findByNombre(productoRequest.nombre()), "Ya existe un producto con ese nombre");
+    ApacheCommonsUtils.requireNonNullRuntime(productoRepository.findByNombre(productoRequest.nombre()), "Ya existe un producto con ese nombre");
 
         Producto producto = Producto.builder()
                 .nombre(productoRequest.nombre())
@@ -49,7 +49,7 @@ public class ProductoService{
 
     public ProductoResponse mostrarPorNombre(String nombre) {
     Producto producto = productoRepository.findByNombre(nombre);
-    GuavaUtils.requireNonNullRuntime(producto, "El producto con ese nombre no existe");
+    ApacheCommonsUtils.requireNonNullRuntime(producto, "El producto con ese nombre no existe");
     return new ProductoResponse(producto);
     }
 

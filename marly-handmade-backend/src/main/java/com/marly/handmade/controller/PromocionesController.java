@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.marly.handmade.domain.promociones.data.PromocionesUpdate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -25,6 +26,7 @@ public class PromocionesController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PromocionesResponse> crearPromociones (@RequestBody @Valid PromocionesRequest promocionesRequest,UriComponentsBuilder builder){
         PromocionesResponse promocionesResponse = promocionesService.crearPromociones(promocionesRequest);
         URI uri = builder.path("/promociones/{id}").buildAndExpand(promocionesResponse.id()).toUri();
@@ -32,12 +34,14 @@ public class PromocionesController {
     }
 
     @PatchMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PromocionesResponse> update(@PathVariable long id, @RequestBody PromocionesUpdate promocionesUpdate){
         PromocionesResponse response = promocionesService.update(id, promocionesUpdate);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PromocionesResponse>> listarPromociones (){
         return ResponseEntity.ok(promocionesService.listarPromociones());
     }
@@ -54,6 +58,7 @@ public class PromocionesController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> eliminarPromocionPorId(@PathVariable long id) {
         promocionesService.eliminarPromocionPorId(id);
         return ResponseEntity.noContent().build();
