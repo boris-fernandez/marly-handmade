@@ -11,7 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ComplaintsBook from "./pages/ComplaintsBook";
 import TermsConditions from "./pages/TermsConditions";
-import CollectionDetail from "./pages/ColletionDetail";
+import SeaCollectionDetail from "./pages/SeaColletionDetail";
 import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
 
@@ -41,9 +41,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/complaints-book" element={<ComplaintsBook />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
-        <Route path="/collection-detail" element={<CollectionDetail />} />
+        <Route path="/sea-collection-detail" element={<SeaCollectionDetail />} />
         <Route path="/recover-password" element={<RecoverPassword />} />
         <Route path="/product" element={<Product />} />
+        <Route path="/product/sea-collection" element={<SeaCollectionDetail />} />
 
         {/* ADMIN */}
         <Route path="/admin/dashboard" element={<Dashboard />} />

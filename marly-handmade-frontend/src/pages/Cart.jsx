@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import OrderCard from "../components/Orders";
-import img24 from "/src/assets/image24.png";
+import img24 from "/src/assets/sea2.png";
 
 export default function Cart() {
   return (
