@@ -78,7 +78,6 @@ function ProductRegister() {
             <div style={{ marginBottom: "20px" }}>
               <label
                 style={{
-                  display: "block",
                   width: "100%",
                   aspectRatio: "1",
                   border: "2px dashed #ddd",
