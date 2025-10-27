@@ -77,7 +77,7 @@ export default function Hero({ texto }: HeroProps) {
           <p style={{ marginTop: "1rem", fontSize: "1.2rem" }}>
             Jewelry with a sea soul. Art you carry with you
           </p>
-          <button
+          <a href="/product/sea-collection"><button
             style={{
               marginTop: "1.5rem",
               padding: "0.8rem 1.5rem",
@@ -89,7 +89,7 @@ export default function Hero({ texto }: HeroProps) {
             }}
           >
             Buy now
-          </button>
+          </button></a>
         </div>
       )}
     </section>
