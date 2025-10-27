@@ -4,13 +4,14 @@ import MostLoved from "../components/MostLoved";
 import ProductSelection from "../assets/image42.png";
 import SelectAmount from "../components/Amount";
 import "../components/Product.css";
+import "../components/ProductSelect.css";
 
 export default function Product() {
     return (
         <>
             <Header />
 
-            <section>
+            <section className="content-Product-Select">
                 <div className="Img-Product">
                     <img src={ProductSelection} />
                 </div>
