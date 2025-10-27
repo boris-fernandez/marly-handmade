@@ -1,4 +1,3 @@
-// ProductGrid.jsx
 import ProductCard from "./ProductCard";
 
 export default function ProductGrid({ products = [] }) {
@@ -11,8 +10,19 @@ export default function ProductGrid({ products = [] }) {
   }
 
   return (
-    <div className="flex-1 px-4 md:px-6 pt-24 mb-8"> 
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="flex-1 px-3 sm:px-4 md:px-6 pt-16 md:pt-24 mb-8">
+      <div
+        className="
+          grid
+          grid-cols-1 
+          sm:grid-cols-2 
+          md:grid-cols-3 
+          lg:grid-cols-4 
+          xl:grid-cols-5
+          gap-4
+          sm:gap-6
+        "
+      >
         {products.map((p) => (
           <ProductCard key={p.id} product={p} />
         ))}

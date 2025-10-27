@@ -26,12 +26,15 @@ import ProductGallery from "./pages/ProductGallery";
 import UserManagement from "./pages/UserManagement";
 import ProductRegister from "./pages/ProductRegister";
 
+import { FilterProvider } from "./contexts/FilterContext.jsx";
+
 
 function App() {
   const { open, closeCart } = useCart();
 
   return (
     <AuthProviderWrapper>
+      <FilterProvider> 
       <CartDrawer open={open} onClose={closeCart} />
 
       <Routes>
@@ -62,6 +65,7 @@ function App() {
           element={<ConfirmNewPassword />}
         />
       </Routes>
+      </FilterProvider> 
     </AuthProviderWrapper>
   );
 }
