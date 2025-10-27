@@ -14,25 +14,29 @@ export default function Product() {
                 <div className="Img-Product">
                     <img src={ProductSelection} />
                 </div>
-                <div className="Content">
-                    <p>Home / SEA BREEZES</p>
+                <div className="Content product-details-content"> 
+                    <p className="Sub-Name-Product">Home / SEA BREEZES</p>
                     <br/>
-                    <h2>SEA BREEZES</h2>
+                    <h2 className="Name-Producto">SEA BREEZES</h2>
 
-                    <p>$21</p>
-                    <h2>Invisible Thread</h2>
+                    <p className="product-price">$21</p> 
+                    <h2 className="product-variant-name">Invisible Thread</h2> 
+                    
+                    <div className="amaunt-select">
+                        <SelectAmount />
+                    </div>
 
-                    <SelectAmount />
+                    <div className="content">
+                        <button className="button-add-to-cart">ADD TO CART</button> 
+                        <button className="button-buy-now">BUY NOW</button> 
 
-                    <button>ADD TO CART</button>
-                    <button>BUY NOW</button>
-
-                    <p>Description</p>
-                    <p>Product Details</p>
-                    <p>Jewelry Care</p>
-                    <p>Shipping Info</p>
+                        <p className="product-detail-accordion">Description</p> 
+                        <p className="product-detail-accordion">Product Details</p> 
+                        <p className="product-detail-accordion">Jewelry Care</p> 
+                        <p className="product-detail-accordion">Shipping Info</p>
+                    </div>
                 </div>
-            </section>
+            </section>
 
             <MostLoved />
 
