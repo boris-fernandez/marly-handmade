@@ -8,6 +8,7 @@ import com.marly.handmade.domain.cliente.modal.Cliente;
 import com.marly.handmade.domain.cliente.repository.ClienteRepository;
 import com.marly.handmade.domain.usuario.data.request.RegistrarUsuario;
 import com.marly.handmade.domain.usuario.data.responst.RespuestaRegistro;
+import com.marly.handmade.domain.usuario.data.responst.UsuarioResponse;
 import com.marly.handmade.domain.usuario.modal.Rol;
 import com.marly.handmade.domain.usuario.modal.Usuario;
 import com.marly.handmade.domain.usuario.repository.UsuarioRepository;
@@ -19,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.marly.handmade.util.GuavaUtils;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -93,5 +96,12 @@ public class UsuarioService{
         log.info("Contraseña actualizada correctamente para usuario: {}", username);
         return new RespuestaForgotPassword("Contraseña actualizada correctamente");
     }
+
+    public List<UsuarioResponse> listarUsuarios() {
+    var usuarios = usuarioRepository.findAll();
+    return usuarios.stream()
+            .map(UsuarioResponse::new)
+            .toList();
+}
 
 }
