@@ -5,7 +5,7 @@ export default function ProductGrid({ products = [] }) {
     return (
       <div className="flex-1 flex items-center justify-center text-[#997C71] font-light text-sm p-6">
         No products found.
-      </div>
+      </div> 
     );
   }
 

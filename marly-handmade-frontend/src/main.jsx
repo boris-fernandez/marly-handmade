@@ -7,17 +7,20 @@ import App from "./App.jsx";
 import { AuthProviderWrapper } from "./contexts/AuthContext.jsx";
 import { CartProvider } from "./contexts/CartContext.jsx";
 import { ReclamacionesProvider } from "./contexts/ReclamacionesContext";
+import { ProductoProvider } from "./contexts/ProductoContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProviderWrapper>
-      <ReclamacionesProvider>
-        <CartProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </CartProvider>
-      </ReclamacionesProvider>
+      <ProductoProvider>
+        <ReclamacionesProvider>
+          <CartProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </CartProvider>
+        </ReclamacionesProvider>
+      </ProductoProvider>
     </AuthProviderWrapper>
   </StrictMode>
 );
