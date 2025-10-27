@@ -37,7 +37,7 @@ export default function Product() {
                     </div>
                 </div>
             </section>
-
+      
             <MostLoved />
 
             <Footer />
