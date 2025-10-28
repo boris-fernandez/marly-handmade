@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import "../styles/Login.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -23,7 +24,32 @@ export default function Login() {
       setPassword("");
     } else {
       setErrorMessage("");
-      navigate("/");
+      
+      // Obtener el token recién guardado y verificar el rol
+      const storedToken = localStorage.getItem("authToken");
+      
+      if (storedToken) {
+        try {
+          const decoded = jwtDecode(storedToken);
+          console.log("Usuario logueado:", decoded);
+          console.log("Rol del usuario:", decoded.rol);
+          
+          // Redirigir según el rol
+          if (decoded.rol === 0) {
+            console.log("Admin detectado, redirigiendo a dashboard...");
+            navigate("/admin/dashboard");
+          } else {
+            console.log("Usuario regular, redirigiendo a home...");
+            navigate("/");
+          }
+        } catch (error) {
+          console.error("Error al decodificar token:", error);
+          navigate("/");
+        }
+      } else {
+        // Si no hay token por alguna razón, ir a home
+        navigate("/");
+      }
     }
   };
 
