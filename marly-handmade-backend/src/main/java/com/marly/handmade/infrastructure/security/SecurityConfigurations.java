@@ -35,7 +35,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register", "/auth/forgot-password")
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/producto", "/producto/all", "/promociones/{nombre}", "/promociones/mostrar/{id}", "/promociones", "/usuario/all", "/clientes/all")
+                        .requestMatchers(HttpMethod.GET, "/producto", "/producto/all", "/promociones/{nombre}", "/promociones/mostrar/{id}", "/promociones", "/usuario/all")
                         .permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/auth/update-password")
                         .permitAll()
