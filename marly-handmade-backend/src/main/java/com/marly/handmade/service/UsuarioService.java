@@ -7,6 +7,7 @@ import com.marly.handmade.domain.cliente.data.response.RespuestaForgotPassword;
 import com.marly.handmade.domain.cliente.modal.Cliente;
 import com.marly.handmade.domain.cliente.repository.ClienteRepository;
 import com.marly.handmade.domain.usuario.data.request.RegistrarUsuario;
+import com.marly.handmade.domain.usuario.data.responst.ClienteConUsuarioResponse;
 import com.marly.handmade.domain.usuario.data.responst.RespuestaRegistro;
 import com.marly.handmade.domain.usuario.data.responst.UsuarioResponse;
 import com.marly.handmade.domain.usuario.modal.Rol;
@@ -22,11 +23,10 @@ import org.springframework.stereotype.Service;
 import com.marly.handmade.util.GuavaUtils;
 import java.util.List;
 
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UsuarioService{
+public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final ClienteRepository clienteRepository;
@@ -35,9 +35,13 @@ public class UsuarioService{
     private final EmailSender emailApiConsumer;
 
     public RespuestaRegistro registrar(RegistrarUsuario registrarUsuario) {
-        GuavaUtils.checkArgumentRuntime(!clienteRepository.existsByIdentificacion(registrarUsuario.cliente().identificacion()), "La identificacion ya está en uso");
-        GuavaUtils.checkArgumentRuntime(!usuarioRepository.existsByUsername(registrarUsuario.username()), "El username ya está en uso");
-        GuavaUtils.checkArgumentRuntime(!clienteRepository.existsByCorreo(registrarUsuario.cliente().correo()), "El correo ya está en uso");
+        GuavaUtils.checkArgumentRuntime(
+                !clienteRepository.existsByIdentificacion(registrarUsuario.cliente().identificacion()),
+                "La identificacion ya está en uso");
+        GuavaUtils.checkArgumentRuntime(!usuarioRepository.existsByUsername(registrarUsuario.username()),
+                "El username ya está en uso");
+        GuavaUtils.checkArgumentRuntime(!clienteRepository.existsByCorreo(registrarUsuario.cliente().correo()),
+                "El correo ya está en uso");
 
         Usuario usuario = Usuario.builder()
                 .username(registrarUsuario.username())
@@ -64,7 +68,7 @@ public class UsuarioService{
 
     public RespuestaForgotPassword forgotPassword(@Valid ForgetPassword forgetPassword) throws Exception {
         Cliente cliente = clienteRepository.findByCorreo(forgetPassword.email());
-        if (cliente == null){
+        if (cliente == null) {
             log.warn("Solicitud de reset de contraseña para email no registrado: {}", forgetPassword.email());
             throw new RuntimeException("No existe un cliente con ese email");
         }
@@ -73,7 +77,8 @@ public class UsuarioService{
         emailApiConsumer.sendCorreo(forgetPassword.email(), token, cliente.getNombres());
 
         log.info("Correo de reset de contraseña enviado a: {}", forgetPassword.email());
-        return new RespuestaForgotPassword("Si este correo existe en nuestro sistema, recibirás un enlace para restablecer la contraseña.");
+        return new RespuestaForgotPassword(
+                "Si este correo existe en nuestro sistema, recibirás un enlace para restablecer la contraseña.");
     }
 
     public RespuestaForgotPassword updatePassword(ResetPasswordRequest resetPasswordRequest) {
@@ -89,7 +94,7 @@ public class UsuarioService{
 
         String newEncodedPassword = passwordEncoder.encode(resetPasswordRequest.newPassword());
         usuario.setPassword(newEncodedPassword);
-        
+
         usuarioRepository.save(usuario);
         usuarioRepository.flush();
 
@@ -98,10 +103,9 @@ public class UsuarioService{
     }
 
     public List<UsuarioResponse> listarUsuarios() {
-    var usuarios = usuarioRepository.findAll();
-    return usuarios.stream()
-            .map(UsuarioResponse::new)
-            .toList();
-}
-
+        var usuarios = usuarioRepository.findAll();
+        return usuarios.stream()
+                .map(UsuarioResponse::new)
+                .toList();
+    }
 }
