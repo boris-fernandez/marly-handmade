@@ -1,7 +1,5 @@
 package com.marly.handmade.controller;
 
-
-
 import com.marly.handmade.domain.producto.data.ProductoRequest;
 
 import com.marly.handmade.domain.producto.data.ProductoResponse;
@@ -24,13 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.util.UriComponentsBuilder;
 
-
-
 import java.net.URI;
 
 import java.util.List;
-
-
 
 @Slf4j
 
@@ -40,11 +34,7 @@ import java.util.List;
 
 public class ProductoController {
 
-
-
     private final ProductoService productoService;
-
-
 
     public ProductoController(ProductoService productoService) {
 
@@ -52,29 +42,27 @@ public class ProductoController {
 
     }
 
-
-
     @PostMapping
 
     @PreAuthorize("hasRole('ADMIN')")
 
-    public ResponseEntity<ProductoResponse>  crearProducto (@RequestBody @Valid ProductoRequest productoRequest, UriComponentsBuilder builder){
+    public ResponseEntity<ProductoResponse> crearProducto(@RequestBody @Valid ProductoRequest productoRequest,
+            UriComponentsBuilder builder) {
 
-        ProductoResponse productoResponse =  productoService.crearProducto(productoRequest);
+        ProductoResponse productoResponse = productoService.crearProducto(productoRequest);
 
         URI uri = builder.path("/producto/{id}").buildAndExpand(productoResponse.id()).toUri();
 
-        log.info("Producto creado correctamente: name:{}, precio={}", productoResponse.nombre(), productoResponse.precio());
+        log.info("Producto creado correctamente: name:{}, precio={}", productoResponse.nombre(),
+                productoResponse.precio());
 
         return ResponseEntity.created(uri).body(productoResponse);
 
     }
 
-
-
     @GetMapping("all")
 
-    public ResponseEntity<List<ProductoResponse>> listarProductos (){
+    public ResponseEntity<List<ProductoResponse>> listarProductos() {
 
         log.info("Listando productos...");
 
@@ -82,19 +70,14 @@ public class ProductoController {
 
     }
 
-
-
     @GetMapping
 
-    public ResponseEntity<ProductoResponse> buscar(@RequestParam(required = false) Long id, @RequestParam(required = false) String nombre){
+    public ResponseEntity<ProductoResponse> buscar(@RequestParam(required = false) Long id,
+            @RequestParam(required = false) String nombre) {
 
         return ResponseEntity.ok(productoService.buscar(nombre, id));
 
     }
-
-
-
-
 
     @PatchMapping("{id}")
 
@@ -102,7 +85,7 @@ public class ProductoController {
 
     @Transactional
 
-    public ResponseEntity<ProductoResponse> update(@PathVariable long id, @RequestBody ProductoUpdate productoUpdate){
+    public ResponseEntity<ProductoResponse> update(@PathVariable long id, @RequestBody ProductoUpdate productoUpdate) {
 
         log.info("Actualizando producto: nameUpdate={}", productoUpdate.nombre());
 
