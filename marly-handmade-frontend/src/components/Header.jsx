@@ -79,6 +79,7 @@ export default function Header() {
   };
 
   return (
+
     <header className="header py-4">
       <div className="header-container">
         {/* NAV DESKTOP */}
@@ -115,6 +116,7 @@ export default function Header() {
         </nav>
 
         {/* LOGO */}
+
         <div className="logo">
           <a href="/" className="flex items-center">
             <img
