@@ -1,11 +1,12 @@
-import { useState, useContext, useEffect, useRef, useMemo } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { useState, useContext, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Globe, Search, User, ShoppingCart, Menu, X } from "lucide-react";
 import { useCart } from "../contexts/CartContext.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import { jwtDecode } from "jwt-decode";
+import { useMemo } from "react";
 
-// Funciones Auxiliares
 function obtenerSubDesdeToken(token) {
   try {
     const decoded = jwtDecode(token);
@@ -306,6 +307,7 @@ export default function Header() {
           )}
 
           <a href="/our-story" className="block py-2 hover:text-[#040F2E]">Our Story</a>
+
         </div>
       )}
     </header>
