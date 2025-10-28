@@ -20,7 +20,7 @@ export default function MarlyCollections() {
   ];
 
   return (
-    <div className="px-[100px] py-20">
+    <div className="CollectionMarly py-20">
       <h2 className="text-2xl font-semibold text-center mt-16 mb-10">
         MARLY Collections
       </h2>

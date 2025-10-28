@@ -6,7 +6,7 @@ import { useCart } from "../contexts/CartContext.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import { jwtDecode } from "jwt-decode";
 import { useMemo } from "react";
-
+// nuevo código
 function obtenerSubDesdeToken(token) {
   try {
     const decoded = jwtDecode(token);
