@@ -3,7 +3,9 @@ package com.marly.handmade.controller;
 import com.marly.handmade.domain.pedido.data.PedidoRequest;
 import com.marly.handmade.domain.pedido.data.PedidoResponse;
 import com.marly.handmade.service.PedidoService;
+import com.marly.handmade.service.ReporteService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -25,9 +28,12 @@ import java.util.List;
 public class PedidosController {
 
     private PedidoService pedidoService;
+    private ReporteService reporteService;
 
-    public PedidosController(PedidoService pedidoService) {
+
+    public PedidosController(PedidoService pedidoService, ReporteService reporteService) {
         this.pedidoService = pedidoService;
+        this.reporteService = reporteService;
     }
 
     @PostMapping
@@ -63,6 +69,12 @@ public class PedidosController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PedidoResponse>> listarPedidoPorestado(@PathVariable boolean estado){
         return ResponseEntity.ok(pedidoService.listarPedidoPorestado(estado));
+    }
+
+    @GetMapping("excel")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void generarExcelReporte(HttpServletResponse response) throws IOException {
+        reporteService.generateExcel(response);
     }
     
 }
