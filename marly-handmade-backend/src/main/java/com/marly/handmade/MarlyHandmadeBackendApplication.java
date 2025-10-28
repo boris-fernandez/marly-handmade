@@ -9,5 +9,4 @@ public class MarlyHandmadeBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MarlyHandmadeBackendApplication.class, args);
 	}
-
 }
