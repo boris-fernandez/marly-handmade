@@ -79,10 +79,11 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full border-b border-gray-200">
-      <div className="flex items-center justify-between px-6 md:px-10 py-4">
+
+    <header className="header py-4">
+      <div className="header-container">
         {/* NAV DESKTOP */}
-        <nav className="hidden md:block">
+        <nav className="nav-desktop">
           <ul className="flex items-center space-x-10 font-serif font-medium">
             <li className="relative group cursor-pointer">
               <a href="/shop" className="pb-2 border-b-2 border-transparent hover:border-[#040F2E] transition-colors duration-300">
@@ -115,7 +116,8 @@ export default function Header() {
         </nav>
 
         {/* LOGO */}
-        <div className="flex justify-center items-center px-2 sm:px-6 py-2 sm:py-4">
+
+        <div className="logo">
           <a href="/" className="flex items-center">
             <img
               src="/logoMarly.png"
@@ -126,27 +128,8 @@ export default function Header() {
         </div>
 
         {/* ICONOS */}
-        <div className="flex items-center space-x-4">
-          {/* 🌍 Idioma */}
-          <div className="relative inline-block">
-            <select className="w-5 h-5 opacity-0 absolute inset-0 cursor-pointer">
-              <option>Spanish</option>
-              <option>English</option>
-            </select>
-            <Globe className="w-5 h-5 text-[#040F2E] pointer-events-none cursor-pointer" />
-          </div>
-
-          {/* 🔍 Buscar */}
-          <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-
-          {/* 💰 Moneda */}
-          <select className="rounded px-2 py-1 text-sm hidden sm:block cursor-pointer">
-            <option>USD</option>
-            <option>PEN</option>
-            <option>EUR</option>
-          </select>
-
-          {/* 👤 Usuario */}
+        <div className="icons">
+  {/* 👤 Usuario */}
           <div className="relative" ref={menuRef}>
             {token ? (
               <div
@@ -206,6 +189,24 @@ export default function Header() {
               </div>
             )}
           </div>
+          {/* 🌍 Idioma */}
+          <div className="relative inline-block">
+            <select className="w-5 h-5 opacity-0 absolute inset-0 cursor-pointer">
+              <option>Spanish</option>
+              <option>English</option>
+            </select>
+            <Globe className="w-5 h-5 text-[#040F2E] pointer-events-none cursor-pointer" />
+          </div>
+
+          {/* 🔍 Buscar */}
+          <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
+
+          {/* 💰 Moneda */}
+          <select className="rounded px-2 py-1 text-sm hidden sm:block cursor-pointer">
+            <option>USD</option>
+            <option>PEN</option>
+            <option>EUR</option>
+          </select>
 
           {/* 🛒 Carrito */}
           <button onClick={openCart} className="relative" aria-label="Abrir carrito">
