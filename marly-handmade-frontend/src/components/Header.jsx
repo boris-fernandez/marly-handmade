@@ -65,116 +65,18 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  return (
-    <header className="header py-4">
-      <div className="header-container">
-        {/* NAV DESKTOP */}
-        <nav className="nav-desktop">
-          <ul className="flex items-center space-x-10 font-serif font-medium">
-            <li className="relative group cursor-pointer">
-              <a
-                href="/shop"
-                className="pb-2 border-b-2 border-transparent hover:border-[#040F2E] transition-colors duration-300"
-              >
-                Shop
-              </a>
-              <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-20 max-w-[95vw] w-[700px]">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                  <div>
-                    <h3 className="font-semibold mb-2 text-[#1B2A40]">
-                      Category
-                    </h3>
-                    <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li>
-                        <a href="/Bracelets" className="hover:text-[#040F2E]">
-                          Bracelets
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/Earrings" className="hover:text-[#040F2E]">
-                          Earrings
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/Necklaces" className="hover:text-[#040F2E]">
-                          Necklaces
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/Rings" className="hover:text-[#040F2E]">
-                          Rings
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2 text-[#1B2A40]">
-                      Material
-                    </h3>
-                    <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li>
-                        <a
-                          href="/Polymer Clay"
-                          className="hover:text-[#040F2E]"
-                        >
-                          Polymer Clay
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/Copper Wire" className="hover:text-[#040F2E]">
-                          Copper Wire
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/Resin" className="hover:text-[#040F2E]">
-                          Resin
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/Textile" className="hover:text-[#040F2E]">
-                          Textile
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2 text-[#1B2A40]">
-                      Featured
-                    </h3>
-                    <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li>
-                        <a
-                          href="/Best Sellers"
-                          className="hover:text-[#040F2E]"
-                        >
-                          Best Sellers
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="/Marly's Favorites"
-                          className="hover:text-[#040F2E]"
-                        >
-                          Marly's Favorites
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="relative flex justify-center items-center">
-                    <a href="/marly-favorites" className="block relative group">
-                      <img
-                        src="/nayblueear.jpg"
-                        className="w-40 h-32 object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
-                        alt="Marly's favorites"
-                      />
-                      <span className="absolute inset-0 flex items-center justify-center text-[#F5E3C3] font-serif text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-[0_3px_6px_rgba(0,0,0,1)]">
-                        Marly's Favorites
-                      </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
+  // 🔹 Función para abrir/cerrar el menú móvil
+  const toggleMenu = () => {
+    setMenuOpen((v) => {
+      const newV = !v;
+      // Cerrar submenús si se cierra el menú principal (aunque no tienen submenús implementados en este código)
+      if (!newV) {
+        setShopOpen(false);
+        setCollectionsOpen(false);
+      }
+      return newV;
+    });
+  };
 
   return (
     <header className="w-full border-b border-gray-200">
@@ -194,16 +96,9 @@ export default function Header() {
               </a>
             </li>
 
-        {/* LOGO */}
-        <div className="logo">
-          <a href="/" className="flex items-center">
-            <img
-              src="/logoMarly.png"
-              alt="Marly logo"
-              className="h-10 w-auto cursor-pointer flex-shrink-0"
-            />
-          </a>
-        </div>
+            <li className="cursor-pointer">
+              <a href="/our-story">Our Story</a>
+            </li>
 
             {/* ✅ CORRECCIÓN APLICADA: visible solo para admin logueado */}
             {isAdmin ? (
@@ -219,28 +114,16 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* ICONS + HAMBURGER */}
-        <div className="icons">
-          {/* 🔽 Menú de cuenta */}
-          <div className="relative" ref={menuRef}>
-            {token ? (
-              <div
-                className="flex items-center gap-2 cursor-pointer select-none"
-                onClick={() => setOpen(!open)}
-              >
-                <User className="w-5 h-5 text-[#040F2E]" />
-                <div className="helloUser text-sm text-[#040F2E]">
-                  <p>
-                    Hello, <span className="font-medium">{userName}</span>
-                  </p>
-                  <p className="font-bold">My Account</p>
-                </div>
-              </div>
-            ) : (
-              <Link to="/login">
-                <User className="w-5 h-5 text-[#040F2E]" />
-              </Link>
-            )}
+        {/* LOGO */}
+        <div className="flex justify-center items-center px-2 sm:px-6 py-2 sm:py-4">
+          <a href="/" className="flex items-center">
+            <img
+              src="/logoMarly.png"
+              alt="Marly logo"
+              className="h-10 w-auto cursor-pointer flex-shrink-0"
+            />
+          </a>
+        </div>
 
         {/* ICONOS */}
         <div className="flex items-center space-x-4">

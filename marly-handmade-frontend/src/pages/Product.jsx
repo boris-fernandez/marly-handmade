@@ -10,7 +10,7 @@ export default function Product() {
         <>
             <Header />
 
-            <section className="productSection">
+            <section>
                 <div className="Img-Product">
                     <img src={ProductSelection} />
                 </div>
