@@ -15,10 +15,11 @@ import java.util.List;
 public class ClienteController {
 
     private final ClienteRepository clienteRepository;
-
+// nuevo endpoint
     @GetMapping("/all")
     public List<ClienteConUsuarioResponse> listarClientesRol1() {
         return clienteRepository.listarClientesConRol1();
     }
+
 }
 
