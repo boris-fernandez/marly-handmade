@@ -16,7 +16,7 @@ import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
 
 import ConfirmNewPassword from "./pages/ConfirmNewPassword";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/AdminDashboard";
 import Profile from "./pages/Profile";
 import ReportsAnalytics from "./pages/ReportsAnalytics";
 import Orders from "./pages/Orders";
