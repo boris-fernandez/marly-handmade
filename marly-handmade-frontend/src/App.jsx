@@ -43,7 +43,7 @@ function App() {
         <Route path="/terms-conditions" element={<TermsConditions />} />
         <Route path="/collection-detail" element={<CollectionDetail />} />
         <Route path="/recover-password" element={<RecoverPassword />} />
-        <Route path="/product" element={<Product />} />
+        <Route path="/product/:id" element={<Product />} />
 
         {/* ADMIN */}
         <Route path="/admin/dashboard" element={<Dashboard />} />
