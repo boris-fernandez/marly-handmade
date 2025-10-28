@@ -3,38 +3,13 @@ import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import AdminSidebar from "../components/AdminSidebar";
+import { useProductos } from "../contexts/ProductoContext";
 
 export default function ProductRegister() {
-  const [formData, setFormData] = useState({
-    productName: "",
-    description: "",
-    material: "",
-    stock: "",
-    price: "",
-    mainImage: null,
-    additionalImages: [],
-  });
-
+  const { formData, setFormData, handleImageUpload, handleSubmit, loading } =
+    useProductos();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
-
-  const handleImageUpload = (e, type) => {
-    const file = e.target.files[0];
-    if (type === "main") {
-      setFormData({ ...formData, mainImage: file });
-    } else {
-      setFormData({
-        ...formData,
-        additionalImages: [...formData.additionalImages, file],
-      });
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Product data:", formData);
-    alert("Product registered successfully!");
-  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -217,12 +192,12 @@ export default function ProductRegister() {
                   </div>
                 </div>
 
-                {/* Submit */}
                 <button
                   type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-sm transition-all"
+                  disabled={loading}
+                  className="bg-[#997C71] hover:bg-[#85695F] text-[#F5E3C3] font-semibold py-3 px-6 rounded-lg shadow-sm transition-all"
                 >
-                  Upload Product
+                  {loading ? "Uploading..." : "Upload Product"}
                 </button>
               </div>
             </form>
