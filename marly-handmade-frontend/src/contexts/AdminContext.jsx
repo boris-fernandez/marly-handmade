@@ -1,7 +1,7 @@
 // AdminContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 
-const AdminContext = createContext();
+export const AdminContext = createContext();
 export const useAdmin = () => useContext(AdminContext);
 
 export const AdminProvider = ({ children }) => {
@@ -13,11 +13,9 @@ export const AdminProvider = ({ children }) => {
   setLoading(true);
   setError(null);
 
-  console.log("🚀 Iniciando fetch de usuarios...");
 
   try {
     const response = await fetch("http://localhost:8080/clientes/all");
-    console.log("📥 Response recibida:", response);
 
     if (!response.ok) {
       console.error("❌ Response no OK:", response.status, response.statusText);
@@ -26,11 +24,9 @@ export const AdminProvider = ({ children }) => {
 
     // Aquí podemos ver el texto crudo antes de parsear
     const text = await response.text();
-    console.log("📝 Texto recibido del servidor:", text);
 
     // Intentamos parsear JSON
     const data = JSON.parse(text);
-    console.log("✅ Datos parseados:", data);
 
     const transformed = data.map((user) => ({
       id: user.idCliente,

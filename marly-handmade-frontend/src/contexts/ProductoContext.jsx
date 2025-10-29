@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-const ProductoContext = createContext();
+export const ProductoContext = createContext();
 
 // Hook para usar el contexto
 export const useProductos = () => useContext(ProductoContext);
@@ -20,6 +20,9 @@ export const ProductoProvider = ({ children }) => {
     price: "",
     mainImage: null,
     additionalImages: [],
+    details: "",
+    care: "",
+    shippingInfo: "",
   });
 
   const API_URL = "http://localhost:8080/producto";
@@ -41,10 +44,23 @@ export const ProductoProvider = ({ children }) => {
         img: item.fotoPrincipal,
         stock: item.stock,
         category: item.categoria,
+        description: item.descripcion,
+        details: item.details,
+        care: item.care,
+        shippingInfo: item.shipping_info,
+        slug: item.nombre
+          .replace(/\s+/g, " ")
+          .trim()
+          .replace(/[^a-zA-Z0-9 ]/g, "")
+          .split(" ")
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          )
+          .join(""),
       }));
 
       setProductos(formatted);
-      console.log("Productos cargados:", formatted);
+      // console.log("Productos cargados:", formatted);
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -83,6 +99,9 @@ export const ProductoProvider = ({ children }) => {
       formDataToSend.append("stock", formData.stock);
       formDataToSend.append("precio", formData.price);
       formDataToSend.append("categoria", "artesania");
+      formDataToSend.append("details", formData.details);
+      formDataToSend.append("care", formData.care);
+      formDataToSend.append("shipping_info", formData.shippingInfo);
 
       if (formData.mainImage)
         formDataToSend.append("fotoPrincipal", formData.mainImage);
@@ -116,6 +135,9 @@ export const ProductoProvider = ({ children }) => {
         price: "",
         mainImage: null,
         additionalImages: [],
+        details: "",
+        care: "",
+        shippingInfo: "",
       });
 
       // Refrescar lista de productos
