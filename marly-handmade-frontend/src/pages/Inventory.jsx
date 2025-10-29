@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AdminSidebar from "../components/AdminSidebar.jsx";
-import { useProductos } from "../contexts/ProductoContext.jsx";
+
+import "../styles/Inventory.css";
+
+const getInventoryData = async () => {
+  const response = await fetch("http://localhost:8080/producto/all");
+  if (!response.ok) throw new Error("Error al obtener productos");
+  return await response.json();
+};
 
 function Inventory() {
   const { productos, loading, error } = useProductos(); // ✅ directamente del contexto
@@ -9,20 +16,42 @@ function Inventory() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // ✅ Si el contexto todavía carga, muestra "Loading..."
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Todos");
+  const [sortField, setSortField] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
+
+  useEffect(() => {
+    getInventoryData()
+      .then(setInventory)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filteredInventory = inventory
+    .filter((item) => {
+      const matchesName = item.nombre.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === "Todos" || item.categoria === selectedCategory;
+      return matchesName && matchesCategory;
+    })
+    .sort((a, b) => {
+      const valA = a[sortField];
+      const valB = b[sortField];
+      if (typeof valA === "string") {
+        return sortDirection === "asc"
+          ? valA.localeCompare(valB)
+          : valB.localeCompare(valA);
+      } else {
+        return sortDirection === "asc" ? valA - valB : valB - valA;
+      }
+    });
+
+  const totalPages = Math.ceil(filteredInventory.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = filteredInventory.slice(startIndex, startIndex + itemsPerPage);
+
   if (loading) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        Cargando productos...
-      </div>
-    );
+    return <div className="loading">Loading...</div>;
   }
 
   // ❌ Si hubo error, mostrarlo
@@ -48,188 +77,106 @@ function Inventory() {
   const currentItems = productos?.slice(startIndex, startIndex + itemsPerPage) || [];
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        backgroundColor: "#f5f5f5",
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      }}
-    >
+    <div className="admin-layout">
       <AdminSidebar />
 
-      <main
-        style={{
-          flex: 1,
-          padding: "40px",
-          backgroundColor: "#f5f5f5",
-          marginLeft: "230px",
-          minHeight: "100vh",
-          overflowX: "hidden",
-        }}
-      >
-        {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "30px",
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "36px",
-              margin: 0,
-              color: "#333",
-              fontWeight: "400",
-            }}
-          >
-            Inventory
-          </h1>
-          <Link to="/admin/product-gallery">
-            <button
-              style={{
-                backgroundColor: "#333",
-                color: "white",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "14px",
-              }}
-            >
-              Product Gallery
-            </button>
-          </Link>
-        </div>
+      <div className="admin-content">
+        
 
-        {/* Tabla de productos */}
-        <div
-          style={{
-            background: "white",
-            borderRadius: "8px",
-            border: "1px solid #e0e0e0",
-            overflow: "hidden",
-          }}
-        >
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr
-                style={{
-                  backgroundColor: "#f8f8f8",
-                  borderBottom: "2px solid #e0e0e0",
-                }}
-              >
-                <th style={thStyle}>No</th>
-                <th style={thStyle}>Name</th>
-                <th style={thStyle}>Price</th>
-                <th style={thStyle}>Stock</th>
-                <th style={thStyle}>Category</th>
-                <th style={thStyle}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.map((producto, i) => (
-                <tr
-                  key={producto.id}
-                  style={{
-                    borderBottom: "1px solid #f0f0f0",
-                    backgroundColor: i % 2 === 0 ? "white" : "#fafafa",
-                  }}
-                >
-                  <td style={tdStyle}>{producto.id}</td>
-                  <td style={tdStyle}>{producto.name}</td>
-                  <td style={tdStyle}>S/ {producto.price.toFixed(2)}</td>
-                  <td style={tdStyle}>{producto.stock}</td>
-                  <td style={tdStyle}>{producto.category}</td>
-                  <td style={tdStyle}>
-                    <button
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        fontSize: "18px",
-                      }}
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#666"
-                        strokeWidth="2"
-                      >
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
+        <main className="inventory-main">
+          <div className="inventory-header">
+            <h1>Inventory</h1>
+            <Link to="/admin/product-gallery">
+              <button className="gallery-button">Product Gallery</button>
+            </Link>
+          </div>
+
+          <div className="filter-panel">
+            <input
+              type="text"
+              placeholder="Buscar por nombre"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+              {["Todos", ...new Set(inventory.map((item) => item.categoria))].map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+
               ))}
-            </tbody>
-          </table>
-        </div>
+            </select>
 
-        {/* Paginación */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "10px",
-            marginTop: "20px",
-          }}
-        >
-          <button
-            onClick={() => setCurrentPage(1)}
-            disabled={currentPage === 1}
-            style={btnPage(currentPage === 1)}
-          >
-            «
-          </button>
-          <button
-            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-            disabled={currentPage === 1}
-            style={btnPage(currentPage === 1)}
-          >
-            ‹
-          </button>
-          {[1, 2, 3].map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              style={{
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                background: currentPage === page ? "#0066cc" : "white",
-                color: currentPage === page ? "white" : "#333",
-                cursor: "pointer",
-                borderRadius: "4px",
-              }}
-            >
-              {page}
-            </button>
-          ))}
-          <button
-            onClick={() =>
-              setCurrentPage(Math.min(totalPages, currentPage + 1))
-            }
-            disabled={currentPage === totalPages}
-            style={btnPage(currentPage === totalPages)}
-          >
-            ›
-          </button>
-          <button
-            onClick={() => setCurrentPage(totalPages)}
-            disabled={currentPage === totalPages}
-            style={btnPage(currentPage === totalPages)}
-          >
-            »
-          </button>
-        </div>
-      </main>
+            <div className="sort-combo">
+              <label>Ordenar por:</label>
+              <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
+                <option value="id">ID</option>
+                <option value="nombre">Nombre</option>
+                <option value="precio">Precio</option>
+                <option value="stock">Stock</option>
+              </select>
+              <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
+                <option value="asc">Ascendente</option>
+                <option value="desc">Descendente</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="inventory-table-wrapper">
+            <table className="inventory-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>Categoría</th>
+                  <th>Detalles</th>
+                  <th>Advertencia</th>
+                  <th>Envío</th>
+                  <th>Stock</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentItems.map((item, i) => (
+                  <tr key={item.id} className={i % 2 === 0 ? "even-row" : "odd-row"}>
+                    <td>{item.id}</td>
+                    <td>{item.nombre}</td>
+                    <td>{item.descripcion}</td>
+                    <td className="price-cell">S/ {item.precio.toFixed(2)}</td>
+                    <td>{item.categoria}</td>
+                    <td>{item.details}</td>
+                    <td>{item.care}</td>
+                    <td>{item.shipping_info}</td>
+                    <td>{item.stock}</td>
+                    <td>
+                      <div className="action-buttons">
+                        <button className="btn-editar">
+                          <i className="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button className="btn-eliminar">
+                          <i className="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="pagination">
+            <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>«</button>
+            <button onClick={() => setCurrentPage(Math.max(1, currentPage - 1))} disabled={currentPage === 1}>‹</button>
+            {[...Array(totalPages).keys()].map((page) => (
+              <button key={page + 1} onClick={() => setCurrentPage(page + 1)} className={currentPage === page + 1 ? "active" : ""}>
+                {page + 1}
+              </button>
+            ))}
+            <button onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))} disabled={currentPage === totalPages}>›</button>
+            <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>»</button>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

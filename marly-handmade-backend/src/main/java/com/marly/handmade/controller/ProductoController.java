@@ -27,7 +27,7 @@ import java.net.URI;
 import java.util.List;
 
 @Slf4j
-
+@CrossOrigin(origins = "*")
 @RestController
 
 @RequestMapping("producto")
