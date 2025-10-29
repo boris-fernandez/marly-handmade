@@ -127,7 +127,7 @@ function UserManagement() {
             <button style={{ marginTop: "20px", backgroundColor: "#997C71", color: "#F5E3C3", border: "none", padding: "8px 16px", borderRadius: "5px", cursor: "pointer" }} onClick={() => setSelectedUser(null)}>
               Cerrar
             </button>
-          </div>
+            </div>
         )}
       </main>
     </div>
