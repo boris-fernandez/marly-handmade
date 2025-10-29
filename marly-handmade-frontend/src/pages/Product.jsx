@@ -9,7 +9,6 @@ import "../components/ProductSelect.css";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import { useState, useContext, useEffect} from "react";
 
-
 function DescriptionItem({ title, children }) {
   const [open, setOpen] = useState(false);
   return (
