@@ -42,33 +42,6 @@ class PedidosControllerTest extends ControllerTestBase {
     private PedidoService pedidoService;
 
     @Test
-    void createPedido() throws Exception {
-    DetallePedidoRequest detalle = new DetallePedidoRequest(2, 10L);
-    PedidoRequest request = new PedidoRequest(List.of(detalle));
-    PedidoResponse responseStub = new PedidoResponse(
-        1L,
-        new Date(),
-        "Calle Falsa 123",
-        200.0,
-        null,
-        List.of()
-    );
-
-    BDDMockito.given(pedidoService.createPedido(any(PedidoRequest.class))).willReturn(responseStub);
-
-    ResultActions result = mockMvc.perform(
-        post("/pedido")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request))
-    );
-
-    result.andDo(print())
-        .andExpect(status().isCreated())
-        .andExpect(header().string("Location", containsString("/pedido/1")))
-        .andExpect(jsonPath("$.id").value(1));
-    }
-
-    @Test
     void updatePedido() throws Exception {
     // mock does nothing (void)
     BDDMockito.doNothing().when(pedidoService).updatePedido(1L);

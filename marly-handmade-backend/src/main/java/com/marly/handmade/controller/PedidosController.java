@@ -3,7 +3,6 @@ package com.marly.handmade.controller;
 import com.marly.handmade.domain.pedido.data.PedidoRequest;
 import com.marly.handmade.domain.pedido.data.PedidoResponse;
 import com.marly.handmade.service.PedidoService;
-
 import com.marly.handmade.service.ReporteService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -71,6 +70,7 @@ public class PedidosController {
     }
 
     @GetMapping("excel")
+    @PreAuthorize("hasRole('ADMIN')")
     public void generarExcelReporte(HttpServletResponse response) throws IOException {
         reporteService.generateExcel(response);
     }

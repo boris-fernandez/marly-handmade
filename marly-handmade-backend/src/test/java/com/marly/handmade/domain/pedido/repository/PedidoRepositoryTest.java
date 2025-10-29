@@ -35,7 +35,7 @@ class PedidoRepositoryTest {
 
     @BeforeEach
     void setup() {
-        Usuario usuario = Usuario.builder().username("u1").password("p").rol(Rol.Cliente).estado(true).build();
+        Usuario usuario = Usuario.builder().username("u1").password("p").rol(Rol.CLIENTE).estado(true).build();
         usuarioRepository.save(usuario);
 
         cliente = Cliente.builder().nombres("Juan").apellidos("Perez").direccion("Calle").usuario(usuario).build();

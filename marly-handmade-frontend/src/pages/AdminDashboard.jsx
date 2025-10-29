@@ -1,10 +1,11 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Package, ShoppingBag, Users, BarChart } from "lucide-react";
+import { Package, ShoppingBag, Users, BarChart, FileSpreadsheet } from "lucide-react";
 import { useEffect, useState, useContext } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import AdminSidebar from "../components/AdminSidebar";
 import { API_BASE_URL } from "../contexts/DashboardContext";
+
 import { AuthContext } from "../contexts/AuthContext"; // Importamos el AuthContext
 import { PedidoContext } from "../contexts/PedidoContext";
 import { ProductoContext } from "../contexts/ProductoContext";
@@ -25,10 +26,38 @@ export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
-    listarPedidoPorestado(false);
-    fetchUsers();
-  }, [token]);
+useEffect(() => {
+  const fetchStats = async () => {
+    if (!token || !token.token) {
+      console.warn("Token no disponible. No se cargarán las estadísticas.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/stats`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setStats(data);
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
+  };
+
+  fetchStats();
+  listarPedidoPorestado(false);
+  fetchUsers();
+}, [token]);
+
 
   const adminCards = [
     {
@@ -66,44 +95,42 @@ export default function AdminDashboard() {
       <Header />
 
       <div
-        className={`
-          flex min-h-[calc(100vh-8rem)] bg-gray-50 transition-all duration-300
-          ${sidebarOpen ? "lg:ml-[230px]" : "lg:ml-0"}
-        `}
+        className={`flex min-h-[calc(100vh-8rem)] bg-gray-50 transition-all duration-300
+          ${sidebarOpen ? "lg:ml-[230px]" : "lg:ml-0"}`}
       >
         <AdminSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
         <main
-          className={`
-            flex-1 w-full min-w-0 p-4 sm:p-6 md:p-8 lg:p-12
-          `}
+          className="flex-1 w-full min-w-0 p-4 sm:p-6 md:p-8 lg:p-12"
           onClick={() => sidebarOpen && setSidebarOpen(false)}
         >
           <div className='max-w-7xl mx-auto'>
             {location.pathname === "/admin/dashboard" ||
             location.pathname === "/admin" ? (
               <>
-                <div className='mb-6 sm:mb-8'>
-                  <div className='flex items-start justify-between'>
-                    <div>
-                      <h1 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2'>
-                        Admin Dashboard
-                      </h1>
-                      <p className='text-sm sm:text-base text-gray-600'>
-                        Manage your Marly Handmade store
-                      </p>
-                    </div>
 
-                    <button
-                      className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition'
-                      onClick={reportes}
-                    >
-                      Generar Reporte
-                    </button>
+                <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+                      Admin Dashboard
+                    </h1>
+                    <p className="text-sm sm:text-base text-gray-600">
+                      Manage your Marly Handmade store
+                    </p>
                   </div>
+
+                  {/* 🔹 Botón Exportar Excel */}
+                  <button
+                    onClick={handleExportExcel}
+                    className="mt-4 sm:mt-0 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md transition-all"
+                  >
+                    <FileSpreadsheet className="w-5 h-5" />
+                    Exportar Excel
+                  </button>
                 </div>
 
-                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12'>
+                {/* Tarjetas principales */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
                   {adminCards.map((card) => {
                     const Icon = card.icon;
                     return (
@@ -128,9 +155,11 @@ export default function AdminDashboard() {
                   })}
                 </div>
 
-                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
-                  <div className='bg-white rounded-lg shadow-sm p-6'>
-                    <h4 className='text-gray-500 text-sm font-medium mb-2'>
+                {/* Estadísticas */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                  <div className="bg-white rounded-lg shadow-sm p-6">
+                    <h4 className="text-gray-500 text-sm font-medium mb-2">
+
                       Total Products
                     </h4>
                     <p className='text-3xl font-bold text-gray-900'>
