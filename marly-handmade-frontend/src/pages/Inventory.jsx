@@ -404,6 +404,7 @@ function Inventory() {
               background: "white",
               cursor: currentPage === 1 ? "not-allowed" : "pointer",
               borderRadius: "4px",
+              
             }}
           >
             «
