@@ -309,3 +309,55 @@ body {
     justify-self: end;
   }
 }
+
+.group:hover .group-hover\:block {
+  display: block !important;
+}
+
+.group:hover > div {
+  pointer-events: auto;
+}
+
+.group > div {
+  pointer-events: none;
+}
+
+
+.gallery-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.thumbnail-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.thumbnail {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.thumbnail:hover {
+  border-color: #c49b77;
+  transform: scale(1.05);
+}
+
+.thumbnail.active {
+  border-color: #8b5e3c;
+}
+
+.Img-Product img {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
