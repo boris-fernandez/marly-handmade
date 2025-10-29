@@ -188,7 +188,7 @@ export default function Register() {
                 required
               />
             </div>
-            <div className="form-links">
+            <div className="form-links-register">
               <Link to="/login">Already have an account? Sign In</Link>
             </div>
             <button type="submit" className="register-btn">
