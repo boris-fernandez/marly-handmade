@@ -22,8 +22,8 @@ export function AuthProviderWrapper({ children }) {
         setUser(decoded);
         // Verificar si es admin (rol = 0)
         setIsAdmin(decoded.sub == 'Maryen' || decoded.sub === 'Maryen');
-        console.log("Usuario decodificado:", decoded);
-        console.log("Es admin:",decoded.sub == 'Maryen' || decoded.sub === 'Maryen');
+        // console.log("Usuario decodificado:", decoded);
+        // console.log("Es admin:",decoded.sub == 'Maryen' || decoded.sub === 'Maryen');
       } catch (error) {
         console.error("Error al decodificar token:", error);
         logout();
@@ -67,8 +67,8 @@ export function AuthProviderWrapper({ children }) {
       // Decodificar y verificar rol inmediatamente
       try {
         const decoded = jwtDecode(result.token);
-        console.log("Login exitoso. Usuario:", decoded);
-        console.log("Rol del usuario:", decoded.rol);
+        // console.log("Login exitoso. Usuario:", decoded);
+        // console.log("Rol del usuario:", decoded.rol);
       } catch (e) {
         console.error("Error al decodificar token en login:", e);
       }
