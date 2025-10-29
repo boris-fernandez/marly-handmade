@@ -1,6 +1,16 @@
+import { useNavigate } from "react-router-dom";
+
 export default function ProductCard({ product }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/product/${product.slug}`);
+    console.log(`Navigating to /product/${product.slug}`);
+  };
+  
   return (
     <div
+      onClick={handleClick}
       className="
         group 
         rounded-xl 
