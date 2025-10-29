@@ -29,7 +29,7 @@ export default function Landing() {
     <>
       <Header />
 
-      <Hero imagen={heroImg} texto={true} />
+      <Hero texto={true} />
 
       <div data-aos="fade-up">
         <ShortMarlyDescriptionLanding />

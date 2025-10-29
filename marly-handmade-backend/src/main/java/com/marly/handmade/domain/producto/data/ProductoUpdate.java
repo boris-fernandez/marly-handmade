@@ -2,7 +2,7 @@ package com.marly.handmade.domain.producto.data;
 
 public record ProductoUpdate(
         String nombre,
-        Float precio,
+        Double precio,
         Integer stock,
         String fotoPrincipal,
         String fotoSecundario,
