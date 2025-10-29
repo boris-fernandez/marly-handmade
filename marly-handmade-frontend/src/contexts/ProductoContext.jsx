@@ -41,6 +41,15 @@ export const ProductoProvider = ({ children }) => {
         img: item.fotoPrincipal,
         stock: item.stock,
         category: item.categoria,
+        slug: item.nombre
+          .replace(/\s+/g, " ") // limpia espacios dobles
+          .trim()
+          .replace(/[^a-zA-Z0-9 ]/g, "") // elimina símbolos raros
+          .split(" ")
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          )
+          .join(""),
       }));
 
       setProductos(formatted);
