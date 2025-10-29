@@ -7,10 +7,11 @@ import com.marly.handmade.domain.usuario.data.request.AutenticacionDto;
 import com.marly.handmade.domain.usuario.data.request.RegistrarUsuario;
 import com.marly.handmade.domain.usuario.data.responst.RespuestaRegistro;
 import com.marly.handmade.domain.usuario.modal.Usuario;
-import com.marly.handmade.service.UsuarioService;
 import com.marly.handmade.infrastructure.security.DatosJWTToken;
 import com.marly.handmade.infrastructure.security.TokenService;
+import com.marly.handmade.service.UsuarioService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +24,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("auth")
+@Slf4j
 public class AutenticacionController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
@@ -39,27 +41,28 @@ public class AutenticacionController {
         Authentication authentication = new UsernamePasswordAuthenticationToken(autenticacionDto.username(), autenticacionDto.password());
         var usuarioAutenticado = authenticationManager.authenticate(authentication);
         String JWTToken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
+        log.info("Usuario autenticado correctamente: username: {}", autenticacionDto.username());
         return ResponseEntity.ok(new DatosJWTToken(JWTToken));
     }
 
     @PostMapping("register")
-    @Transactional
-    public ResponseEntity<Void> registrar(@RequestBody @Valid RegistrarUsuario registrarUsuario, UriComponentsBuilder builder){
+    public ResponseEntity<RespuestaRegistro> registrar(@RequestBody @Valid RegistrarUsuario registrarUsuario, UriComponentsBuilder builder){
         RespuestaRegistro usuarioCreado =  usuarioService.registrar(registrarUsuario);
         URI uri = builder.path("/usuario/{id}").buildAndExpand(usuarioCreado.id()).toUri();
-        return ResponseEntity.created(uri).build();
+        log.info("Usuario registrado correctamente: username: {}, uri = {}", usuarioCreado.username(), uri);
+        return ResponseEntity.created(uri).body(usuarioCreado);
     }
 
     @PostMapping("forgot-password")
     public ResponseEntity<RespuestaForgotPassword> resetPassword(@RequestBody @Valid ForgetPassword forgetPassword) throws Exception {
-        RespuestaForgotPassword respuestaForgotPassword =  usuarioService.forgotPassword(forgetPassword);
-        return ResponseEntity.ok(respuestaForgotPassword);
+        return ResponseEntity.ok(usuarioService.forgotPassword(forgetPassword));
     }
 
     @PatchMapping("update-password")
     @Transactional
     public ResponseEntity<RespuestaForgotPassword> updatePassword(@RequestBody @Valid ResetPasswordRequest resetPasswordRequest){
         RespuestaForgotPassword forgotPassword = usuarioService.updatePassword(resetPasswordRequest);
+        log.info("Actualizado correctamente: msj={}", forgotPassword.mensage());
         return ResponseEntity.ok(forgotPassword);
     }
 }

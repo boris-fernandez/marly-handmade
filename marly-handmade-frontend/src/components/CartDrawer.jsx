@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { OrderCard } from "./OrderCard";
-import image24 from "../assets/image24.png";
+import image24 from "../assets/sea4.png";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 
 export function CartDrawer({ open, onClose }) {
