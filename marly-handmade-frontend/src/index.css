@@ -309,3 +309,15 @@ body {
     justify-self: end;
   }
 }
+
+.group:hover .group-hover\:block {
+  display: block !important;
+}
+
+.group:hover > div {
+  pointer-events: auto;
+}
+
+.group > div {
+  pointer-events: none;
+}

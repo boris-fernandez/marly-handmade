@@ -39,7 +39,9 @@ export default function Header() {
   const userName = useMemo(() => {
     if (!token?.token) return null;
     const name = obtenerSubDesdeToken(token.token);
-    return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : null;
+    return name
+      ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+      : null;
   }, [token]);
 
   // Verificar si es admin (Memoizado)
@@ -78,31 +80,86 @@ export default function Header() {
               >
                 Shop
               </a>
-              <div className="absolute left-0 mt-4 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
+              <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                   <div>
-                    <h3 className="font-semibold mb-2 text-[#1B2A40]">Category</h3>
+                    <h3 className="font-semibold mb-2 text-[#1B2A40]">
+                      Category
+                    </h3>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li><a href="/Bracelets" className="hover:text-[#040F2E]">Bracelets</a></li>
-                      <li><a href="/Earrings" className="hover:text-[#040F2E]">Earrings</a></li>
-                      <li><a href="/Necklaces" className="hover:text-[#040F2E]">Necklaces</a></li>
-                      <li><a href="/Rings" className="hover:text-[#040F2E]">Rings</a></li>
+                      <li>
+                        <a href="/Bracelets" className="hover:text-[#040F2E]">
+                          Bracelets
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/Earrings" className="hover:text-[#040F2E]">
+                          Earrings
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/Necklaces" className="hover:text-[#040F2E]">
+                          Necklaces
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/Rings" className="hover:text-[#040F2E]">
+                          Rings
+                        </a>
+                      </li>
                     </ul>
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-2 text-[#1B2A40]">Material</h3>
+                    <h3 className="font-semibold mb-2 text-[#1B2A40]">
+                      Material
+                    </h3>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li><a href="/Polymer Clay" className="hover:text-[#040F2E]">Polymer Clay</a></li>
-                      <li><a href="/Copper Wire" className="hover:text-[#040F2E]">Copper Wire</a></li>
-                      <li><a href="/Resin" className="hover:text-[#040F2E]">Resin</a></li>
-                      <li><a href="/Textile" className="hover:text-[#040F2E]">Textile</a></li>
+                      <li>
+                        <a
+                          href="/Polymer Clay"
+                          className="hover:text-[#040F2E]"
+                        >
+                          Polymer Clay
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/Copper Wire" className="hover:text-[#040F2E]">
+                          Copper Wire
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/Resin" className="hover:text-[#040F2E]">
+                          Resin
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/Textile" className="hover:text-[#040F2E]">
+                          Textile
+                        </a>
+                      </li>
                     </ul>
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-2 text-[#1B2A40]">Featured</h3>
+                    <h3 className="font-semibold mb-2 text-[#1B2A40]">
+                      Featured
+                    </h3>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li><a href="/Best Sellers" className="hover:text-[#040F2E]">Best Sellers</a></li>
-                      <li><a href="/Marly's Favorites" className="hover:text-[#040F2E]">Marly's Favorites</a></li>
+                      <li>
+                        <a
+                          href="/Best Sellers"
+                          className="hover:text-[#040F2E]"
+                        >
+                          Best Sellers
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="/Marly's Favorites"
+                          className="hover:text-[#040F2E]"
+                        >
+                          Marly's Favorites
+                        </a>
+                      </li>
                     </ul>
                   </div>
                   <div className="relative flex justify-center items-center">
@@ -129,31 +186,65 @@ export default function Header() {
               >
                 Collections
               </a>
-              <div className="absolute left-0 mt-4 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
+              <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
-                      <li><a href="/product/sea-collection" className="hover:text-[#040F2E]">SEA COLLECTION</a></li>
-                      <li><a href="/MATARITA COLLECTION" className="hover:text-[#040F2E]">MATARITA COLLECTION</a></li>
+                      <li>
+                        <a
+                          href="/product/sea-collection"
+                          className="hover:text-[#040F2E]"
+                        >
+                          SEA COLLECTION
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="/MATARITA COLLECTION"
+                          className="hover:text-[#040F2E]"
+                        >
+                          MATARITA COLLECTION
+                        </a>
+                      </li>
                     </ul>
                   </div>
                   <div className="flex flex-col items-center">
-                    <a href="/product/sea-collection" className="block text-center text-[#2C3E5E] hover:text-[#040F2E]">
-                      <img src="/sea-collection.jpg" alt="Sea Collection" className="w-40 h-32 object-cover rounded-lg transition-transform duration-300 hover:scale-105" />
-                      <span className="mt-2 text-sm font-medium">SEA COLLECTION</span>
+                    <a
+                      href="/product/sea-collection"
+                      className="block text-center text-[#2C3E5E] hover:text-[#040F2E]"
+                    >
+                      <img
+                        src="/sea-collection.jpg"
+                        alt="Sea Collection"
+                        className="w-40 h-32 object-cover rounded-lg transition-transform duration-300 hover:scale-105"
+                      />
+                      <span className="mt-2 text-sm font-medium">
+                        SEA COLLECTION
+                      </span>
                     </a>
                   </div>
                   <div className="flex flex-col items-center">
-                    <a href="/matarita-collection" className="block text-center text-[#2C3E5E] hover:text-[#040F2E]">
-                      <img src="/matarita-collection.jpg" alt="Matarita Collection" className="w-40 h-32 object-cover rounded-lg transition-transform duration-300 hover:scale-105" />
-                      <span className="mt-2 text-sm font-medium">MATARITA COLLECTION</span>
+                    <a
+                      href="/matarita-collection"
+                      className="block text-center text-[#2C3E5E] hover:text-[#040F2E]"
+                    >
+                      <img
+                        src="/matarita-collection.jpg"
+                        alt="Matarita Collection"
+                        className="w-40 h-32 object-cover rounded-lg transition-transform duration-300 hover:scale-105"
+                      />
+                      <span className="mt-2 text-sm font-medium">
+                        MATARITA COLLECTION
+                      </span>
                     </a>
                   </div>
                 </div>
               </div>
             </li>
 
-            <li><a href="/our-story">Our Story</a></li>
+            <li>
+              <a href="/our-story">Our Story</a>
+            </li>
 
             {isAdmin && (
               <li>
@@ -171,7 +262,11 @@ export default function Header() {
         {/* LOGO */}
         <div className="flex justify-center items-center px-2 sm:px-6 py-2 sm:py-4">
           <a href="/" className="flex items-center">
-            <img src="/logoMarly.png" alt="Marly logo" className="h-10 w-auto cursor-pointer flex-shrink-0" />
+            <img
+              src="/logoMarly.png"
+              alt="Marly logo"
+              className="h-10 w-auto cursor-pointer flex-shrink-0"
+            />
           </a>
         </div>
 
@@ -202,7 +297,9 @@ export default function Header() {
               >
                 <User className="w-5 h-5 text-[#040F2E]" />
                 <div className="text-sm text-[#040F2E] hidden sm:block">
-                  <p>Hello, <span className="font-medium">{userName}</span></p>
+                  <p>
+                    Hello, <span className="font-medium">{userName}</span>
+                  </p>
                   <p className="font-bold">My Account</p>
                 </div>
               </div>
@@ -250,13 +347,25 @@ export default function Header() {
           </div>
 
           {/* Carrito */}
-          <button onClick={openCart} className="relative" aria-label="Abrir carrito">
+          <button
+            onClick={openCart}
+            className="relative"
+            aria-label="Abrir carrito"
+          >
             <ShoppingCart className="w-5 h-5 cursor-pointer text-[#040F2E]" />
           </button>
 
           {/* Hamburguesa */}
-          <button className="md:hidden p-2 text-[#040F2E]" onClick={toggleMenu} aria-label="Toggle menu">
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          <button
+            className="md:hidden p-2 text-[#040F2E]"
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -301,13 +410,18 @@ export default function Header() {
 
           {collectionsOpen && (
             <div className="mt-2 pl-4 border-l border-gray-200 space-y-3">
-              <a href="/product/sea-collection" className="block">Sea Collection</a>
-              <a href="/matarita-collection" className="block">Matarita Collection</a>
+              <a href="/product/sea-collection" className="block">
+                Sea Collection
+              </a>
+              <a href="/matarita-collection" className="block">
+                Matarita Collection
+              </a>
             </div>
           )}
 
-          <a href="/our-story" className="block py-2 hover:text-[#040F2E]">Our Story</a>
-
+          <a href="/our-story" className="block py-2 hover:text-[#040F2E]">
+            Our Story
+          </a>
         </div>
       )}
     </header>
