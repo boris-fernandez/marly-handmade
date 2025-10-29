@@ -1,150 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AdminSidebar from "../components/AdminSidebar.jsx";
-
-const getInventoryData = async () => {
-  return [
-    {
-      id: 1,
-      name: "Golden Sun Necklace",
-      price: 850.0,
-      warehouse: "Central Depot",
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: "Silver Moon Ring",
-      price: 320.0,
-      warehouse: "East Hub",
-      stock: 40,
-    },
-    {
-      id: 3,
-      name: "Emerald Drop Earrings",
-      price: 1200.0,
-      warehouse: "North Warehouse",
-      stock: 15,
-    },
-    {
-      id: 4,
-      name: "Ruby Crown Bracelet",
-      price: 950.0,
-      warehouse: "South Store",
-      stock: 18,
-    },
-    {
-      id: 5,
-      name: "Sapphire Ocean Pendant",
-      price: 1350.0,
-      warehouse: "West Facility",
-      stock: 20,
-    },
-    {
-      id: 6,
-      name: "Pearl Blossom Necklace",
-      price: 780.0,
-      warehouse: "Central Depot",
-      stock: 22,
-    },
-    {
-      id: 7,
-      name: "Amethyst Harmony Ring",
-      price: 540.0,
-      warehouse: "East Hub",
-      stock: 35,
-    },
-    {
-      id: 8,
-      name: "Diamond Star Earrings",
-      price: 2500.0,
-      warehouse: "North Warehouse",
-      stock: 10,
-    },
-    {
-      id: 9,
-      name: "Topaz Glow Bracelet",
-      price: 620.0,
-      warehouse: "South Store",
-      stock: 28,
-    },
-    {
-      id: 10,
-      name: "Onyx Shadow Pendant",
-      price: 480.0,
-      warehouse: "West Facility",
-      stock: 30,
-    },
-    {
-      id: 11,
-      name: "Rose Quartz Ring",
-      price: 410.0,
-      warehouse: "Central Depot",
-      stock: 26,
-    },
-    {
-      id: 12,
-      name: "Turquoise Sky Earrings",
-      price: 530.0,
-      warehouse: "East Hub",
-      stock: 24,
-    },
-    {
-      id: 13,
-      name: "Obsidian Charm Bracelet",
-      price: 460.0,
-      warehouse: "North Warehouse",
-      stock: 33,
-    },
-    {
-      id: 14,
-      name: "Jade Serenity Pendant",
-      price: 700.0,
-      warehouse: "South Store",
-      stock: 16,
-    },
-    {
-      id: 15,
-      name: "Citrine Flame Ring",
-      price: 560.0,
-      warehouse: "West Facility",
-      stock: 21,
-    },
-    {
-      id: 16,
-      name: "Aquamarine Breeze Necklace",
-      price: 1100.0,
-      warehouse: "Central Depot",
-      stock: 12,
-    },
-    {
-      id: 17,
-      name: "Garnet Passion Earrings",
-      price: 640.0,
-      warehouse: "East Hub",
-      stock: 19,
-    },
-  ];
-};
+import { useProductos } from "../contexts/ProductoContext.jsx";
 
 function Inventory() {
-  const [inventory, setInventory] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { productos, loading, error } = useProductos(); // ✅ directamente del contexto
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getInventoryData();
-      setInventory(data);
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
-
-  const totalPages = Math.ceil(inventory.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = inventory.slice(startIndex, startIndex + itemsPerPage);
-
+  // ✅ Si el contexto todavía carga, muestra "Loading..."
   if (loading) {
     return (
       <div
@@ -155,10 +20,32 @@ function Inventory() {
           height: "100vh",
         }}
       >
-        Loading...
+        Cargando productos...
       </div>
     );
   }
+
+  // ❌ Si hubo error, mostrarlo
+  if (error) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          color: "red",
+        }}
+      >
+        Error al cargar productos: {error}
+      </div>
+    );
+  }
+
+  // 🧮 Paginación
+  const totalPages = Math.ceil((productos?.length || 0) / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = productos?.slice(startIndex, startIndex + itemsPerPage) || [];
 
   return (
     <div
@@ -172,8 +59,6 @@ function Inventory() {
     >
       <AdminSidebar />
 
-      {/* Main Content */}
-
       <main
         style={{
           flex: 1,
@@ -184,6 +69,7 @@ function Inventory() {
           overflowX: "hidden",
         }}
       >
+        {/* Header */}
         <div
           style={{
             display: "flex",
@@ -219,6 +105,7 @@ function Inventory() {
           </Link>
         </div>
 
+        {/* Tabla de productos */}
         <div
           style={{
             background: "white",
@@ -235,129 +122,29 @@ function Inventory() {
                   borderBottom: "2px solid #e0e0e0",
                 }}
               >
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  No
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  Name
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  Price
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  Warehouse
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  Stock
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  Action
-                </th>
+                <th style={thStyle}>No</th>
+                <th style={thStyle}>Name</th>
+                <th style={thStyle}>Price</th>
+                <th style={thStyle}>Stock</th>
+                <th style={thStyle}>Category</th>
+                <th style={thStyle}>Action</th>
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((item, i) => (
+              {currentItems.map((producto, i) => (
                 <tr
-                  key={item.id}
+                  key={producto.id}
                   style={{
                     borderBottom: "1px solid #f0f0f0",
                     backgroundColor: i % 2 === 0 ? "white" : "#fafafa",
                   }}
                 >
-                  <td
-                    style={{
-                      padding: "15px 12px",
-                      fontSize: "14px",
-                      color: "#333",
-                    }}
-                  >
-                    {item.id}
-                  </td>
-                  <td
-                    style={{
-                      padding: "15px 12px",
-                      fontSize: "14px",
-                      color: "#333",
-                    }}
-                  >
-                    {item.name}
-                  </td>
-                  <td
-                    style={{
-                      padding: "15px 12px",
-                      fontSize: "14px",
-                      color: "#333",
-                    }}
-                  >
-                    S/ {item.price.toFixed(2)}
-                  </td>
-                  <td
-                    style={{
-                      padding: "15px 12px",
-                      fontSize: "14px",
-                      color: "#333",
-                    }}
-                  >
-                    {item.warehouse}
-                  </td>
-                  <td
-                    style={{
-                      padding: "15px 12px",
-                      fontSize: "14px",
-                      color: "#333",
-                    }}
-                  >
-                    {item.stock}
-                  </td>
-                  <td style={{ padding: "15px 12px" }}>
+                  <td style={tdStyle}>{producto.id}</td>
+                  <td style={tdStyle}>{producto.name}</td>
+                  <td style={tdStyle}>S/ {producto.price.toFixed(2)}</td>
+                  <td style={tdStyle}>{producto.stock}</td>
+                  <td style={tdStyle}>{producto.category}</td>
+                  <td style={tdStyle}>
                     <button
                       style={{
                         background: "none",
@@ -385,7 +172,7 @@ function Inventory() {
           </table>
         </div>
 
-        {/* Pagination */}
+        {/* Paginación */}
         <div
           style={{
             display: "flex",
@@ -398,26 +185,14 @@ function Inventory() {
           <button
             onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              background: "white",
-              cursor: currentPage === 1 ? "not-allowed" : "pointer",
-              borderRadius: "4px",
-            }}
+            style={btnPage(currentPage === 1)}
           >
             «
           </button>
           <button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              background: "white",
-              cursor: currentPage === 1 ? "not-allowed" : "pointer",
-              borderRadius: "4px",
-            }}
+            style={btnPage(currentPage === 1)}
           >
             ‹
           </button>
@@ -442,26 +217,14 @@ function Inventory() {
               setCurrentPage(Math.min(totalPages, currentPage + 1))
             }
             disabled={currentPage === totalPages}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              background: "white",
-              cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-              borderRadius: "4px",
-            }}
+            style={btnPage(currentPage === totalPages)}
           >
             ›
           </button>
           <button
             onClick={() => setCurrentPage(totalPages)}
             disabled={currentPage === totalPages}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              background: "white",
-              cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-              borderRadius: "4px",
-            }}
+            style={btnPage(currentPage === totalPages)}
           >
             »
           </button>
@@ -470,5 +233,28 @@ function Inventory() {
     </div>
   );
 }
+
+// 🎨 Estilos compactos
+const thStyle = {
+  padding: "12px",
+  textAlign: "left",
+  fontSize: "13px",
+  fontWeight: "500",
+  color: "#666",
+};
+
+const tdStyle = {
+  padding: "15px 12px",
+  fontSize: "14px",
+  color: "#333",
+};
+
+const btnPage = (disabled) => ({
+  padding: "8px 12px",
+  border: "1px solid #ddd",
+  background: "white",
+  cursor: disabled ? "not-allowed" : "pointer",
+  borderRadius: "4px",
+});
 
 export default Inventory;
