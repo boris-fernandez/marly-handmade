@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import "../components/Product.css";
 import "../components/ProductSelect.css";
 
-import { useState } from "react";
 
 //con este funcion ayuda aabrir y cerra la description osea del + y menos
 function DescriptionItem({ title, children }) {
