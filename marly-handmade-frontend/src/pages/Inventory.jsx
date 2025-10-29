@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AdminSidebar from "../components/AdminSidebar.jsx";
+
 import "../styles/Inventory.css";
 
 const getInventoryData = async () => {
@@ -10,8 +11,8 @@ const getInventoryData = async () => {
 };
 
 function Inventory() {
-  const [inventory, setInventory] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { productos, loading, error } = useProductos(); // ✅ directamente del contexto
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -53,6 +54,28 @@ function Inventory() {
     return <div className="loading">Loading...</div>;
   }
 
+  // ❌ Si hubo error, mostrarlo
+  if (error) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          color: "red",
+        }}
+      >
+        Error al cargar productos: {error}
+      </div>
+    );
+  }
+
+  // 🧮 Paginación
+  const totalPages = Math.ceil((productos?.length || 0) / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = productos?.slice(startIndex, startIndex + itemsPerPage) || [];
+
   return (
     <div className="admin-layout">
       <AdminSidebar />
@@ -78,6 +101,7 @@ function Inventory() {
             <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
               {["Todos", ...new Set(inventory.map((item) => item.categoria))].map((cat) => (
                 <option key={cat} value={cat}>{cat}</option>
+
               ))}
             </select>
 
@@ -151,13 +175,33 @@ function Inventory() {
             <button onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))} disabled={currentPage === totalPages}>›</button>
             <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>»</button>
           </div>
-
-          
         </main>
-        
       </div>
     </div>
   );
 }
+
+// 🎨 Estilos compactos
+const thStyle = {
+  padding: "12px",
+  textAlign: "left",
+  fontSize: "13px",
+  fontWeight: "500",
+  color: "#666",
+};
+
+const tdStyle = {
+  padding: "15px 12px",
+  fontSize: "14px",
+  color: "#333",
+};
+
+const btnPage = (disabled) => ({
+  padding: "8px 12px",
+  border: "1px solid #ddd",
+  background: "white",
+  cursor: disabled ? "not-allowed" : "pointer",
+  borderRadius: "4px",
+});
 
 export default Inventory;

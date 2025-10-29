@@ -38,7 +38,7 @@ class ClienteRepositoryTest {
         usuario = Usuario.builder()
                 .username("Boris")
                 .password("123")
-                .rol(Rol.Cliente)
+                .rol(Rol.CLIENTE)
                 .estado(false)
                 .build();
         usuarioRepository.save(usuario);
