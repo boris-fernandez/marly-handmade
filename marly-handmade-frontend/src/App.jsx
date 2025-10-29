@@ -14,6 +14,13 @@ import TermsConditions from "./pages/TermsConditions";
 import SeaCollectionDetail from "./pages/SeaColletionDetail";
 import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
+import ShippingPolicy from "./pages/ShippingPolicy.jsx";
+import ExchangePolicy from "./pages/ExchangePolicy.jsx";
+import FAQ from "./pages/FAQ.jsx";
+import OurStory from "./pages/OurStory.jsx";
+import ContactUs from "./pages/ContactUs.jsx";
+import Returns from "./pages/Returns.jsx";
 
 import ConfirmNewPassword from "./pages/ConfirmNewPassword";
 import Dashboard from "./pages/AdminDashboard";
@@ -48,6 +55,14 @@ function App() {
         <Route path="/recover-password" element={<RecoverPassword />} />
         <Route path="/product" element={<Product />} />
         <Route path="/product/sea-collection" element={<SeaCollectionDetail />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+        <Route path="/exchange" element={<ExchangePolicy />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/our-story" element={<OurStory />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/returns" element={<Returns />} />
+        <Route path="/shop" element={<SeaCollectionDetail />} />
 
         {/* ADMIN */}
         <Route path="/admin/dashboard" element={<Dashboard />} />
