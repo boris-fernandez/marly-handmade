@@ -1,26 +1,24 @@
 import { useParams } from "react-router-dom";
-import { useProductos } from "../contexts/ProductoContext";
+import { useCart } from "../contexts/CartContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import MostLoved from "../components/MostLoved";
 import SelectAmount from "../components/Amount";
-import { useEffect, useState } from "react";
 import "../components/Product.css";
 import "../components/ProductSelect.css";
+import { AuthContext } from "../contexts/AuthContext.jsx";
+import { useState, useContext, useEffect} from "react";
 
 
-//con este funcion ayuda aabrir y cerra la description osea del + y menos
 function DescriptionItem({ title, children }) {
   const [open, setOpen] = useState(false);
-
   return (
     <div className="accordion-item">
-      <p
-        className="product-detail-accordion"
-        onClick={() => setOpen(!open)}
-      >
+      <p className="product-detail-accordion" onClick={() => setOpen(!open)}>
         {title}
-        <span><strong>{open ? "-" : "+"}</strong></span>
+        <span>
+          <strong>{open ? "-" : "+"}</strong>
+        </span>
       </p>
       {open && <div className="accordion-content">{children}</div>}
     </div>
@@ -29,22 +27,24 @@ function DescriptionItem({ title, children }) {
 
 export default function Product() {
   const { slug } = useParams();
-  const { productos, listarProductos } = useProductos();
   const [producto, setProducto] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { openCart, addToCart } = useCart();
+  const { token, logout } = useContext(AuthContext);
+
+  const API_URL = "http://localhost:8080/producto/all";
 
   useEffect(() => {
     const fetchProducto = async () => {
-      // buscar por slug
-      const found = productos.find((p) => p.slug === slug);
-      if (found) {
-        setProducto(found);
-        return;
-      }
-
-      // fallback si entra directo
       try {
-        const res = await fetch("http://localhost:8080/producto/all");
+        setLoading(true);
+        setError(null);
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error("Error al obtener los productos");
         const data = await res.json();
+
         const formatted = data.map((item) => ({
           id: item.id,
           name: item.nombre,
@@ -52,38 +52,72 @@ export default function Product() {
           img: item.fotoPrincipal,
           stock: item.stock,
           category: item.categoria,
+          description: item.descripcion,
+          details: item.details,
+          care: item.care,
+          shippingInfo: item.shipping_info,
+          images: [
+            item.fotoPrincipal,
+            item.fotoSecundario,
+            item.fotoTerciario,
+          ].filter(Boolean),
+
           slug: item.nombre
-        .replace(/\s+/g, " ")
-        .trim()
-        .replace(/[^a-zA-Z0-9 ]/g, "")
-        .split(" ")
-        .map(
-            (word) =>
-            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-        )
-        .join(""),
+            .replace(/\s+/g, " ")
+            .trim()
+            .replace(/[^a-zA-Z0-9 ]/g, "")
+            .split(" ")
+            .map(
+              (word) =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            )
+            .join(""),
         }));
 
         const match = formatted.find((p) => p.slug === slug);
-        setProducto(match || null);
-      } catch (error) {
-        console.error(error);
+        if (!match) throw new Error("Producto no encontrado");
+        setProducto(match);
+        setSelectedImage(match.images?.[0] || match.img);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProducto();
-  }, [slug, productos]);
+  }, [slug]);
 
+  if (loading) return <p className="text-center mt-10">Cargando producto...</p>;
+  if (error)
+    return <p className="text-center mt-10 text-red-500">⚠️ {error}</p>;
   if (!producto)
-    return <p className="text-center mt-10">Cargando producto...</p>;
+    return <p className="text-center mt-10">Producto no encontrado</p>;
 
-    return (
+  return (
     <>
       <Header />
 
       <section className="productSection">
-        <div className="Img-Product">
-          <img src={producto.img} alt={producto.name} />
+        <div className="gallery-container">
+          <div className="thumbnail-column">
+            {producto.images?.map((image, i) => (
+              <img
+                key={i}
+                src={image}
+                alt={`thumb-${i}`}
+                className={`thumbnail ${
+                  selectedImage === image ? "active" : ""
+                }`}
+                onClick={() => setSelectedImage(image)}
+              />
+            ))}
+          </div>
+
+          <div className="Img-Product">
+            <img src={selectedImage || producto.img} alt={producto.name} />
+          </div>
         </div>
 
         <div className="Content product-details-content">
@@ -100,24 +134,47 @@ export default function Product() {
           </div>
 
           <div className="content">
-            <button className="button-add-to-cart">ADD TO CART</button>
+            {token ? (
+            <button
+              className="button-add-to-cart"
+              onClick={() => {
+                // addToCart(producto);
+                openCart();
+              }}
+            >
+              ADD TO CART
+            </button>
+            ) : (
+            <button
+              className="button-add-to-cart"
+              onClick={() => {
+                openCart();
+              }}
+            >
+              ADD TO CART
+            </button>
+            )}
             <button className="button-buy-now">BUY NOW</button>
 
-            {/* Aquí usamos los nuevos componentes de developer */}
             <DescriptionItem title="Description">
               <p>{producto.description || "No hay descripción disponible."}</p>
             </DescriptionItem>
 
             <DescriptionItem title="Product Details">
-              <p>Detalles técnicos del producto.</p>
+              <p>{producto.details || "No hay detalles adicionales."}</p>
             </DescriptionItem>
 
             <DescriptionItem title="Jewelry Care">
-              <p>Recomendaciones para el cuidado del producto.</p>
+              <p>
+                {producto.care || "Sin recomendaciones de cuidado disponibles."}
+              </p>
             </DescriptionItem>
 
             <DescriptionItem title="Shipping Info">
-              <p>Información de envío y tiempos de entrega.</p>
+              <p>
+                {producto.shippingInfo ||
+                  "No hay información de envío disponible."}
+              </p>
             </DescriptionItem>
           </div>
         </div>
@@ -128,4 +185,3 @@ export default function Product() {
     </>
   );
 }
-

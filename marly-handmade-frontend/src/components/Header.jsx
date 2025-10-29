@@ -67,10 +67,10 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full border-b border-gray-200">
-      <div className="flex items-center justify-between px-6 md:px-10 py-4">
+    <header className="header py-2">
+      <div className="header-container">
         {/* NAV DESKTOP */}
-        <nav className="hidden md:block">
+        <nav className="nav-desktop">
           <ul className="flex items-center space-x-10 font-serif font-medium">
             {/* SHOP */}
             <li className="relative group cursor-pointer">
@@ -260,7 +260,7 @@ export default function Header() {
         </nav>
 
         {/* LOGO */}
-        <div className="flex justify-center items-center px-2 sm:px-6 py-2 sm:py-4">
+        <div className="logo">
           <a href="/" className="flex items-center">
             <img
               src="/logoMarly.png"
@@ -271,7 +271,7 @@ export default function Header() {
         </div>
 
         {/* ICONOS */}
-        <div className="flex items-center space-x-4">
+        <div className="icons">
           <div className="relative inline-block">
             <select className="w-5 h-5 opacity-0 absolute inset-0 cursor-pointer">
               <option>Spanish</option>
