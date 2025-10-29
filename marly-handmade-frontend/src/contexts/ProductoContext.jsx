@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-const ProductoContext = createContext();
+export const ProductoContext = createContext();
 
 // Hook para usar el contexto
 export const useProductos = () => useContext(ProductoContext);

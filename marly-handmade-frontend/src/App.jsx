@@ -48,7 +48,7 @@ function App() {
         <Route path="/recover-password" element={<RecoverPassword />} />
         <Route path="/product/:slug" element={<Product />} />
         <Route path="/product/sea-collection" element={<SeaCollectionDetail />} />
-
+          
         {/* ADMIN */}
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/profile" element={<Profile />} />

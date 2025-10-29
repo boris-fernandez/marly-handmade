@@ -6,6 +6,27 @@ import MostLoved from "../components/MostLoved";
 import SelectAmount from "../components/Amount";
 import { useEffect, useState } from "react";
 import "../components/Product.css";
+import "../components/ProductSelect.css";
+
+import { useState } from "react";
+
+//con este funcion ayuda aabrir y cerra la description osea del + y menos
+function DescriptionItem({ title, children }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="accordion-item">
+      <p
+        className="product-detail-accordion"
+        onClick={() => setOpen(!open)}
+      >
+        {title}
+        <span><strong>{open ? "-" : "+"}</strong></span>
+      </p>
+      {open && <div className="accordion-content">{children}</div>}
+    </div>
+  );
+}
 
 export default function Product() {
   const { slug } = useParams();
@@ -57,18 +78,21 @@ export default function Product() {
   if (!producto)
     return <p className="text-center mt-10">Cargando producto...</p>;
 
-  return (
+    return (
     <>
       <Header />
+
       <section className="productSection">
         <div className="Img-Product">
           <img src={producto.img} alt={producto.name} />
         </div>
 
         <div className="Content product-details-content">
-          <p className="Sub-Name-Product">Home / {producto.category}</p>
-          <h2 className="Name-Producto">{producto.name}</h2>
+          <p className="Sub-Name-Product">
+            Home / <span>{producto.category}</span>
+          </p>
 
+          <h2 className="Name-Producto">{producto.name}</h2>
           <p className="product-price">${producto.price}</p>
           <h2 className="product-variant-name">Stock: {producto.stock}</h2>
 
@@ -80,8 +104,22 @@ export default function Product() {
             <button className="button-add-to-cart">ADD TO CART</button>
             <button className="button-buy-now">BUY NOW</button>
 
-            <p className="product-detail-accordion">Descripción:</p>
-            <p className="text-sm text-gray-700">{producto.description}</p>
+            {/* Aquí usamos los nuevos componentes de developer */}
+            <DescriptionItem title="Description">
+              <p>{producto.description || "No hay descripción disponible."}</p>
+            </DescriptionItem>
+
+            <DescriptionItem title="Product Details">
+              <p>Detalles técnicos del producto.</p>
+            </DescriptionItem>
+
+            <DescriptionItem title="Jewelry Care">
+              <p>Recomendaciones para el cuidado del producto.</p>
+            </DescriptionItem>
+
+            <DescriptionItem title="Shipping Info">
+              <p>Información de envío y tiempos de entrega.</p>
+            </DescriptionItem>
           </div>
         </div>
       </section>
@@ -91,3 +129,4 @@ export default function Product() {
     </>
   );
 }
+
