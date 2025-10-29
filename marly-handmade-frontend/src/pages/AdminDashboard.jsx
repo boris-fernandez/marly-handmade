@@ -121,7 +121,7 @@ useEffect(() => {
 
                   {/* 🔹 Botón Exportar Excel */}
                   <button
-                    onClick={generar}
+                    onClick={reportes}
                     className="mt-4 sm:mt-0 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md transition-all"
                   >
                     <FileSpreadsheet className="w-5 h-5" />
