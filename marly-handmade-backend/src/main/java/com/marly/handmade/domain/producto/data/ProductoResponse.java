@@ -13,7 +13,8 @@ public record ProductoResponse(
         String categoria,
         String details,
         String care,
-        String shipping_info) {
+        String shippingInfo,
+        String descripcion) {
 
     public ProductoResponse(Producto producto) {
     this(
@@ -27,7 +28,8 @@ public record ProductoResponse(
         producto.getCategoria(),      // String categoria
         producto.getDetails(),        // String details
         producto.getCare(),           // String care
-        producto.getShippingInfo()    // String shipping_info
+        producto.getShippingInfo(),
+        producto.getDescripcion()
     );
 }
 
