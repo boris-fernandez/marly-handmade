@@ -38,21 +38,17 @@ public class ProductoService {
                 "Ya existe un producto con ese nombre");
 
         Producto producto = Producto.builder()
-
                 .nombre(productoRequest.nombre())
-
+                .descripcion(productoRequest.descripcion())
                 .precio(productoRequest.precio())
-
                 .stock(productoRequest.stock())
-
                 .fotoPrincipal(productoRequest.fotoPrincipal())
-
                 .fotoSecundario(productoRequest.fotoSecundario())
-
                 .fotoTerciario(productoRequest.fotoTerciario())
-
                 .categoria(productoRequest.categoria())
-
+                .details(productoRequest.details())
+                .care(productoRequest.care())
+                .shippingInfo(productoRequest.shippingInfo())
                 .build();
 
         productoRepository.save(producto);

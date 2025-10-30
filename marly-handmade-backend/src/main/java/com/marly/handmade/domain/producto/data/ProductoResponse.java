@@ -14,23 +14,23 @@ public record ProductoResponse(
         String categoria,
         String details,
         String care,
-        String shipping_info
-) {
+        String shipping_info) {
 
     public ProductoResponse(Producto producto) {
         this(
-            producto.getIdProducto(),
-            producto.getNombre(),
-            producto.getDescripcion(),
-            producto.getPrecio(),
-            producto.getStock(),
-            producto.getFotoPrincipal(),
-            producto.getFotoSecundario(),
-            producto.getFotoTerciario(),
-            producto.getCategoria(),
-            producto.getDetails(),
-            producto.getCare(),
-            producto.getShipping_info()
+                producto.getIdProducto(),
+                producto.getNombre(),
+                producto.getDescripcion(),
+                producto.getPrecio(),
+                producto.getStock(),
+                producto.getFotoPrincipal(),
+                producto.getFotoSecundario(),
+                producto.getFotoTerciario(),
+                producto.getCategoria(),
+                producto.getDetails(),
+                producto.getCare(),
+                producto.getShippingInfo()
         );
     }
+
 }

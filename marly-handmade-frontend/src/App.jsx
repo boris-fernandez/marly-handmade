@@ -32,6 +32,7 @@ import Inventory from "./pages/Inventory";
 import ProductGallery from "./pages/ProductGallery";
 import UserManagement from "./pages/UserManagement";
 import ProductRegister from "./pages/ProductRegister";
+import Buy from "./pages/Buy.jsx";
 
 import { FilterProvider } from "./contexts/FilterContext.jsx";
 
@@ -64,6 +65,7 @@ function App() {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/returns" element={<Returns />} />
         <Route path="/shop" element={<SeaCollectionDetail />} />
+        <Route path="/buy" element={<Buy />} />
 
         {/* ADMIN */}
         <Route path="/admin/dashboard" element={<Dashboard />} />

@@ -23,8 +23,8 @@ function AdminSidebar() {
     { to: "/admin/users", label: "Users", icon: Users },
     { to: "/admin/inventory", label: "Inventory", icon: Archive },
     { to: "/admin/orders", label: "Orders", icon: ShoppingBag },
-    { to: "/admin/content", label: "Content Management", icon: FileText },
-    { to: "/admin/reports", label: "Reports / Analytics", icon: PieChart },
+    // { to: "/admin/content", label: "Content Management", icon: FileText },
+    // { to: "/admin/reports", label: "Reports / Analytics", icon: PieChart },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -85,7 +85,7 @@ function AdminSidebar() {
         </nav>
 
         {/* Perfil en la parte inferior */}
-        <div className="border-t border-gray-200">
+        {/* <div className="border-t border-gray-200">
           <Link
             to="/admin/profile"
             onClick={() => setIsOpen(false)}
@@ -94,7 +94,7 @@ function AdminSidebar() {
             <User size={20} className="text-gray-600" />
             <span>Profile</span>
           </Link>
-        </div>
+        </div> */}
       </aside>
 
     </>
