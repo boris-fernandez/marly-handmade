@@ -7,7 +7,7 @@ import SelectAmount from "../components/Amount";
 import "../components/Product.css";
 import "../components/ProductSelect.css";
 import { AuthContext } from "../contexts/AuthContext.jsx";
-import { useState, useContext, useEffect} from "react";
+import { useState, useContext, useEffect } from "react";
 
 function DescriptionItem({ title, children }) {
   const [open, setOpen] = useState(false);
@@ -31,7 +31,7 @@ export default function Product() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1); // Estado de cantidad
-  
+
   const { openCart, addToCart } = useCart();
   const { token, logout } = useContext(AuthContext);
 
@@ -149,13 +149,35 @@ export default function Product() {
               <button
                 className="button-add-to-cart"
                 onClick={() => {
-                  alert("Debes iniciar sesión para agregar al carrito");
+                  // alert("Debes iniciar sesión para agregar al carrito");
+                  openCart();
                 }}
               >
                 ADD TO CART
               </button>
             )}
-            <button className="button-buy-now">BUY NOW</button>
+
+            {token ? (
+              <a href="/buy">
+                <button
+                  className="button-buy-now"
+                  onClick={() => {
+                    addToCart(producto, quantity);
+                  }}
+                >
+                  BUY NOW
+                </button>
+              </a>
+            ) : (
+              <button
+                className="button-buy-now"
+                onClick={() => {
+                  openCart();
+                }}
+              >
+                BUY NOW
+              </button>
+            )}
 
             <DescriptionItem title="Description">
               <p>{producto.description || "No hay descripción disponible."}</p>
