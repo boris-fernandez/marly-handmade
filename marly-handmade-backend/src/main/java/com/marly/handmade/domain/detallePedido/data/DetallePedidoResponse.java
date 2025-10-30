@@ -9,7 +9,7 @@ public record DetallePedidoResponse(
 ) {
     public DetallePedidoResponse(DetallePedido detalle) {
         this(
-                detalle.getProducto().getNombre(),
+                detalle.getProducto() != null ? detalle.getProducto().getNombre() : null,
                 detalle.getCantidad(),
                 detalle.getPrecioUnitario()
         );

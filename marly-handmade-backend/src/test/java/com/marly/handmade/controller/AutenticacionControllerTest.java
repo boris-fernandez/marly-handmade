@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AutenticacionController.class)
 @AutoConfigureMockMvc(addFilters = false)
+
 class AutenticacionControllerTest extends ControllerTestBase {
 
     @Autowired

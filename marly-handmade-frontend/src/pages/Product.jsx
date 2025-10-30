@@ -30,6 +30,8 @@ export default function Product() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [quantity, setQuantity] = useState(1); // Estado de cantidad
+  
   const { openCart, addToCart } = useCart();
   const { token, logout } = useContext(AuthContext);
 
@@ -129,29 +131,29 @@ export default function Product() {
           <h2 className="product-variant-name">Stock: {producto.stock}</h2>
 
           <div className="amaunt-select">
-            <SelectAmount />
+            <SelectAmount quantity={quantity} setQuantity={setQuantity} />
           </div>
 
           <div className="content">
             {token ? (
-            <button
-              className="button-add-to-cart"
-              onClick={() => {
-                // addToCart(producto);
-                openCart();
-              }}
-            >
-              ADD TO CART
-            </button>
+              <button
+                className="button-add-to-cart"
+                onClick={() => {
+                  addToCart(producto, quantity);
+                  openCart();
+                }}
+              >
+                ADD TO CART
+              </button>
             ) : (
-            <button
-              className="button-add-to-cart"
-              onClick={() => {
-                openCart();
-              }}
-            >
-              ADD TO CART
-            </button>
+              <button
+                className="button-add-to-cart"
+                onClick={() => {
+                  alert("Debes iniciar sesión para agregar al carrito");
+                }}
+              >
+                ADD TO CART
+              </button>
             )}
             <button className="button-buy-now">BUY NOW</button>
 
