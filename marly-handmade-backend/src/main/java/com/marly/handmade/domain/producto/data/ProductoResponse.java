@@ -10,19 +10,26 @@ public record ProductoResponse(
         String fotoPrincipal,
         String fotoSecundario,
         String fotoTerciario,
-        String categoria
-) {
+        String categoria,
+        String details,
+        String care,
+        String shipping_info) {
 
     public ProductoResponse(Producto producto) {
         this(
-            producto.getIdProducto(),
-            producto.getNombre(),
+                producto.getIdProducto(),
+                producto.getNombre(),
+                producto.getDescripcion(),
                 producto.getPrecio(),
-            producto.getStock(),
-            producto.getFotoPrincipal(),
-            producto.getFotoSecundario(),
-            producto.getFotoTerciario(),
-            producto.getCategoria()
+                producto.getStock(),
+                producto.getFotoPrincipal(),
+                producto.getFotoSecundario(),
+                producto.getFotoTerciario(),
+                producto.getCategoria(),
+                producto.getDetails(),
+                producto.getCare(),
+                producto.getShippingInfo()
         );
     }
+
 }

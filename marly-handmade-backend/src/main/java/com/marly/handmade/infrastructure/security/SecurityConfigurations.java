@@ -33,26 +33,29 @@ public class SecurityConfigurations {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register", "/auth/forgot-password")
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register", "/auth/forgot-password"
+                               )
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/producto", "/producto/all", "/promociones/{nombre}", "/promociones/mostrar/{id}", "/promociones", "/usuario/all", "/clientes/all")
+
+                        .requestMatchers(HttpMethod.GET, "/producto/all", "/promociones/{nombre}",
+                                "/promociones/mostrar/{id}", "/promociones", "/usuario/all", "/clientes/all")
                         .permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/auth/update-password")
                         .permitAll()
                         .anyRequest()
-                        .authenticated()
-                )
+                        .authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

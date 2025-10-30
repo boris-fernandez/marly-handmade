@@ -34,6 +34,7 @@ import java.util.List;
 
 public class ProductoController {
     private final ProductoService productoService;
+
     public ProductoController(ProductoService productoService) {
 
         this.productoService = productoService;
@@ -41,21 +42,19 @@ public class ProductoController {
     }
 
     @PostMapping
-
     @PreAuthorize("hasRole('ADMIN')")
-
-    public ResponseEntity<ProductoResponse> crearProducto(@RequestBody @Valid ProductoRequest productoRequest,
+    public ResponseEntity<ProductoResponse> crearProducto(
+            @RequestBody @Valid ProductoRequest productoRequest,
             UriComponentsBuilder builder) {
 
         ProductoResponse productoResponse = productoService.crearProducto(productoRequest);
 
-        URI uri = builder.path("/producto/{id}").buildAndExpand(productoResponse.id()).toUri();
+        URI uri = builder.path("/producto/{id}")
+                .buildAndExpand(productoResponse.id())
+                .toUri();
 
-        log.info("Producto creado correctamente: name:{}, precio={}", productoResponse.nombre(),
-                productoResponse.precio());
 
         return ResponseEntity.created(uri).body(productoResponse);
-
     }
 
     @GetMapping("all")

@@ -1,12 +1,21 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useProductos } from "../contexts/ProductoContext";
+import "../styles/ProductoRegister.css";
 
 export default function ProductRegister() {
   const { formData, setFormData, handleImageUpload, handleSubmit, loading } =
     useProductos();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+
+  // 🧠 Función auxiliar para mostrar imágenes locales o URLs
+  const getImageSrc = (image) => {
+    if (!image) return null;
+    if (typeof image === "string") return image; // URL ya subida a Cloudinary
+    if (image instanceof File) return URL.createObjectURL(image); // archivo local
+    return null;
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -36,29 +45,27 @@ export default function ProductRegister() {
               className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white rounded-xl shadow-sm p-6 sm:p-8"
             >
               {/* === IMAGE UPLOADS === */}
-              <div className="space-y-6">
-                {/* Main Image */}
-                <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all">
+              <div className="image-uploads">
+                {/* Imagen principal */}
+                <label className="image-upload main">
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => handleImageUpload(e, "main")}
-                    className="hidden"
                   />
                   {formData.mainImage ? (
                     <img
-                      src={URL.createObjectURL(formData.mainImage)}
+                      src={getImageSrc(formData.mainImage)}
                       alt="Main"
-                      className="w-full h-64 object-cover rounded-lg"
+                      className="rounded-lg object-cover w-full h-64"
                     />
                   ) : (
                     <>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="w-12 h-12 text-gray-400 mb-3"
-                        fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
+                        className="w-10 h-10 text-gray-400"
                       >
                         <path
                           strokeLinecap="round"
@@ -67,41 +74,47 @@ export default function ProductRegister() {
                           d="M3 16l4-4a3 3 0 014 0l4 4m0 0l4-4a3 3 0 014 0l4 4M3 10h18"
                         />
                       </svg>
-                      <span className="text-gray-600 font-medium">
-                        Upload Main Image
-                      </span>
+                      <span>Upload Main Image</span>
                     </>
                   )}
                 </label>
 
-                {/* Additional Images */}
-                <div className="grid grid-cols-3 gap-4">
-                  {[1, 2, 3].map((i) => (
-                    <label
-                      key={i}
-                      className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all"
-                    >
+                {/* Imágenes adicionales */}
+                <div className="extra-images">
+                  {[1, 2].map((i) => (
+                    <label key={i} className="image-upload small">
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={(e) => handleImageUpload(e, "additional")}
-                        className="hidden"
+                        onChange={(e) =>
+                          handleImageUpload(e, `additional-${i}`)
+                        }
                       />
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-6 h-6 text-gray-400 mb-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1.5}
-                          d="M3 16l4-4a3 3 0 014 0l4 4m0 0l4-4a3 3 0 014 0l4 4M3 10h18"
+                      {formData.additionalImages &&
+                      formData.additionalImages[i - 1] ? (
+                        <img
+                          src={getImageSrc(formData.additionalImages[i - 1])}
+                          alt={`Additional ${i}`}
+                          className="rounded-md object-cover w-full h-32"
                         />
-                      </svg>
-                      <span className="text-xs text-gray-600">Upload</span>
+                      ) : (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            className="w-6 h-6 text-gray-400"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.5}
+                              d="M3 16l4-4a3 3 0 014 0l4 4m0 0l4-4a3 3 0 014 0l4 4M3 10h18"
+                            />
+                          </svg>
+                          <span>Upload</span>
+                        </>
+                      )}
                     </label>
                   ))}
                 </div>
@@ -109,7 +122,6 @@ export default function ProductRegister() {
 
               {/* === FORM FIELDS === */}
               <div className="space-y-6">
-                {/* Product Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Product Name
@@ -124,7 +136,6 @@ export default function ProductRegister() {
                   />
                 </div>
 
-                {/* Description */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Description
@@ -142,7 +153,6 @@ export default function ProductRegister() {
                   />
                 </div>
 
-                {/* Material, Stock, Price */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -165,6 +175,7 @@ export default function ProductRegister() {
                     <input
                       type="number"
                       value={formData.stock}
+                      min={0}
                       onChange={(e) =>
                         setFormData({ ...formData, stock: e.target.value })
                       }
@@ -179,12 +190,59 @@ export default function ProductRegister() {
                     <input
                       type="number"
                       value={formData.price}
+                      min={0}
                       onChange={(e) =>
                         setFormData({ ...formData, price: e.target.value })
                       }
                       className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none"
                     />
                   </div>
+                </div>
+
+                {/* === CAMPOS ADICIONALES === */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Details
+                  </label>
+                  <textarea
+                    value={formData.details}
+                    onChange={(e) =>
+                      setFormData({ ...formData, details: e.target.value })
+                    }
+                    rows="3"
+                    className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Describe detalles únicos del producto (materiales, proceso artesanal, etc.)"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Care Instructions
+                  </label>
+                  <textarea
+                    value={formData.care}
+                    onChange={(e) =>
+                      setFormData({ ...formData, care: e.target.value })
+                    }
+                    rows="2"
+                    className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Ejemplo: limpiar con paño seco, evitar exposición al agua..."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Shipping Info
+                  </label>
+                  <textarea
+                    value={formData.shippingInfo}
+                    onChange={(e) =>
+                      setFormData({ ...formData, shippingInfo: e.target.value })
+                    }
+                    rows="2"
+                    className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Ejemplo: envío nacional e internacional, empaques ecológicos..."
+                  />
                 </div>
 
                 <button

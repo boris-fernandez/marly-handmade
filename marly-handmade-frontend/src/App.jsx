@@ -32,6 +32,7 @@ import Inventory from "./pages/Inventory";
 import ProductGallery from "./pages/ProductGallery";
 import UserManagement from "./pages/UserManagement";
 import ProductRegister from "./pages/ProductRegister";
+import Buy from "./pages/Buy.jsx";
 
 import { FilterProvider } from "./contexts/FilterContext.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
@@ -65,6 +66,8 @@ function App() {
         <Route path="/returns" element={<Returns />} />
         <Route path="/shop" element={<SeaCollectionDetail />} />
         <Route path="/confirm-new-password/:token" element={<ConfirmNewPassword />} />
+        <Route path="/buy" element={<Buy />} />
+
         {/* ADMIN */}
         <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<Dashboard />} />

@@ -87,7 +87,7 @@ function AdminSidebar() {
         </nav>
 
         {/* Perfil en la parte inferior */}
-        <div className="border-t border-gray-200">
+        {/* <div className="border-t border-gray-200">
           <Link
             to="/admin/profile"
             onClick={() => setIsOpen(false)}
@@ -96,7 +96,7 @@ function AdminSidebar() {
             <User size={20} className="text-gray-600" />
             <span>Profile</span>
           </Link>
-        </div>
+        </div> */}
       </aside>
 
     </>

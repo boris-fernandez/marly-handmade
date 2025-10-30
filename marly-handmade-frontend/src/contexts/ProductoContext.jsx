@@ -1,17 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { AuthContext } from "../contexts/AuthContext"; // Importamos el AuthContext
 
 export const ProductoContext = createContext();
 
-// Hook para usar el contexto
 export const useProductos = () => useContext(ProductoContext);
 
 export const ProductoProvider = ({ children }) => {
-  // 🟢 Estados para listar productos
+  // Estados para listar productos
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // 🟣 Estados para el registro de productos
+  // Estados para el registro de productos
   const [formData, setFormData] = useState({
     productName: "",
     description: "",
@@ -27,7 +27,7 @@ export const ProductoProvider = ({ children }) => {
 
   const API_URL = "http://localhost:8080/producto";
 
-  // 🟢 Función: Listar productos
+  // Función: Listar productos
   const listarProductos = async () => {
     setLoading(true);
     setError(null);
@@ -69,55 +69,104 @@ export const ProductoProvider = ({ children }) => {
     }
   };
 
-  // 🟣 Función: Manejar carga de imágenes
-  const handleImageUpload = (e, type) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const [previewUrl, setPreviewUrl] = useState(null); // 🟢 <--- aquí está la línea que faltaba
+  const { token } = useContext(AuthContext); // Usamos useContext para obtener el token
 
-    if (type === "main") {
-      setFormData((prev) => ({ ...prev, mainImage: file }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        additionalImages: [...prev.additionalImages, file],
-      }));
+  const CLOUD_NAME = "cloudjosue";
+  const UPLOAD_PRESET = "MarlyCloud"; // asegúrate de que este nombre coincida en Cloudinary
+
+  const handleImageUpload = async (e, type = "main") => {
+    const file = e.target.files?.[0];
+    console.log("🧠 Archivo recibido:", file);
+    if (!(file instanceof File)) {
+      console.error("❌ No es un archivo válido:", file);
+      return;
+    }
+
+    const formDataCloud = new FormData();
+    formDataCloud.append("file", file);
+    formDataCloud.append("upload_preset", UPLOAD_PRESET);
+
+    try {
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formDataCloud,
+        }
+      );
+
+      const data = await res.json();
+      console.log("📦 Respuesta Cloudinary:", data);
+
+      if (!res.ok || data.error) {
+        console.error("❌ Error al subir:", data.error?.message);
+        return;
+      }
+
+      console.log("✅ Subida exitosa:", data.secure_url);
+
+      // 🔧 Actualizar según el tipo de imagen
+      setFormData((prev) => {
+        if (type === "main") {
+          return { ...prev, mainImage: data.secure_url };
+        } else if (type === "additional-1") {
+          const updated = [...prev.additionalImages];
+          updated[0] = data.secure_url;
+          return { ...prev, additionalImages: updated };
+        } else if (type === "additional-2") {
+          const updated = [...prev.additionalImages];
+          updated[1] = data.secure_url;
+          return { ...prev, additionalImages: updated };
+        }
+        return prev;
+      });
+    } catch (err) {
+      console.error("🚨 Error de red:", err);
     }
   };
 
-  // 🟣 Función: Registrar producto
+  // Función: Registrar producto
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
-      const formDataToSend = new FormData();
+      // Obtener token de admin
+      // const token = localStorage.getItem("token");
 
-      formDataToSend.append("nombre", formData.productName);
-      formDataToSend.append("descripcion", formData.description);
-      formDataToSend.append("material", formData.material);
-      formDataToSend.append("stock", formData.stock);
-      formDataToSend.append("precio", formData.price);
-      formDataToSend.append("categoria", "artesania");
-      formDataToSend.append("details", formData.details);
-      formDataToSend.append("care", formData.care);
-      formDataToSend.append("shipping_info", formData.shippingInfo);
+      if (!token) {
+        alert("No hay token disponible. No se puede subir el producto.");
+        setLoading(false);
+        return;
+      }
 
-      if (formData.mainImage)
-        formDataToSend.append("fotoPrincipal", formData.mainImage);
+      // Preparar payload en JSON
+      const payload = {
+        nombre: formData.productName,
+        descripcion: formData.description,
+        precio: parseFloat(formData.price),
+        stock: parseInt(formData.stock),
+        fotoPrincipal: formData.mainImage || "",
+        fotoSecundario: formData.additionalImages[0] || "",
+        fotoTerciario: formData.additionalImages[1] || "",
+        categoria: "artesania", // o puedes permitir cambiarlo desde un input
+        details: formData.details,
+        care: formData.care,
+        shippingInfo: formData.shippingInfo,
+      };
 
-      if (formData.additionalImages[0])
-        formDataToSend.append("fotoSecundario", formData.additionalImages[0]);
+      console.log("📤 Payload a enviar:", payload);
+      console.log("📦 Token a enviar:", token.token);
 
-      if (formData.additionalImages[1])
-        formDataToSend.append("fotoTerciario", formData.additionalImages[1]);
-
-      const response = await fetch(API_URL, {
+      // Enviar POST al backend
+      const response = await fetch("http://localhost:8080/producto", {
         method: "POST",
         headers: {
-          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.token}`, // tu token de admin
         },
-        body: formDataToSend,
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) throw new Error("Error al registrar el producto");
