@@ -36,7 +36,7 @@ function AdminSidebar() {
       {/* Botón hamburguesa para móvil - fixed para que siempre esté visible */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-20 left-4 z-50 bg-white border border-gray-300 p-2 rounded-lg shadow-lg hover:bg-gray-50 transition-colors"
+        className="lg:hidden fixed top-9 left-4 z-50 bg-white border border-gray-300 p-2 rounded-lg shadow-lg hover:bg-gray-50 transition-colors"
         aria-label="Toggle menu"
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -44,20 +44,16 @@ function AdminSidebar() {
 
       {/* Sidebar - Fixed en móvil, Static en desktop */}
       <aside
-        className={`
-          bg-white border-r border-gray-200 flex-shrink-0
-          
-          /* Móvil: fixed y deslizable */
-          fixed top-0 left-0 bottom-0 w-[230px] z-40
-          transform transition-transform duration-300 ease-in-out
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}
-          
-          /* Desktop: static y siempre visible */
-          lg:translate-x-0 lg:static lg:block
-          
-          flex flex-col
-        `}
-      >
+          className={`
+            bg-white border-r border-gray-200 flex-shrink-0
+            fixed left-0 z-40 w-[230px] lg:w-[230px]
+            top-[200px] bottom-[200px]
+            transform transition-transform duration-300 ease-in-out
+            ${isOpen ? "translate-x-0" : "-translate-x-full"}
+            lg:translate-x-0 lg:static lg:block
+            flex flex-col
+          `}
+        >
         {/* Navegación principal */}
         <nav className="flex-1 overflow-y-auto py-6">
           {navItems.map((item) => {
