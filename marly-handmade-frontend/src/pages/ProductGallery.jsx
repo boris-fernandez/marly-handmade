@@ -129,12 +129,10 @@ function ProductGallery() {
                 <span className={`gallery-stock ${product.stock <= 10 ? "low" : "ok"}`}>
                   {product.stock <= 10 ? "⚠ Stock bajo" : `✓ ${product.stock} en stock`}
                 </span>
-                <button
-                  onClick={() => alert(`Editar producto: ${product.nombre}`)}
-                  className="gallery-edit-button"
-                >
+                <Link to={`/admin/inventory/edit/${product.id}`} className="gallery-edit-button">
                   Editar
-                </button>
+                </Link>
+                <button onClick={() => alert(`Editar producto: ${product.nombre}`)} className="gallery-edit-button" > Eliminar </button>
               </div>
             </div>
           ))}
