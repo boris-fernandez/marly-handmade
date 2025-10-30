@@ -2,16 +2,15 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 export const ProductoContext = createContext();
 
-// Hook para usar el contexto
 export const useProductos = () => useContext(ProductoContext);
 
 export const ProductoProvider = ({ children }) => {
-  // 🟢 Estados para listar productos
+  // Estados para listar productos
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // 🟣 Estados para el registro de productos
+  // Estados para el registro de productos
   const [formData, setFormData] = useState({
     productName: "",
     description: "",
@@ -27,7 +26,7 @@ export const ProductoProvider = ({ children }) => {
 
   const API_URL = "http://localhost:8080/producto";
 
-  // 🟢 Función: Listar productos
+  // Función: Listar productos
   const listarProductos = async () => {
     setLoading(true);
     setError(null);
@@ -69,7 +68,7 @@ export const ProductoProvider = ({ children }) => {
     }
   };
 
-  // 🟣 Función: Manejar carga de imágenes
+  // Función: Manejar carga de imágenes
   const handleImageUpload = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -84,7 +83,7 @@ export const ProductoProvider = ({ children }) => {
     }
   };
 
-  // 🟣 Función: Registrar producto
+  // Función: Registrar producto
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
