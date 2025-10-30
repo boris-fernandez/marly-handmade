@@ -26,6 +26,7 @@ export const CartProvider = ({ children }) => {
     } else {
       localStorage.removeItem("cart");
     }
+    // console.log("Carrito actualizado:", cartItems);
   }, [cartItems]);
 
   const openCart = () => setOpen(true);

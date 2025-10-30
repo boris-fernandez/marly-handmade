@@ -1,31 +1,26 @@
 import { useContext } from "react";
 import { OrderCard } from "./OrderCard";
 import { AuthContext } from "../contexts/AuthContext.jsx";
-import { useCart } from "../contexts/CartContext"; 
+import { useCart } from "../contexts/CartContext";
 
 export function CartDrawer({ open, onClose }) {
   const { token } = useContext(AuthContext);
-  
+
   // Obtiene datos del CartContext en lugar de useState local
-  const { 
-    cartItems, 
-    removeFromCart, 
-    updateQuantity, 
-    getCartTotal,
-    clearCart 
-  } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } =
+    useCart();
 
   const handleDelete = (id) => removeFromCart(id);
 
   const handleAdd = (id) => {
-    const item = cartItems.find(item => item.id === id);
+    const item = cartItems.find((item) => item.id === id);
     if (item) {
       updateQuantity(id, item.quantity + 1);
     }
   };
 
   const handleDecrease = (id) => {
-    const item = cartItems.find(item => item.id === id);
+    const item = cartItems.find((item) => item.id === id);
     if (item) {
       updateQuantity(id, item.quantity - 1);
     }
@@ -74,14 +69,14 @@ export function CartDrawer({ open, onClose }) {
               {cartItems.map((item) => (
                 <OrderCard
                   key={item.id}
-                  status="En carrito" 
+                  status="En carrito"
                   image={item.img}
-                  title={item.name} 
-                  subtitle={item.category} 
+                  title={item.name}
+                  subtitle={item.category}
                   price={item.price}
                   quantity={item.quantity}
                   onAdd={() => handleAdd(item.id)}
-                  onDecrease={() => handleDecrease(item.id)} 
+                  onDecrease={() => handleDecrease(item.id)}
                   onDelete={() => handleDelete(item.id)}
                 />
               ))}
@@ -100,9 +95,11 @@ export function CartDrawer({ open, onClose }) {
                 <span>Total</span>
                 <span>${total.toFixed(2)}</span>
               </div>
-              <button className="w-full bg-black text-white py-2 rounded-md font-semibold cursor-pointer hover:bg-gray-800">
-                Checkout
-              </button>
+              <a href="/buy">
+                <button className="w-full bg-black text-white py-2 rounded-md font-semibold cursor-pointer hover:bg-gray-800">
+                  Checkout
+                </button>
+              </a>
               <button
                 onClick={onClose}
                 className="w-full border border-gray-300 py-2 rounded-md font-medium cursor-pointer hover:bg-gray-50"
