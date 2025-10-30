@@ -66,14 +66,15 @@ public class PedidoService{
                 .total(total)
                 .estado(false)
                 .build();
-        pedidoRepository.save(pedido);
+    // Guardar pedido y usar la instancia devuelta por el repositorio (mock puede devolver otra instancia)
+    Pedido pedidoGuardado = pedidoRepository.save(pedido);
 
-        List<DetallePedido> detallePedidos = saveDetallesPedido(productoList, request,pedido);
+    List<DetallePedido> detallePedidos = saveDetallesPedido(productoList, request, pedidoGuardado);
 
         //Reducir el stock de producto
         reducirStockProducto(productoList, request);
 
-        return new PedidoResponse(pedido, cliente, detallePedidos);
+    return new PedidoResponse(pedidoGuardado, cliente, detallePedidos);
     }
 
     public void updatePedido(long id) {

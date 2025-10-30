@@ -7,7 +7,6 @@ import com.marly.handmade.domain.cliente.data.response.RespuestaForgotPassword;
 import com.marly.handmade.domain.cliente.modal.Cliente;
 import com.marly.handmade.domain.cliente.repository.ClienteRepository;
 import com.marly.handmade.domain.usuario.data.request.RegistrarUsuario;
-import com.marly.handmade.domain.usuario.data.responst.ClienteConUsuarioResponse;
 import com.marly.handmade.domain.usuario.data.responst.RespuestaRegistro;
 import com.marly.handmade.domain.usuario.data.responst.UsuarioResponse;
 import com.marly.handmade.domain.usuario.modal.Rol;

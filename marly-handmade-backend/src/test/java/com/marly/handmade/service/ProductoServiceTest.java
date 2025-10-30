@@ -52,8 +52,8 @@ class ProductoServiceTest {
     @DisplayName("Test para verificar que trae todos los productos")
     @Test
     void listarProductos() {
-        List<Producto> productoList = Arrays.asList(new Producto(1L,"Collar", 10.0, 3, "", "", "", ""),
-                new Producto(1L,"Arete", 20.0, 5, "", "", "", ""));
+        List<Producto> productoList = Arrays.asList(new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", ""),
+                new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", ""));
         BDDMockito.given(productoRepository.findAll()).willReturn(productoList);
 
         List<ProductoResponse> productoResponses = productoService.listarProductos();
@@ -67,7 +67,7 @@ class ProductoServiceTest {
     @DisplayName("Test para comprobar que devuelve producto buscado por id")
     @Test
     void buscarPorId(){
-        Producto producto = new Producto(1L,"Collar", 10.0, 3, "", "", "", "");
+        Producto producto = new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "");
         BDDMockito.given(productoRepository.findById(anyLong())).willReturn(Optional.of(producto));
 
         ProductoResponse productoResponse = productoService.buscar(null, anyLong());
@@ -80,7 +80,7 @@ class ProductoServiceTest {
     @DisplayName("Test para comprobar que devuelve producto buscado por nombre")
     @Test
     void buscarPorNombre(){
-        Producto producto = new Producto(1L,"Collar", 10.0, 3, "", "", "", "");
+        Producto producto = new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "");
         BDDMockito.given(productoRepository.findByNombre(anyString())).willReturn(producto);
 
         ProductoResponse productoResponse = productoService.buscar(anyString(), null);
@@ -104,7 +104,7 @@ class ProductoServiceTest {
     @DisplayName("Test para comprbar que se actualizan los datos")
     @Test
     void update() {
-        Producto producto = new Producto(1L,"Collar", 10.0, 3, "", "", "", "");
+        Producto producto = new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "");
         BDDMockito.given(productoRepository.findById(anyLong())).willReturn(Optional.of(producto));
         BDDMockito.given(productoRepository.save(any(Producto.class))).willReturn(null);
 
