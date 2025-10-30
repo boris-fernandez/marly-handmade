@@ -41,17 +41,24 @@ public class Producto {
 
     @Column(columnDefinition = "TEXT")
     private String care;
-
+    
     @Column(name = "shipping_info", columnDefinition = "TEXT")
-    private String Shipping_info;
+    private String shippingInfo; // ✅ camelCase
 
     public void update(ProductoUpdate productoUpdate) {
-        if (productoUpdate.nombre() != null)  setNombre(productoUpdate.nombre());
-        if (productoUpdate.precio() != null)  setPrecio(productoUpdate.precio());
-        if (productoUpdate.stock() != null)  setStock(productoUpdate.stock());
-        if (productoUpdate.fotoPrincipal() != null)  setFotoPrincipal(productoUpdate.fotoPrincipal());
-        if (productoUpdate.fotoSecundario() != null)  setFotoSecundario(productoUpdate.fotoSecundario());
-        if (productoUpdate.fotoTerciario() != null)  setFotoTerciario(productoUpdate.fotoTerciario());
-        if (productoUpdate.categoria() != null) setCategoria(productoUpdate.categoria());
+        if (productoUpdate.nombre() != null)
+            setNombre(productoUpdate.nombre());
+        if (productoUpdate.precio() != null)
+            setPrecio(productoUpdate.precio());
+        if (productoUpdate.stock() != null)
+            setStock(productoUpdate.stock());
+        if (productoUpdate.fotoPrincipal() != null)
+            setFotoPrincipal(productoUpdate.fotoPrincipal());
+        if (productoUpdate.fotoSecundario() != null)
+            setFotoSecundario(productoUpdate.fotoSecundario());
+        if (productoUpdate.fotoTerciario() != null)
+            setFotoTerciario(productoUpdate.fotoTerciario());
+        if (productoUpdate.categoria() != null)
+            setCategoria(productoUpdate.categoria());
     }
 }
