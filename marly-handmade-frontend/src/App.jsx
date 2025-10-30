@@ -34,7 +34,7 @@ import UserManagement from "./pages/UserManagement";
 import ProductRegister from "./pages/ProductRegister";
 
 import { FilterProvider } from "./contexts/FilterContext.jsx";
-
+import AdminLayout from "./layouts/AdminLayout.jsx";
 
 function App() {
   const { open, closeCart } = useCart();
@@ -64,22 +64,20 @@ function App() {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/returns" element={<Returns />} />
         <Route path="/shop" element={<SeaCollectionDetail />} />
-
+        <Route path="/confirm-new-password/:token" element={<ConfirmNewPassword />} />
         {/* ADMIN */}
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/profile" element={<Profile />} />
-        <Route path="/admin/reports" element={<ReportsAnalytics />} />
-        <Route path="/admin/orders" element={<Orders />} />
-        <Route path="/admin/content" element={<ContentManagement />} />
-        <Route path="/admin/inventory" element={<Inventory />} />
-        <Route path="/admin/users" element={<UserManagement />} />
-        <Route path="/admin/product-gallery" element={<ProductGallery />} />
-        <Route path="/admin/products" element={<ProductRegister />} />
-
-        <Route
-          path="/confirm-new-password/:token"
-          element={<ConfirmNewPassword />}
-        />
+        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="products" element={<ProductRegister />} />
+        <Route path="users" element={<UserManagement />} />
+        <Route path="inventory" element={<Inventory />} />
+        <Route path="orders" element={<Orders />} />
+        <Route path="content" element={<ContentManagement />} />
+        <Route path="reports" element={<ReportsAnalytics />} />
+        <Route path="complaints" element={<ComplaintsBook />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="product-gallery" element={<ProductGallery />} />
+        </Route>
       </Routes>
       </FilterProvider> 
     </AuthProviderWrapper>

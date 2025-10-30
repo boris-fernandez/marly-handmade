@@ -10,7 +10,8 @@ import {
   PieChart,
   User,
   Menu,
-  X
+  X,
+  Book
 } from "lucide-react";
 
 function AdminSidebar() {
@@ -25,6 +26,7 @@ function AdminSidebar() {
     { to: "/admin/orders", label: "Orders", icon: ShoppingBag },
     { to: "/admin/content", label: "Content Management", icon: FileText },
     { to: "/admin/reports", label: "Reports / Analytics", icon: PieChart },
+    { to: "/admin/complaints", label: "Complaints Book", icon: Book },
   ];
 
   const isActive = (path) => location.pathname === path;
