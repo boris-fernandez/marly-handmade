@@ -16,20 +16,19 @@ public record ProductoResponse(
         String shipping_info) {
 
     public ProductoResponse(Producto producto) {
-    this(
-        producto.getIdProducto(),     // Long id
-        producto.getNombre(),         // String nombre
-        producto.getPrecio(),         // Double precio
-        producto.getStock(),          // Integer stock
-        producto.getFotoPrincipal(),  // String fotoPrincipal
-        producto.getFotoSecundario(), // String fotoSecundario
-        producto.getFotoTerciario(),  // String fotoTerciario
-        producto.getCategoria(),      // String categoria
-        producto.getDetails(),        // String details
-        producto.getCare(),           // String care
-        producto.getShippingInfo()    // String shipping_info
-    );
-}
-
+        this(
+                producto.getIdProducto(),     // Long id
+                producto.getNombre(),         // String nombre
+                producto.getPrecio(),         // Double precio
+                producto.getStock(),          // Integer stock
+                producto.getFotoPrincipal(),  // String fotoPrincipal
+                producto.getFotoSecundario(), // String fotoSecundario
+                producto.getFotoTerciario(),  // String fotoTerciario
+                producto.getCategoria(),      // String categoria
+                producto.getDetails(),        // String details
+                producto.getCare(),           // String care
+                producto.getShippingInfo()    // String shipping_info
+                );
+    }
 
 }
