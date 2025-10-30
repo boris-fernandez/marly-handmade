@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CartItems from "../components/CartItems.jsx";
@@ -6,6 +6,7 @@ import { useCart } from "../contexts/CartContext.jsx";
 import "../styles/Buy.css";
 import yape from "../assets/yape.jfif";
 import plin from "../assets/plin.jfif";
+import { AuthContext } from "../contexts/AuthContext.jsx";
 
 const Buy = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
@@ -20,6 +21,7 @@ const Buy = () => {
   });
   const [errors, setErrors] = useState({});
   const [buttonState, setButtonState] = useState("idle"); // idle | loading | success | error
+  const { token, logout } = useContext(AuthContext);
 
   // Detectar tipo de tarjeta
   const detectCardType = (number) => {
@@ -28,6 +30,51 @@ const Buy = () => {
     if (/^5[1-5]/.test(clean)) return "MasterCard";
     if (/^3[47]/.test(clean)) return "Amex";
     return "";
+  };
+
+  const createMultiplePedidos = async () => {
+    if (cartItems.length === 0) return;
+
+    // Construir todos los pedidos primero
+    const pedidos = cartItems.map((item) => ({
+      detallePedido: [
+        {
+          cantidad: item.quantity,
+          idProducto: item.id,
+        },
+      ],
+    }));
+
+    // Imprimir todos los pedidos antes de enviarlos
+    console.log("Pedidos a enviar:", pedidos);
+
+    // Enviar los pedidos uno por uno
+    for (let pedidoBody of pedidos) {
+      try {
+        const res = await fetch("http://localhost:8080/pedido", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.token}`,
+          },
+          body: JSON.stringify(pedidoBody),
+        });
+
+        if (!res.ok)
+          throw new Error(
+            "Error al crear pedido para producto " +
+              pedidoBody.detallePedido[0].idProducto
+          );
+
+        const data = await res.json();
+        console.log("Pedido creado:", data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Limpiar carrito después de crear todos los pedidos
+    clearCart();
   };
 
   // Formateo de número y fecha
@@ -97,9 +144,7 @@ const Buy = () => {
   // Antes de handleCheckout, agrega un chequeo rápido
   const handleCheckout = () => {
     if (cartItems.length === 0) {
-      alert(
-        "Tu carrito está vacío. Agrega productos antes de proceder al pago."
-      );
+      alert("Tu carrito está vacío.");
       return;
     }
 
@@ -112,14 +157,13 @@ const Buy = () => {
     }
 
     setButtonState("loading");
-    setTimeout(() => {
-      setButtonState("success");
 
-      // Simular limpieza tras el pago
-      clearCart();
+    setTimeout(async () => {
+      await createMultiplePedidos(); // Llamada a la función que crea los pedidos
+      setButtonState("success");
       setCardData({ number: "", expiry: "", cvv: "", name: "", type: "" });
       setTimeout(() => setButtonState("idle"), 2000);
-    }, 2000);
+    }, 1000);
   };
 
   return (
