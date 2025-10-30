@@ -64,7 +64,7 @@ function Inventory() {
 
   return (
     <div className="admin-layout">
-      <AdminSidebar />
+      
 
       <div className="admin-content">
         <main className="inventory-main">

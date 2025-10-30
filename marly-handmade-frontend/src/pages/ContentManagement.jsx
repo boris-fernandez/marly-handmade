@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AdminSidebar from "../components/AdminSidebar.jsx";
+
 
 function ContentManagement() {
   const [aboutContent, setAboutContent] = useState({
@@ -30,7 +30,7 @@ function ContentManagement() {
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
-      <AdminSidebar />
+      
 
       {/* Main Content */}
 

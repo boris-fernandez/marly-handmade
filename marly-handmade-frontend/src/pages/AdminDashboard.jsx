@@ -1,9 +1,6 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Package, ShoppingBag, Users, BarChart, FileSpreadsheet } from "lucide-react";
 import { useEffect, useState, useContext } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import AdminSidebar from "../components/AdminSidebar";
 import { API_BASE_URL } from "../contexts/DashboardContext";
 
 import { AuthContext } from "../contexts/AuthContext"; // Importamos el AuthContext
@@ -92,13 +89,13 @@ useEffect(() => {
 
   return (
     <div className='flex flex-col min-h-screen'>
-      <Header />
+      
 
       <div
         className={`flex min-h-[calc(100vh-8rem)] bg-gray-50 transition-all duration-300
           ${sidebarOpen ? "lg:ml-[230px]" : "lg:ml-0"}`}
       >
-        <AdminSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+        
 
         <main
           className="flex-1 w-full min-w-0 p-4 sm:p-6 md:p-8 lg:p-12"
@@ -190,8 +187,6 @@ useEffect(() => {
           </div>
         </main>
       </div>
-
-      <Footer />
     </div>
   );
 }

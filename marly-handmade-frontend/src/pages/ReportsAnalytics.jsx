@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Link } from "react-router-dom";
-import AdminSidebar from "../components/AdminSidebar.jsx";
+
 
 const getReportsData = async () => {
   return {
@@ -113,7 +113,7 @@ function ReportsAnalytics() {
       }}
     >
       {/* Sidebar */}
-      <AdminSidebar />
+      
 
       {/* Main Content */}
       <main

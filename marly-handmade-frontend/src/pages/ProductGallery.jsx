@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import AdminSidebar from "../components/AdminSidebar.jsx";
 import { Link } from "react-router-dom";
 import "../styles/ProductGallery.css";
 
@@ -66,10 +65,6 @@ function ProductGallery() {
 
   return (
       <div className="gallery-container">
-      <div className="gallery-sidebar">
-        <AdminSidebar />
-      </div>
-
       <main className="gallery-main">
         <div className="gallery-header">
           <h1 className="gallery-title">Product Gallery</h1>
