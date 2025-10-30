@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const Amount = () => {
-  const [cantidad, setCantidad] = useState(1); // ← Aquí se define el estado inicial
-
-  const incrementar = () => setCantidad(prev => prev + 1); // ← Función para sumar
+const Amount = ({ quantity, setQuantity }) => {
+  const incrementar = () => setQuantity(prev => prev + 1);
+  
   const decrementar = () => {
-    if (cantidad > 1) setCantidad(prev => prev - 1); // ← Evita que baje de 1
+    if (quantity > 1) setQuantity(prev => prev - 1);
   };
 
   return (
@@ -13,7 +12,7 @@ const Amount = () => {
       <button onClick={decrementar}>–</button>
       <input
         type="text"
-        value={cantidad}
+        value={quantity}
         readOnly
         style={{ width: '40px', textAlign: 'center' }}
       />
