@@ -30,6 +30,9 @@ class ProductoRepositoryTest {
                 .fotoSecundario("")
                 .fotoTerciario("")
                 .categoria("categoria A")
+                .care("")
+                .details("")
+                .Shipping_info("")
                 .build();
         productoRepository.save(producto);
     }

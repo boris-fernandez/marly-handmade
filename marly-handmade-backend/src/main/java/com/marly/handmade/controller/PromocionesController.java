@@ -41,7 +41,6 @@ public class PromocionesController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PromocionesResponse>> listarPromociones (){
         return ResponseEntity.ok(promocionesService.listarPromociones());
     }

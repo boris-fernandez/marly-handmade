@@ -11,12 +11,19 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ComplaintsBook from "./pages/ComplaintsBook";
 import TermsConditions from "./pages/TermsConditions";
-import CollectionDetail from "./pages/ColletionDetail";
+import SeaCollectionDetail from "./pages/SeaColletionDetail";
 import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
+import ShippingPolicy from "./pages/ShippingPolicy.jsx";
+import ExchangePolicy from "./pages/ExchangePolicy.jsx";
+import FAQ from "./pages/FAQ.jsx";
+import OurStory from "./pages/OurStory.jsx";
+import ContactUs from "./pages/ContactUs.jsx";
+import Returns from "./pages/Returns.jsx";
 
 import ConfirmNewPassword from "./pages/ConfirmNewPassword";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/AdminDashboard";
 import Profile from "./pages/Profile";
 import ReportsAnalytics from "./pages/ReportsAnalytics";
 import Orders from "./pages/Orders";
@@ -25,13 +32,19 @@ import Inventory from "./pages/Inventory";
 import ProductGallery from "./pages/ProductGallery";
 import UserManagement from "./pages/UserManagement";
 import ProductRegister from "./pages/ProductRegister";
+import Buy from "./pages/Buy.jsx";
+//import ComplaintsBookAdmin from "./pages/ComplaintsBookAdmin.jsx";
 
+import { FilterProvider } from "./contexts/FilterContext.jsx";
+import AdminLayout from "./layouts/AdminLayout.jsx";
+import ProductUpload from "./pages/ProductEdit.jsx"
 
 function App() {
   const { open, closeCart } = useCart();
 
   return (
     <AuthProviderWrapper>
+      <FilterProvider> 
       <CartDrawer open={open} onClose={closeCart} />
 
       <Routes>
@@ -41,26 +54,38 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/complaints-book" element={<ComplaintsBook />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
-        <Route path="/collection-detail" element={<CollectionDetail />} />
+        <Route path="/sea-collection-detail" element={<SeaCollectionDetail />} />
         <Route path="/recover-password" element={<RecoverPassword />} />
-        <Route path="/product" element={<Product />} />
+        <Route path="/product/:slug" element={<Product />} />
+        <Route path="/product/sea-collection" element={<SeaCollectionDetail />} />
+
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+        <Route path="/exchange" element={<ExchangePolicy />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/our-story" element={<OurStory />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/returns" element={<Returns />} />
+        <Route path="/shop" element={<SeaCollectionDetail />} />
+        <Route path="/confirm-new-password/:token" element={<ConfirmNewPassword />} />
+        <Route path="/buy" element={<Buy />} />
 
         {/* ADMIN */}
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/profile" element={<Profile />} />
-        <Route path="/admin/reports" element={<ReportsAnalytics />} />
-        <Route path="/admin/orders" element={<Orders />} />
-        <Route path="/admin/content" element={<ContentManagement />} />
-        <Route path="/admin/inventory" element={<Inventory />} />
-        <Route path="/admin/users" element={<UserManagement />} />
-        <Route path="/admin/product-gallery" element={<ProductGallery />} />
-        <Route path="/admin/products" element={<ProductRegister />} />
-
-        <Route
-          path="/confirm-new-password/:token"
-          element={<ConfirmNewPassword />}
-        />
+        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="products" element={<ProductRegister />} />
+        <Route path="users" element={<UserManagement />} />
+        <Route path="inventory" element={<Inventory />} />
+        <Route path="orders" element={<Orders />} />
+        <Route path="content" element={<ContentManagement />} />
+        <Route path="reports" element={<ReportsAnalytics />} />
+        <Route path="complaints" element={<ComplaintsBook/>} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="product-gallery" element={<ProductGallery />} />
+        <Route path="inventory/edit/:id" element={<ProductUpload />} />
+        </Route>
       </Routes>
+      </FilterProvider> 
     </AuthProviderWrapper>
   );
 }

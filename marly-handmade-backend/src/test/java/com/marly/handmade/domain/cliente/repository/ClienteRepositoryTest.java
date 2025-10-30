@@ -19,8 +19,8 @@ import java.util.Date;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ClienteRepositoryTest {
 
     @Autowired
@@ -38,7 +38,7 @@ class ClienteRepositoryTest {
         usuario = Usuario.builder()
                 .username("Boris")
                 .password("123")
-                .rol(Rol.Cliente)
+                .rol(Rol.CLIENTE)
                 .estado(false)
                 .build();
         usuarioRepository.save(usuario);

@@ -1,251 +1,138 @@
-import React, { useState } from "react";
-import AdminSidebar from "../components/AdminSidebar.jsx";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "../styles/ProductGallery.css";
 
-const getProductsData = () => {
-  return [
-    {
-      id: 1,
-      name: "Street Pulse H",
-      type: "Hoola",
-      vendor: "StreetFlex",
-      unitCost: 140,
-      stock: 150,
-    },
-    {
-      id: 2,
-      name: "Urban Shadow J",
-      type: "Hoola",
-      vendor: "CityMixes",
-      unitCost: 120,
-      stock: 180,
-    },
-    {
-      id: 3,
-      name: "Neon Splash",
-      type: "Hoola",
-      vendor: "UrbanTech",
-      unitCost: 160,
-      stock: 125,
-    },
-    {
-      id: 4,
-      name: "Night Walker J",
-      type: "Hoola",
-      vendor: "DenimWork",
-      unitCost: 150,
-      stock: 95,
-    },
-    {
-      id: 5,
-      name: "Retro High Sne",
-      type: "Sneakers",
-      vendor: "StreetFlex",
-      unitCost: 130,
-      stock: 5,
-    },
-    {
-      id: 6,
-      name: "Cityscape",
-      type: "Cap",
-      vendor: "HeadTop",
-      unitCost: 45,
-      stock: 200,
-    },
-    {
-      id: 7,
-      name: "Skyline So",
-      type: "Socks",
-      vendor: "FootWool",
-      unitCost: 18,
-      stock: 350,
-    },
-    {
-      id: 8,
-      name: "Moonlight S",
-      type: "Scarf",
-      vendor: "WrapUp",
-      unitCost: 130,
-      stock: 75,
-    },
-  ];
+const getProductsData = async () => {
+  const response = await fetch("http://localhost:8080/producto/all");
+  if (!response.ok) throw new Error("Error al obtener productos");
+  return await response.json();
 };
 
 function ProductGallery() {
-  const [products] = useState(getProductsData());
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Todos");
+  const [sortField, setSortField] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
+
+  useEffect(() => {
+    getProductsData()
+      .then((data) => {
+        setProducts(data);
+        setFilteredProducts(data);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    let filtered = products;
+
+    if (selectedCategory !== "Todos") {
+      filtered = filtered.filter((p) => p.categoria === selectedCategory);
+    }
+
+    if (searchTerm.trim() !== "") {
+      filtered = filtered.filter((p) =>
+        p.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (sortField) {
+      filtered.sort((a, b) => {
+        const valA = a[sortField];
+        const valB = b[sortField];
+        if (typeof valA === "string") {
+          return sortDirection === "asc"
+            ? valA.localeCompare(valB)
+            : valB.localeCompare(valA);
+        } else {
+          return sortDirection === "asc" ? valA - valB : valB - valA;
+        }
+      });
+    }
+
+    setFilteredProducts(filtered);
+  }, [searchTerm, selectedCategory, sortField, sortDirection, products]);
+
+  const uniqueCategories = ["Todos", ...new Set(products.map((p) => p.categoria))];
+
+  if (loading) {
+    return <div className="gallery-loading">Cargando productos...</div>;
+  }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        backgroundColor: "#f5f5f5",
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      }}
-    >
-      {/* Sidebar */}
-      <AdminSidebar />
-
-      {/* Main Content */}
-      <main
-        style={{
-          flex: 1,
-          padding: "40px",
-          backgroundColor: "#f5f5f5",
-          marginLeft: "230px",
-          minHeight: "100vh",
-          overflowX: "hidden",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "30px",
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "36px",
-              margin: 0,
-              color: "#333",
-              fontWeight: "400",
-            }}
-          >
-            Product Gallery
-          </h1>
+      <div className="gallery-container">
+      <main className="gallery-main">
+        <div className="gallery-header">
+          <h1 className="gallery-title">Product Gallery</h1>
           <Link to="/admin/inventory">
-            <button
-              style={{
-                backgroundColor: "#333",
-                color: "white",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "14px",
-              }}
-            >
-              Inventory
-            </button>
+            <button className="gallery-button">Inventory</button>
           </Link>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "20px",
-          }}
-        >
-          {products.map((product) => (
-            <div
-              key={product.id}
-              style={{
-                background: "white",
-                borderRadius: "8px",
-                padding: "20px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  aspectRatio: "1",
-                  background: "#f5f5f5",
-                  borderRadius: "4px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: "15px",
-                  fontSize: "60px",
-                  color: "#ddd",
-                }}
-              >
-                ✕
-              </div>
+        <div className="gallery-filters">
+          <input
+            type="text"
+            placeholder="Buscar por nombre..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            {uniqueCategories.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+          <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
+            <option value="id">ID</option>
+            <option value="nombre">Nombre</option>
+            <option value="precio">Precio</option>
+            <option value="stock">Stock</option>
+          </select>
+          <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
+            <option value="asc">Ascendente</option>
+            <option value="desc">Descendente</option>
+          </select>
+        </div>
 
-              <h3
-                style={{
-                  fontSize: "16px",
-                  margin: "0 0 10px 0",
-                  color: "#333",
-                  fontWeight: "500",
-                }}
-              >
-                {product.name}
-              </h3>
+        <div className="gallery-grid">
+          {filteredProducts.map((product) => (
+            <div key={product.id} className="gallery-card">
+              {[product.fotoPrincipal, product.fotoSecundario, product.fotoTerciario].map((img, index) =>
+                img ? (
+                  <img
+                    key={index}
+                    src={img}
+                    alt={`Imagen ${index + 1}`}
+                    className="gallery-image"
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                      e.target.insertAdjacentHTML("afterend", `<div class='gallery-placeholder'>Sin imagen</div>`);
+                    }}
+                  />
+                ) : (
+                  <div key={index} className="gallery-placeholder">Sin imagen</div>
+                )
+              )}
 
-              <div
-                style={{ fontSize: "12px", color: "#666", marginBottom: "5px" }}
-              >
-                <strong>Type:</strong>
-                <br />
-                <span
-                  style={{
-                    display: "inline-block",
-                    padding: "2px 8px",
-                    background: "#f0f0f0",
-                    borderRadius: "3px",
-                    marginTop: "3px",
-                  }}
-                >
-                  {product.type}
+              <h3 className="gallery-name">{product.nombre}</h3>
+              <p className="gallery-description">{product.descripcion}</p>
+              <p className="gallery-price">S/ {product.precio.toFixed(2)}</p>
+              <p className="gallery-category"><strong>Categoría:</strong> {product.categoria}</p>
+
+              <div className="gallery-footer">
+                <span className={`gallery-stock ${product.stock <= 10 ? "low" : "ok"}`}>
+                  {product.stock <= 10 ? "⚠ Stock bajo" : `✓ ${product.stock} en stock`}
                 </span>
-              </div>
-
-              <div
-                style={{ fontSize: "12px", color: "#666", marginBottom: "5px" }}
-              >
-                <strong>Vendor:</strong>
-                <br />
-                <span
-                  style={{
-                    display: "inline-block",
-                    padding: "2px 8px",
-                    background: "#f0f0f0",
-                    borderRadius: "3px",
-                    marginTop: "3px",
-                  }}
-                >
-                  {product.vendor}
-                </span>
-              </div>
-
-              <div
-                style={{
-                  fontSize: "12px",
-                  color: "#666",
-                  marginBottom: "15px",
-                }}
-              >
-                <strong>Unit Cost:</strong>
-                <br />
-                <span
-                  style={{ fontSize: "14px", fontWeight: "500", color: "#333" }}
-                >
-                  ${product.unitCost}
-                </span>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "10px",
-                  background: product.stock <= 10 ? "#fff3cd" : "#d4edda",
-                  borderRadius: "4px",
-                  fontSize: "12px",
-                }}
-              >
-                <span>
-                  {product.stock <= 10
-                    ? "⚠ Low stock"
-                    : `✓ ${product.stock} in stock`}
-                </span>
+                <Link to={`/admin/inventory/edit/${product.id}`} className="gallery-edit-button">
+                  Editar
+                </Link>
+                <button onClick={() => alert(`Editar producto: ${product.nombre}`)} className="gallery-edit-button" > Eliminar </button>
               </div>
             </div>
           ))}

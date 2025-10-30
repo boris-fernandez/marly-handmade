@@ -11,6 +11,7 @@ import com.marly.handmade.domain.pedido.modal.Pedido;
 import com.marly.handmade.domain.pedido.repository.PedidoRepository;
 import com.marly.handmade.domain.producto.modal.Producto;
 import com.marly.handmade.domain.producto.repository.ProductoRepository;
+import com.marly.handmade.domain.usuario.modal.Rol;
 import com.marly.handmade.domain.usuario.modal.Usuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,6 +56,7 @@ class PedidoServiceTest {
     void createPedido_happyPath() {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
+        usuario.setRol(Rol.CLIENTE);
         Cliente cliente = Cliente.builder().id(2L).nombres("Juan").direccion("Calle 1").usuario(usuario).build();
         mockSecurityContextWithUsuario(usuario);
 
@@ -73,7 +75,7 @@ class PedidoServiceTest {
 
         assertThat(resp.id()).isEqualTo(1L);
         assertThat(resp.total()).isEqualTo(100.0);
-        
+
         Mockito.verify(productoRepository, Mockito.atLeastOnce()).save(Mockito.any(Producto.class));
     }
 

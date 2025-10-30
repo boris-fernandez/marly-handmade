@@ -1,46 +1,33 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { OrderCard } from "./OrderCard";
-import image24 from "../assets/image24.png";
 import { AuthContext } from "../contexts/AuthContext.jsx";
+import { useCart } from "../contexts/CartContext";
 
 export function CartDrawer({ open, onClose }) {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      status: "Shipped",
-      image: image24,
-      title: "SAHARA TREASURE",
-      subtitle: "Necklace",
-      price: 64,
-      quantity: 2,
-    },
-    {
-      id: 2,
-      status: "Shipped",
-      image: image24,
-      title: "SAHARA TREASURE",
-      subtitle: "Necklace",
-      price: 64,
-      quantity: 2,
-    },
-  ]);
+  const { token } = useContext(AuthContext);
 
-  const handleDelete = (id) =>
-    setCartItems((items) => items.filter((item) => item.id !== id));
+  // Obtiene datos del CartContext en lugar de useState local
+  const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } =
+    useCart();
 
-  const handleAdd = (id) =>
-    setCartItems((items) =>
-      items.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
+  const handleDelete = (id) => removeFromCart(id);
 
-  const { token, logout } = useContext(AuthContext);
-  const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-  const shipping = 10;
+  const handleAdd = (id) => {
+    const item = cartItems.find((item) => item.id === id);
+    if (item) {
+      updateQuantity(id, item.quantity + 1);
+    }
+  };
+
+  const handleDecrease = (id) => {
+    const item = cartItems.find((item) => item.id === id);
+    if (item) {
+      updateQuantity(id, item.quantity - 1);
+    }
+  };
+
+  const subtotal = getCartTotal();
+  const shipping = cartItems.length > 0 ? 10 : 0; // Solo cobra envío si hay productos
   const total = subtotal + shipping;
 
   return (
@@ -82,13 +69,14 @@ export function CartDrawer({ open, onClose }) {
               {cartItems.map((item) => (
                 <OrderCard
                   key={item.id}
-                  status={item.status}
-                  image={item.image}
-                  title={item.title}
-                  subtitle={item.subtitle}
+                  status="En carrito"
+                  image={item.img}
+                  title={item.name}
+                  subtitle={item.category}
                   price={item.price}
                   quantity={item.quantity}
                   onAdd={() => handleAdd(item.id)}
+                  onDecrease={() => handleDecrease(item.id)}
                   onDelete={() => handleDelete(item.id)}
                 />
               ))}
@@ -97,22 +85,24 @@ export function CartDrawer({ open, onClose }) {
             <div className="p-4 border-t space-y-4">
               <div className="flex justify-between font-medium">
                 <span>Subtotal</span>
-                <span>${subtotal}</span>
+                <span>${subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-medium">
                 <span>Shipping</span>
-                <span>${shipping}</span>
+                <span>${shipping.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-semibold text-lg">
                 <span>Total</span>
-                <span>${total}</span>
+                <span>${total.toFixed(2)}</span>
               </div>
-              <button className="w-full bg-black text-white py-2 rounded-md font-semibold cursor-pointer">
-                Checkout
-              </button>
+              <a href="/buy">
+                <button className="w-full bg-black text-white py-2 rounded-md font-semibold cursor-pointer hover:bg-gray-800">
+                  Checkout
+                </button>
+              </a>
               <button
                 onClick={onClose}
-                className="w-full border border-gray-300 py-2 rounded-md font-medium cursor-pointer"
+                className="w-full border border-gray-300 py-2 rounded-md font-medium cursor-pointer hover:bg-gray-50"
               >
                 Continuar comprando
               </button>

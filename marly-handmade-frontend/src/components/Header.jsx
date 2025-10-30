@@ -1,35 +1,78 @@
 import { BrowserRouter } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Globe, Search, User, ShoppingCart, Menu, X } from "lucide-react";
 import { useCart } from "../contexts/CartContext.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
+import { jwtDecode } from "jwt-decode";
+import { useMemo } from "react";
+
+function obtenerSubDesdeToken(token) {
+  try {
+    const decoded = jwtDecode(token);
+    return decoded.sub || decoded.username || null;
+  } catch {
+    return null;
+  }
+}
+
+function verificarAdmin(token) {
+  try {
+    const decoded = jwtDecode(token);
+    return decoded.sub === "Maryen";
+  } catch {
+    return false;
+  }
+}
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
+  const [open, setOpen] = useState(false); // Dropdown del usuario
 
+  const menuRef = useRef(null);
   const { openCart } = useCart();
   const { token, logout } = useContext(AuthContext);
 
-  const toggleMenu = () => {
-    setMenuOpen((v) => {
-      const newV = !v;
-      if (!newV) {
-        setShopOpen(false);
-        setCollectionsOpen(false);
+  // 🔹 Nombre de usuario (Memoizado)
+  const userName = useMemo(() => {
+    if (!token?.token) return null;
+    const name = obtenerSubDesdeToken(token.token);
+    return name
+      ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+      : null;
+  }, [token]);
+
+  // Verificar si es admin (Memoizado)
+  const isAdmin = useMemo(() => {
+    if (!token?.token) return false;
+    return verificarAdmin(token.token);
+  }, [token]);
+
+  // Cerrar dropdown del usuario al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpen(false);
       }
-      return newV;
-    });
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Menú móvil
+  const toggleMenu = () => {
+    setMenuOpen((v) => !v);
   };
 
   return (
-    <header className="w-full border-b border-gray-200">
-      <div className="flex items-center justify-between px-6 md:px-10 py-4">
+    <header className="header py-2">
+      <div className="header-container">
         {/* NAV DESKTOP */}
-        <nav className="hidden md:block">
+        <nav className="nav-desktop">
           <ul className="flex items-center space-x-10 font-serif font-medium">
+            {/* SHOP */}
             <li className="relative group cursor-pointer">
               <a
                 href="/shop"
@@ -37,7 +80,7 @@ export default function Header() {
               >
                 Shop
               </a>
-              <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-20 max-w-[95vw] w-[700px]">
+              <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                   <div>
                     <h3 className="font-semibold mb-2 text-[#1B2A40]">
@@ -135,6 +178,7 @@ export default function Header() {
               </div>
             </li>
 
+            {/* COLLECTIONS */}
             <li className="relative group cursor-pointer">
               <a
                 href="/collections"
@@ -142,13 +186,13 @@ export default function Header() {
               >
                 Collections
               </a>
-              <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-20 max-w-[95vw] w-[700px]">
+              <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <ul className="space-y-1 text-sm text-[#2C3E5E]">
                       <li>
                         <a
-                          href="/SEA COLLECTION"
+                          href="/product/sea-collection"
                           className="hover:text-[#040F2E]"
                         >
                           SEA COLLECTION
@@ -166,7 +210,7 @@ export default function Header() {
                   </div>
                   <div className="flex flex-col items-center">
                     <a
-                      href="/sea-collection"
+                      href="/product/sea-collection"
                       className="block text-center text-[#2C3E5E] hover:text-[#040F2E]"
                     >
                       <img
@@ -198,12 +242,25 @@ export default function Header() {
               </div>
             </li>
 
-            <li className="cursor-pointer">Our Story</li>
+            <li>
+              <a href="/our-story">Our Story</a>
+            </li>
+
+            {isAdmin && (
+              <li>
+                <Link
+                  to="/admin/dashboard"
+                  className="pb-2 border-b-2 border-transparent hover:border-[#997C71] text-[#997C71] font-semibold"
+                >
+                  Admin Panel
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
 
         {/* LOGO */}
-        <div className="flex justify-center items-center px-2 sm:px-6 py-2 sm:py-4">
+        <div className="logo">
           <a href="/" className="flex items-center">
             <img
               src="/logoMarly.png"
@@ -213,8 +270,8 @@ export default function Header() {
           </a>
         </div>
 
-        {/* ICONS + HAMBURGER */}
-        <div className="flex items-center space-x-4">
+        {/* ICONOS */}
+        <div className="icons">
           <div className="relative inline-block">
             <select className="w-5 h-5 opacity-0 absolute inset-0 cursor-pointer">
               <option>Spanish</option>
@@ -222,22 +279,75 @@ export default function Header() {
             </select>
             <Globe className="w-5 h-5 text-[#040F2E] pointer-events-none cursor-pointer" />
           </div>
+
+          <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
+
           <select className="rounded px-2 py-1 text-sm hidden sm:block cursor-pointer">
             <option>USD</option>
             <option>PEN</option>
             <option>EUR</option>
           </select>
-          <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-          {token ? (
-            <button onClick={logout} className="text-[#040F2E] font-medium cursor-pointer">
-              Logout
-            </button>
-          ) : (
-            <Link to="/login">
-              <User className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-            </Link>
-          )}{" "}
-          {/* CART */}
+
+          {/* Usuario */}
+          <div className="relative" ref={menuRef}>
+            {token ? (
+              <div
+                className="flex items-center gap-2 cursor-pointer select-none"
+                onClick={() => setOpen(!open)}
+              >
+                <User className="w-5 h-5 text-[#040F2E]" />
+                <div className="text-sm text-[#040F2E] hidden sm:block">
+                  <p>
+                    Hello, <span className="font-medium">{userName}</span>
+                  </p>
+                  <p className="font-bold">My Account</p>
+                </div>
+              </div>
+            ) : (
+              <Link to="/login">
+                <User className="w-5 h-5 text-[#040F2E]" />
+              </Link>
+            )}
+
+            {open && token && (
+              <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg py-2 z-50 border border-gray-100">
+                <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
+                  <p className="font-medium">{userName}</p>
+                  {isAdmin && (
+                    <span className="inline-block mt-1 px-2 py-0.5 bg-[#997C71] text-white text-xs rounded">
+                      Admin
+                    </span>
+                  )}
+                </div>
+
+                {isAdmin && (
+                  <Link
+                    to="/admin/dashboard"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  >
+                    📊 Admin Dashboard
+                  </Link>
+                )}
+
+                <Link
+                  to="/perfil"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                >
+                  Mi Perfil
+                </Link>
+
+                <a href="/"><button
+                  onClick={logout}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                >
+                  Cerrar sesión
+                </button>
+                </a>
+              </div>
+            )}
+          </div>
+
+          {/* Carrito */}
           <button
             onClick={openCart}
             className="relative"
@@ -245,6 +355,8 @@ export default function Header() {
           >
             <ShoppingCart className="w-5 h-5 cursor-pointer text-[#040F2E]" />
           </button>
+
+          {/* Hamburguesa */}
           <button
             className="md:hidden p-2 text-[#040F2E]"
             onClick={toggleMenu}
@@ -259,90 +371,58 @@ export default function Header() {
         </div>
       </div>
 
-      {/* MOBILE MENU */}
+      {/* MENU MOBILE */}
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 font-serif">
-          <div>
-            <button
-              onClick={() => setShopOpen((v) => !v)}
-              className="w-full flex justify-between items-center py-2 text-left hover:text-[#040F2E]"
-            >
-              <span>Shop</span>
-              <span className="text-sm">{shopOpen ? "−" : "+"}</span>
-            </button>
-            {shopOpen && (
-              <div className="mt-2 pl-4 border-l border-gray-200 space-y-3">
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Category</h4>
-                  <ul className="text-sm text-[#2C3E5E] space-y-1">
-                    <li>Bracelets</li>
-                    <li>Earrings</li>
-                    <li>Necklaces</li>
-                    <li>Rings</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Material</h4>
-                  <ul className="text-sm text-[#2C3E5E] space-y-1">
-                    <li>Polymer Clay</li>
-                    <li>Copper Wire</li>
-                    <li>Resin</li>
-                    <li>Textile</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm mb-1">Featured</h4>
-                  <ul className="text-sm text-[#2C3E5E] space-y-1">
-                    <li>Best Sellers</li>
-                    <li>Marly's Favorites</li>
-                  </ul>
-                </div>
-                <a href="/marly-favorites" className="block mt-2">
-                  <img
-                    src="/nayblueear.jpg"
-                    alt="Marly's favorites"
-                    className="w-36 h-28 object-cover rounded-lg"
-                  />
-                </a>
-              </div>
-            )}
-          </div>
+          <button
+            onClick={() => setShopOpen((v) => !v)}
+            className="w-full flex justify-between items-center py-2 text-left hover:text-[#040F2E]"
+          >
+            <span>Shop</span>
+            <span className="text-sm">{shopOpen ? "−" : "+"}</span>
+          </button>
 
-          <div className="mt-3">
-            <button
-              onClick={() => setCollectionsOpen((v) => !v)}
-              className="w-full flex justify-between items-center py-2 text-left hover:text-[#040F2E]"
-            >
-              <span>Collections</span>
-              <span className="text-sm">{collectionsOpen ? "−" : "+"}</span>
-            </button>
-            {collectionsOpen && (
-              <div className="mt-2 pl-4 border-l border-gray-200 space-y-3">
-                <a href="/sea-collection" className="block">
-                  <img
-                    src="/sea-collection.jpg"
-                    alt="Sea"
-                    className="w-36 h-28 object-cover rounded-lg"
-                  />
-                  <div className="mt-1 text-sm">SEA COLLECTION</div>
-                </a>
-                <a href="/matarita-collection" className="block">
-                  <img
-                    src="/matarita-collection.jpg"
-                    alt="Matarita"
-                    className="w-36 h-28 object-cover rounded-lg"
-                  />
-                  <div className="mt-1 text-sm">MATARITA COLLECTION</div>
-                </a>
-              </div>
-            )}
-          </div>
+          {shopOpen && (
+            <div className="mt-2 pl-4 border-l border-gray-200 space-y-3">
+              <h4 className="font-semibold text-sm">Category</h4>
+              <ul className="text-sm space-y-1">
+                <li>Bracelets</li>
+                <li>Earrings</li>
+                <li>Necklaces</li>
+                <li>Rings</li>
+              </ul>
+              <h4 className="font-semibold text-sm mt-2">Material</h4>
+              <ul className="text-sm space-y-1">
+                <li>Polymer Clay</li>
+                <li>Copper Wire</li>
+                <li>Resin</li>
+                <li>Textile</li>
+              </ul>
+            </div>
+          )}
 
-          <div className="mt-3">
-            <a href="/our-story" className="block py-2 hover:text-[#040F2E]">
-              Our Story
-            </a>
-          </div>
+          <button
+            onClick={() => setCollectionsOpen((v) => !v)}
+            className="w-full flex justify-between items-center py-2 text-left hover:text-[#040F2E]"
+          >
+            <span>Collections</span>
+            <span className="text-sm">{collectionsOpen ? "−" : "+"}</span>
+          </button>
+
+          {collectionsOpen && (
+            <div className="mt-2 pl-4 border-l border-gray-200 space-y-3">
+              <a href="/product/sea-collection" className="block">
+                Sea Collection
+              </a>
+              <a href="/matarita-collection" className="block">
+                Matarita Collection
+              </a>
+            </div>
+          )}
+
+          <a href="/our-story" className="block py-2 hover:text-[#040F2E]">
+            Our Story
+          </a>
         </div>
       )}
     </header>

@@ -28,7 +28,6 @@ public class ReclamacionesController {
         ReclamacionesResponse reclamacionesResponse = reclamacionesService.crearReclamacion(reclamacionesRequest);
         URI uri = builder.path("/reclamaciones/{id}").buildAndExpand(reclamacionesResponse.id()).toUri();
         return ResponseEntity.created(uri).body(reclamacionesResponse);
-
     }
 
     @GetMapping

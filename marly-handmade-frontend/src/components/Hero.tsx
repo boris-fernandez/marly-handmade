@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./Hero.module.css";
-import orcaVideo from "../assets/orcaMarly.mp4";
-import heroImg from "../assets/hero.png"; 
+import orcaVideo from "../assets/retorno.mp4";
+import heroImg from "../assets/hero1.png";
 
 interface HeroProps {
   texto: boolean;
@@ -16,7 +16,6 @@ export default function Hero({ texto }: HeroProps) {
     if (!video) return;
 
     const handleEnd = () => {
-      // Waits a sec and then does fade-out
       setTimeout(() => setShowVideo(false), 400);
     };
 
@@ -37,7 +36,7 @@ export default function Hero({ texto }: HeroProps) {
         backgroundPosition: "center",
       }}
     >
-      {/* Vid that vanishes */}
+      {/* Video */}
       {showVideo && (
         <video
           ref={videoRef}
@@ -59,39 +58,85 @@ export default function Hero({ texto }: HeroProps) {
         ></video>
       )}
 
-      {/* Text and button */}
-      {texto && (
-        <div
-          style={{
-            position: "relative",
-            zIndex: 1,
-            color: "white",
-            textAlign: "center",
-            top: "10%",
-            transform: "translateY(-50%)",
-          }}
-        >
-          <h1 style={{ fontSize: "3rem", letterSpacing: "2px" }}>
-            NEW COLLECTION
-          </h1>
-          <p style={{ marginTop: "1rem", fontSize: "1.2rem" }}>
-            Jewelry with a sea soul. Art you carry with you
-          </p>
-          <button
+      {/* Dos capas sobre el video */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "50%",
+          zIndex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
+      >
+        {texto && (
+          <div
+            className="textHeroLanding"
             style={{
-              marginTop: "1.5rem",
-              padding: "0.8rem 1.5rem",
-              border: "none",
-              backgroundColor: "white",
-              color: "black",
-              fontWeight: "bold",
-              cursor: "pointer",
+              position: "relative",
+              zIndex: 2, // sobre las capas
+              color: "white",
+              textAlign: "center",
+              top: "10%",
+              transform: "translateY(-50%)",
             }}
           >
-            Buy now
-          </button>
-        </div>
-      )}
+            <h1 className="textDisruptive" style={{ letterSpacing: "2px" }}>NEW COLLECTION</h1>
+            <p style={{ marginTop: "1rem" }}>
+              Jewelry with a sea soul. Art you carry with you
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: "100vw",
+          height: "50%",
+          zIndex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        {texto && (
+          <div
+            className="textHeroLanding"
+            style={{
+              position: "relative",
+              zIndex: 2, // sobre las capas
+              color: "white",
+              textAlign: "center",
+              top: "10%",
+              transform: "translateY(-50%)",
+            }}
+          >
+            <a href="/product/sea-collection">
+              <button
+                style={{
+                  marginTop: "1.5rem",
+                  padding: "0.8rem 1.5rem",
+                  border: "none",
+                  backgroundColor: "white",
+                  color: "black",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+              >
+                Buy now
+              </button>
+            </a>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

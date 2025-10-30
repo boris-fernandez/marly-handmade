@@ -178,16 +178,8 @@ function Orders() {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        backgroundColor: "#f5f5f5",
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      }}
-    >
-      <AdminSidebar />
+    <div>
+     
 
       {/* Main Content */}
       <main

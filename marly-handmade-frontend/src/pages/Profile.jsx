@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AdminSidebar from "../components/AdminSidebar.jsx";
+
 
 function Profile() {
   const [profileData, setProfileData] = useState({
@@ -36,7 +36,7 @@ function Profile() {
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
-      <AdminSidebar />
+      
       {/* Main Content */}
       <main
         style={{

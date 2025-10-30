@@ -28,6 +28,7 @@ public class TokenService {
                     .withIssuer("Marly Handmade")
                     .withSubject(usuario.getUsername())
                     .withClaim("id", usuario.getId())
+                    .withClaim("rol", usuario.getRol().name()) // 👈 aquí cambiamos esto
                     .withExpiresAt(generarFechaExpiracion())
                     .sign(algorithm);
         } catch (JWTCreationException exception){
@@ -38,7 +39,7 @@ public class TokenService {
     public String getSubject(String token){
         GuavaUtils.requireNonNullRuntime(token, "Token nulo");
 
-        DecodedJWT decodedJWT = null;
+        DecodedJWT decodedJWT;
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
             JWTVerifier verifier = JWT.require(algorithm)
@@ -49,7 +50,8 @@ public class TokenService {
         } catch (JWTVerificationException exception){
             throw new RuntimeException(exception);
         }
-        GuavaUtils.requireNonNullRuntime(decodedJWT.getSubject(), "Verificacion invalido");
+
+        GuavaUtils.requireNonNullRuntime(decodedJWT.getSubject(), "Verificación inválida");
         return decodedJWT.getSubject();
     }
 

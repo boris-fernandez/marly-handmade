@@ -1,151 +1,52 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AdminSidebar from "../components/AdminSidebar.jsx";
+import { useProductos } from "../contexts/ProductoContext.jsx";
 
-const getInventoryData = async () => {
-  return [
-    {
-      id: 1,
-      name: "Golden Sun Necklace",
-      price: 850.0,
-      warehouse: "Central Depot",
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: "Silver Moon Ring",
-      price: 320.0,
-      warehouse: "East Hub",
-      stock: 40,
-    },
-    {
-      id: 3,
-      name: "Emerald Drop Earrings",
-      price: 1200.0,
-      warehouse: "North Warehouse",
-      stock: 15,
-    },
-    {
-      id: 4,
-      name: "Ruby Crown Bracelet",
-      price: 950.0,
-      warehouse: "South Store",
-      stock: 18,
-    },
-    {
-      id: 5,
-      name: "Sapphire Ocean Pendant",
-      price: 1350.0,
-      warehouse: "West Facility",
-      stock: 20,
-    },
-    {
-      id: 6,
-      name: "Pearl Blossom Necklace",
-      price: 780.0,
-      warehouse: "Central Depot",
-      stock: 22,
-    },
-    {
-      id: 7,
-      name: "Amethyst Harmony Ring",
-      price: 540.0,
-      warehouse: "East Hub",
-      stock: 35,
-    },
-    {
-      id: 8,
-      name: "Diamond Star Earrings",
-      price: 2500.0,
-      warehouse: "North Warehouse",
-      stock: 10,
-    },
-    {
-      id: 9,
-      name: "Topaz Glow Bracelet",
-      price: 620.0,
-      warehouse: "South Store",
-      stock: 28,
-    },
-    {
-      id: 10,
-      name: "Onyx Shadow Pendant",
-      price: 480.0,
-      warehouse: "West Facility",
-      stock: 30,
-    },
-    {
-      id: 11,
-      name: "Rose Quartz Ring",
-      price: 410.0,
-      warehouse: "Central Depot",
-      stock: 26,
-    },
-    {
-      id: 12,
-      name: "Turquoise Sky Earrings",
-      price: 530.0,
-      warehouse: "East Hub",
-      stock: 24,
-    },
-    {
-      id: 13,
-      name: "Obsidian Charm Bracelet",
-      price: 460.0,
-      warehouse: "North Warehouse",
-      stock: 33,
-    },
-    {
-      id: 14,
-      name: "Jade Serenity Pendant",
-      price: 700.0,
-      warehouse: "South Store",
-      stock: 16,
-    },
-    {
-      id: 15,
-      name: "Citrine Flame Ring",
-      price: 560.0,
-      warehouse: "West Facility",
-      stock: 21,
-    },
-    {
-      id: 16,
-      name: "Aquamarine Breeze Necklace",
-      price: 1100.0,
-      warehouse: "Central Depot",
-      stock: 12,
-    },
-    {
-      id: 17,
-      name: "Garnet Passion Earrings",
-      price: 640.0,
-      warehouse: "East Hub",
-      stock: 19,
-    },
-  ];
-};
+import "../styles/Inventory.css";
 
 function Inventory() {
-  const [inventory, setInventory] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { productos, error, loading } = useProductos();
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Todos");
+  const [sortField, setSortField] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getInventoryData();
-      setInventory(data);
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+  // 🔍 Filtrar y ordenar productos directamente del contexto
+  const filteredProducts = productos
+    .filter((item) => {
+      const matchesName = item.name
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "Todos" || item.category === selectedCategory;
+      return matchesName && matchesCategory;
+    })
+    .sort((a, b) => {
+      const valA = a[sortField];
+      const valB = b[sortField];
+      if (typeof valA === "string") {
+        return sortDirection === "asc"
+          ? valA.localeCompare(valB)
+          : valB.localeCompare(valA);
+      } else {
+        return sortDirection === "asc" ? valA - valB : valB - valA;
+      }
+    });
 
-  const totalPages = Math.ceil(inventory.length / itemsPerPage);
+  // 🧮 Paginación
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = inventory.slice(startIndex, startIndex + itemsPerPage);
+  const currentItems = filteredProducts.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
-  if (loading) {
+  // ⏳ Loading y errores
+  if (loading) return <div className="loading">Cargando productos...</div>;
+  if (error)
     return (
       <div
         style={{
@@ -153,320 +54,159 @@ function Inventory() {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          color: "red",
         }}
       >
-        Loading...
+        Error al cargar productos: {error}
       </div>
     );
-  }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        backgroundColor: "#f5f5f5",
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      }}
-    >
-      <AdminSidebar />
+    <div className="admin-layout">
+      
 
-      {/* Main Content */}
+      <div className="admin-content">
+        <main className="inventory-main">
+          <div className="inventory-header">
+            <h1>Inventario</h1>
+            <Link to="/admin/product-gallery">
+              <button className="gallery-button">Ver galería</button>
+            </Link>
+          </div>
 
-      <main
-        style={{
-          flex: 1,
-          padding: "40px",
-          backgroundColor: "#f5f5f5",
-          marginLeft: "230px",
-          minHeight: "100vh",
-          overflowX: "hidden",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "30px",
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "36px",
-              margin: 0,
-              color: "#333",
-              fontWeight: "400",
-            }}
-          >
-            Inventory
-          </h1>
-          <Link to="/admin/product-gallery">
-            <button
-              style={{
-                backgroundColor: "#333",
-                color: "white",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "14px",
-              }}
+          <div className="filter-panel">
+            <input
+              type="text"
+              placeholder="Buscar por nombre"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
             >
-              Product Gallery
-            </button>
-          </Link>
-        </div>
+              {["Todos", ...new Set(productos.map((p) => p.category))].map(
+                (cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                )
+              )}
+            </select>
 
-        <div
-          style={{
-            background: "white",
-            borderRadius: "8px",
-            border: "1px solid #e0e0e0",
-            overflow: "hidden",
-          }}
-        >
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr
-                style={{
-                  backgroundColor: "#f8f8f8",
-                  borderBottom: "2px solid #e0e0e0",
-                }}
+            <div className="sort-combo">
+              <label>Ordenar por:</label>
+              <select
+                value={sortField}
+                onChange={(e) => setSortField(e.target.value)}
               >
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  No
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  Name
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  Price
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  Warehouse
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  Stock
-                </th>
-                <th
-                  style={{
-                    padding: "12px",
-                    textAlign: "left",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                  }}
-                >
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.map((item, i) => (
-                <tr
-                  key={item.id}
-                  style={{
-                    borderBottom: "1px solid #f0f0f0",
-                    backgroundColor: i % 2 === 0 ? "white" : "#fafafa",
-                  }}
-                >
-                  <td
-                    style={{
-                      padding: "15px 12px",
-                      fontSize: "14px",
-                      color: "#333",
-                    }}
-                  >
-                    {item.id}
-                  </td>
-                  <td
-                    style={{
-                      padding: "15px 12px",
-                      fontSize: "14px",
-                      color: "#333",
-                    }}
-                  >
-                    {item.name}
-                  </td>
-                  <td
-                    style={{
-                      padding: "15px 12px",
-                      fontSize: "14px",
-                      color: "#333",
-                    }}
-                  >
-                    S/ {item.price.toFixed(2)}
-                  </td>
-                  <td
-                    style={{
-                      padding: "15px 12px",
-                      fontSize: "14px",
-                      color: "#333",
-                    }}
-                  >
-                    {item.warehouse}
-                  </td>
-                  <td
-                    style={{
-                      padding: "15px 12px",
-                      fontSize: "14px",
-                      color: "#333",
-                    }}
-                  >
-                    {item.stock}
-                  </td>
-                  <td style={{ padding: "15px 12px" }}>
-                    <button
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        fontSize: "18px",
-                      }}
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#666"
-                        strokeWidth="2"
-                      >
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                <option value="id">ID</option>
+                <option value="name">Nombre</option>
+                <option value="price">Precio</option>
+                <option value="stock">Stock</option>
+              </select>
+              <select
+                value={sortDirection}
+                onChange={(e) => setSortDirection(e.target.value)}
+              >
+                <option value="asc">Ascendente</option>
+                <option value="desc">Descendente</option>
+              </select>
+            </div>
+          </div>
 
-        {/* Pagination */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "10px",
-            marginTop: "20px",
-          }}
-        >
-          <button
-            onClick={() => setCurrentPage(1)}
-            disabled={currentPage === 1}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              background: "white",
-              cursor: currentPage === 1 ? "not-allowed" : "pointer",
-              borderRadius: "4px",
-            }}
-          >
-            «
-          </button>
-          <button
-            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-            disabled={currentPage === 1}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              background: "white",
-              cursor: currentPage === 1 ? "not-allowed" : "pointer",
-              borderRadius: "4px",
-            }}
-          >
-            ‹
-          </button>
-          {[1, 2, 3].map((page) => (
+          <div className="inventory-table-wrapper">
+            <table className="inventory-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>Categoría</th>
+                  <th>Detalles</th>
+                  <th>Cuidado</th>
+                  <th>Envío</th>
+                  <th>Stock</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentItems.map((item, i) => (
+                  <tr
+                    key={item.id}
+                    className={i % 2 === 0 ? "even-row" : "odd-row"}
+                  >
+                    <td>{item.id}</td>
+                    <td>{item.name}</td>
+                    <td>{item.description}</td>
+                    <td className="price-cell">
+                      S/{" "}
+                      {typeof item.price === "number"
+                        ? item.price.toFixed(2)
+                        : "0.00"}
+                    </td>
+                    <td>{item.category}</td>
+                    <td>{item.details}</td>
+                    <td>{item.care}</td>
+                    <td>{item.shippingInfo}</td>
+                    <td>{item.stock}</td>
+                    <td>
+                      <div className="action-buttons">
+                        <Link to={`/admin/inventory/edit/${item.id}`} className="btn-editar">
+                          <i className="fa-solid fa-pen-to-square"></i>
+                        </Link>
+                        <button className="btn-eliminar">
+                          <i className="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="pagination">
             <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              style={{
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                background: currentPage === page ? "#0066cc" : "white",
-                color: currentPage === page ? "white" : "#333",
-                cursor: "pointer",
-                borderRadius: "4px",
-              }}
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
             >
-              {page}
+              «
             </button>
-          ))}
-          <button
-            onClick={() =>
-              setCurrentPage(Math.min(totalPages, currentPage + 1))
-            }
-            disabled={currentPage === totalPages}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              background: "white",
-              cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-              borderRadius: "4px",
-            }}
-          >
-            ›
-          </button>
-          <button
-            onClick={() => setCurrentPage(totalPages)}
-            disabled={currentPage === totalPages}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              background: "white",
-              cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-              borderRadius: "4px",
-            }}
-          >
-            »
-          </button>
-        </div>
-      </main>
+            <button
+              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
+            >
+              ‹
+            </button>
+            {[...Array(totalPages).keys()].map((page) => (
+              <button
+                key={page + 1}
+                onClick={() => setCurrentPage(page + 1)}
+                className={currentPage === page + 1 ? "active" : ""}
+              >
+                {page + 1}
+              </button>
+            ))}
+            <button
+              onClick={() =>
+                setCurrentPage(Math.min(totalPages, currentPage + 1))
+              }
+              disabled={currentPage === totalPages}
+            >
+              ›
+            </button>
+            <button
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+            >
+              »
+            </button>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

@@ -1,369 +1,262 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import AdminSidebar from "../components/AdminSidebar.jsx";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useProductos } from "../contexts/ProductoContext";
+import "../styles/ProductoRegister.css";
 
-function ProductRegister() {
-  const [formData, setFormData] = useState({
-    productName: "",
-    description: "",
-    material: "",
-    stock: "",
-    price: "",
-    mainImage: null,
-    additionalImages: [],
-  });
+export default function ProductRegister() {
+  const { formData, setFormData, handleImageUpload, handleSubmit, loading } =
+    useProductos();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
-  const handleImageUpload = (e, type) => {
-    const file = e.target.files[0];
-    if (type === "main") {
-      setFormData({ ...formData, mainImage: file });
-    } else {
-      setFormData({
-        ...formData,
-        additionalImages: [...formData.additionalImages, file],
-      });
-    }
-  };
-
-  const handleSubmit = () => {
-    console.log("Product data:", formData);
-    alert("Product registered successfully!");
+  // 🧠 Función auxiliar para mostrar imágenes locales o URLs
+  const getImageSrc = (image) => {
+    if (!image) return null;
+    if (typeof image === "string") return image; // URL ya subida a Cloudinary
+    if (image instanceof File) return URL.createObjectURL(image); // archivo local
+    return null;
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        backgroundColor: "#f5f5f5",
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      }}
-    >
-      <AdminSidebar />
+    <div className="flex flex-col min-h-screen">
 
-      {/* Main Content */}
-      <main
-        style={{
-          flex: 1,
-          padding: "40px",
-          backgroundColor: "#f5f5f5",
-          marginLeft: "230px",
-          minHeight: "100vh",
-          overflowX: "hidden",
-        }}
+      <div
+        className={`flex min-h-[calc(100vh-8rem)] bg-gray-50 transition-all duration-300 ${
+          sidebarOpen ? "lg:ml-[230px]" : "lg:ml-0"
+        }`}
       >
-        <h1
-          style={{
-            fontSize: "36px",
-            marginBottom: "40px",
-            color: "#333",
-            fontWeight: "400",
-          }}
-        >
-          Product Register
-        </h1>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "400px 1fr",
-            gap: "40px",
-            maxWidth: "1200px",
-          }}
+        <main
+          className="flex-1 w-full min-w-0 p-4 sm:p-6 md:p-8 lg:p-12"
+          onClick={() => sidebarOpen && setSidebarOpen(false)}
         >
-          {/* Left Side - Image Uploads */}
-          <div>
-            {/* Main Image Upload */}
-            <div style={{ marginBottom: "20px" }}>
-              <label
-                style={{
-                  display: "block",
-                  width: "100%",
-                  aspectRatio: "1",
-                  border: "2px dashed #ddd",
-                  borderRadius: "8px",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  background: "#fafafa",
-                  transition: "all 0.3s",
-                }}
-              >
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageUpload(e, "main")}
-                  style={{ display: "none" }}
-                />
-                <svg
-                  width="60"
-                  height="60"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#999"
-                  strokeWidth="1.5"
-                >
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                  <circle cx="12" cy="13" r="4" />
-                </svg>
-                <div
-                  style={{
-                    marginTop: "20px",
-                    fontSize: "18px",
-                    fontWeight: "500",
-                    color: "#333",
-                  }}
-                >
-                  UPLOAD
-                </div>
-              </label>
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+                Product Register
+              </h1>
+              <p className="text-sm sm:text-base text-gray-600">
+                Add new handmade products to your catalog
+              </p>
             </div>
 
-            {/* Additional Images */}
-            <div style={{ display: "flex", gap: "15px" }}>
-              {[1, 2, 3].map((num) => (
-                <label
-                  key={num}
-                  style={{
-                    flex: 1,
-                    aspectRatio: "1",
-                    border: "2px dashed #ddd",
-                    borderRadius: "8px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    background: "#fafafa",
-                    transition: "all 0.3s",
-                  }}
-                >
+            <form
+              onSubmit={handleSubmit}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white rounded-xl shadow-sm p-6 sm:p-8"
+            >
+              {/* === IMAGE UPLOADS === */}
+              <div className="image-uploads">
+                {/* Imagen principal */}
+                <label className="image-upload main">
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => handleImageUpload(e, "additional")}
-                    style={{ display: "none" }}
+                    onChange={(e) => handleImageUpload(e, "main")}
                   />
-                  <svg
-                    width="30"
-                    height="30"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#999"
-                    strokeWidth="1.5"
-                  >
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                    <circle cx="12" cy="13" r="4" />
-                  </svg>
-                  <div
-                    style={{
-                      marginTop: "10px",
-                      fontSize: "11px",
-                      fontWeight: "500",
-                      color: "#666",
-                    }}
-                  >
-                    UPLOAD
+                  {formData.mainImage ? (
+                    <img
+                      src={getImageSrc(formData.mainImage)}
+                      alt="Main"
+                      className="rounded-lg object-cover w-full h-64"
+                    />
+                  ) : (
+                    <>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-10 h-10 text-gray-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M3 16l4-4a3 3 0 014 0l4 4m0 0l4-4a3 3 0 014 0l4 4M3 10h18"
+                        />
+                      </svg>
+                      <span>Upload Main Image</span>
+                    </>
+                  )}
+                </label>
+
+                {/* Imágenes adicionales */}
+                <div className="extra-images">
+                  {[1, 2].map((i) => (
+                    <label key={i} className="image-upload small">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) =>
+                          handleImageUpload(e, `additional-${i}`)
+                        }
+                      />
+                      {formData.additionalImages &&
+                      formData.additionalImages[i - 1] ? (
+                        <img
+                          src={getImageSrc(formData.additionalImages[i - 1])}
+                          alt={`Additional ${i}`}
+                          className="rounded-md object-cover w-full h-32"
+                        />
+                      ) : (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            className="w-6 h-6 text-gray-400"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.5}
+                              d="M3 16l4-4a3 3 0 014 0l4 4m0 0l4-4a3 3 0 014 0l4 4M3 10h18"
+                            />
+                          </svg>
+                          <span>Upload</span>
+                        </>
+                      )}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* === FORM FIELDS === */}
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Product Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.productName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, productName: e.target.value })
+                    }
+                    className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        description: e.target.value,
+                      })
+                    }
+                    rows="4"
+                    className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Material
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.material}
+                      onChange={(e) =>
+                        setFormData({ ...formData, material: e.target.value })
+                      }
+                      className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
                   </div>
-                </label>
-              ))}
-            </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Stock
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.stock}
+                      min={0}
+                      onChange={(e) =>
+                        setFormData({ ...formData, stock: e.target.value })
+                      }
+                      className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Price
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.price}
+                      min={0}
+                      onChange={(e) =>
+                        setFormData({ ...formData, price: e.target.value })
+                      }
+                      className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+                </div>
+
+                {/* === CAMPOS ADICIONALES === */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Details
+                  </label>
+                  <textarea
+                    value={formData.details}
+                    onChange={(e) =>
+                      setFormData({ ...formData, details: e.target.value })
+                    }
+                    rows="3"
+                    className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Describe detalles únicos del producto (materiales, proceso artesanal, etc.)"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Care Instructions
+                  </label>
+                  <textarea
+                    value={formData.care}
+                    onChange={(e) =>
+                      setFormData({ ...formData, care: e.target.value })
+                    }
+                    rows="2"
+                    className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Ejemplo: limpiar con paño seco, evitar exposición al agua..."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Shipping Info
+                  </label>
+                  <textarea
+                    value={formData.shippingInfo}
+                    onChange={(e) =>
+                      setFormData({ ...formData, shippingInfo: e.target.value })
+                    }
+                    rows="2"
+                    className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Ejemplo: envío nacional e internacional, empaques ecológicos..."
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-[#997C71] hover:bg-[#85695F] text-[#F5E3C3] font-semibold py-3 px-6 rounded-lg shadow-sm transition-all"
+                >
+                  {loading ? "Uploading..." : "Upload Product"}
+                </button>
+              </div>
+            </form>
           </div>
-
-          {/* Right Side - Form */}
-          <div>
-            <div style={{ marginBottom: "25px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "13px",
-                  fontWeight: "500",
-                  color: "#666",
-                  marginBottom: "8px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.5px",
-                }}
-              >
-                Product Name
-              </label>
-              <input
-                type="text"
-                value={formData.productName}
-                onChange={(e) =>
-                  setFormData({ ...formData, productName: e.target.value })
-                }
-                style={{
-                  width: "100%",
-                  padding: "12px 15px",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
-                  fontSize: "14px",
-                  outline: "none",
-                }}
-              />
-            </div>
-
-            <div style={{ marginBottom: "25px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "13px",
-                  fontWeight: "500",
-                  color: "#666",
-                  marginBottom: "8px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.5px",
-                }}
-              >
-                Description
-              </label>
-              <textarea
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                rows="4"
-                style={{
-                  width: "100%",
-                  padding: "12px 15px",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
-                  fontSize: "14px",
-                  outline: "none",
-                  resize: "vertical",
-                  fontFamily: "inherit",
-                }}
-              />
-            </div>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr",
-                gap: "15px",
-                marginBottom: "25px",
-              }}
-            >
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                    marginBottom: "8px",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  Material
-                </label>
-                <input
-                  type="text"
-                  value={formData.material}
-                  onChange={(e) =>
-                    setFormData({ ...formData, material: e.target.value })
-                  }
-                  style={{
-                    width: "100%",
-                    padding: "12px 15px",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    fontSize: "14px",
-                    outline: "none",
-                  }}
-                />
-              </div>
-
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                    marginBottom: "8px",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  Stock
-                </label>
-                <input
-                  type="number"
-                  value={formData.stock}
-                  onChange={(e) =>
-                    setFormData({ ...formData, stock: e.target.value })
-                  }
-                  style={{
-                    width: "100%",
-                    padding: "12px 15px",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    fontSize: "14px",
-                    outline: "none",
-                  }}
-                />
-              </div>
-
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#666",
-                    marginBottom: "8px",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  Price
-                </label>
-                <input
-                  type="number"
-                  value={formData.price}
-                  onChange={(e) =>
-                    setFormData({ ...formData, price: e.target.value })
-                  }
-                  style={{
-                    width: "100%",
-                    padding: "12px 15px",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    fontSize: "14px",
-                    outline: "none",
-                  }}
-                />
-              </div>
-            </div>
-
-            <button
-              onClick={handleSubmit}
-              style={{
-                background: "#333",
-                color: "white",
-                border: "none",
-                padding: "12px 40px",
-                borderRadius: "4px",
-                fontSize: "14px",
-                fontWeight: "500",
-                cursor: "pointer",
-                textTransform: "uppercase",
-                letterSpacing: "1px",
-                marginTop: "20px",
-              }}
-            >
-              UPLOAD
-            </button>
-          </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
-
-export default ProductRegister;

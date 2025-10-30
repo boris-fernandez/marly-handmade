@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AutenticacionController.class)
 @AutoConfigureMockMvc(addFilters = false)
+
 class AutenticacionControllerTest extends ControllerTestBase {
 
     @Autowired
@@ -58,7 +59,7 @@ class AutenticacionControllerTest extends ControllerTestBase {
         Usuario usuario = new Usuario();
         usuario.setUsername(username);
         usuario.setPassword(password);
-        usuario.setRol(Rol.Admin);
+        usuario.setRol(Rol.ADMIN);
 
         Authentication authenticationMock = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
 

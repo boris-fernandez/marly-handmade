@@ -75,11 +75,9 @@ public class PromocionesService {
 
     public PromocionesResponse mostrarPorNombre(String nombre) {
         Producto producto = productoRepository.findByNombre(nombre);
-
-    ApacheCommonsUtils.requireNonNullRuntime(producto, "El producto con ese nombre no existe");
-
+        ApacheCommonsUtils.requireNonNullRuntime(producto, "El producto con ese nombre no existe");
         Promociones promociones = promocionesRepository.findByProducto(producto);
-    ApacheCommonsUtils.requireNonNullRuntime(promociones, "No existe una promoción para ese producto");
+        ApacheCommonsUtils.requireNonNullRuntime(promociones, "No existe una promoción para ese producto");
 
         return new PromocionesResponse(promociones, producto);
     }
