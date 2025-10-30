@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useProductos } from "../contexts/ProductoContext.jsx";
-import AdminSidebar from "../components/AdminSidebar.jsx";
 
 import "../styles/Inventory.css";
 
@@ -155,9 +154,9 @@ function Inventory() {
                     <td>{item.stock}</td>
                     <td>
                       <div className="action-buttons">
-                        <button className="btn-editar">
+                        <Link to={`/admin/inventory/edit/${item.id}`} className="btn-editar">
                           <i className="fa-solid fa-pen-to-square"></i>
-                        </button>
+                        </Link>
                         <button className="btn-eliminar">
                           <i className="fa-solid fa-trash"></i>
                         </button>

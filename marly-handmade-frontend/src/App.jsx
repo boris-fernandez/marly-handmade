@@ -33,9 +33,11 @@ import ProductGallery from "./pages/ProductGallery";
 import UserManagement from "./pages/UserManagement";
 import ProductRegister from "./pages/ProductRegister";
 import Buy from "./pages/Buy.jsx";
+//import ComplaintsBookAdmin from "./pages/ComplaintsBookAdmin.jsx";
 
 import { FilterProvider } from "./contexts/FilterContext.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
+import ProductUpload from "./pages/ProductEdit.jsx"
 
 function App() {
   const { open, closeCart } = useCart();
@@ -77,9 +79,10 @@ function App() {
         <Route path="orders" element={<Orders />} />
         <Route path="content" element={<ContentManagement />} />
         <Route path="reports" element={<ReportsAnalytics />} />
-        <Route path="complaints" element={<ComplaintsBook />} />
+        <Route path="complaints" element={<ComplaintsBook/>} />
         <Route path="profile" element={<Profile />} />
         <Route path="product-gallery" element={<ProductGallery />} />
+        <Route path="inventory/edit/:id" element={<ProductUpload />} />
         </Route>
       </Routes>
       </FilterProvider> 
