@@ -24,8 +24,8 @@ function AdminSidebar() {
     { to: "/admin/users", label: "Users", icon: Users },
     { to: "/admin/inventory", label: "Inventory", icon: Archive },
     { to: "/admin/orders", label: "Orders", icon: ShoppingBag },
-    { to: "/admin/content", label: "Content Management", icon: FileText },
-    { to: "/admin/reports", label: "Reports / Analytics", icon: PieChart },
+//    { to: "/admin/content", label: "Content Management", icon: FileText },
+//    { to: "/admin/reports", label: "Reports / Analytics", icon: PieChart },
     { to: "/admin/complaints", label: "Complaints Book", icon: Book },
   ];
 
