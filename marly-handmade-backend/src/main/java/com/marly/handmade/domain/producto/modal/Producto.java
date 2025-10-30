@@ -60,5 +60,13 @@ public class Producto {
             setFotoTerciario(productoUpdate.fotoTerciario());
         if (productoUpdate.categoria() != null)
             setCategoria(productoUpdate.categoria());
+        if (productoUpdate.descripcion() != null)
+            setDescripcion(productoUpdate.descripcion());
+        if (productoUpdate.details() != null)
+            setDetails(productoUpdate.details());
+        if (productoUpdate.care() != null)
+            setCare(productoUpdate.care());
+        if (productoUpdate.shippingInfo() != null)
+            setShippingInfo(productoUpdate.shippingInfo());
     }
 }
