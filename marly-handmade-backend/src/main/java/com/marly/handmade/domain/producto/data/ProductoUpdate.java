@@ -11,6 +11,7 @@ public record ProductoUpdate(
         String descripcion,
         String details,
         String care,
-        String shippingInfo
+        String shippingInfo,
+        Boolean status
 ) {
 }

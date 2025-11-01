@@ -97,7 +97,7 @@ function UserManagement() {
             <p><strong>Email:</strong> {selectedUser.email}</p>
             <p><strong>Registrado:</strong> {selectedUser.registered}</p>
 
-            <h3 style={{ marginTop: "20px" }}>Historial de Compras</h3>
+            {/* /<h3 style={{ marginTop: "20px" }}>Historial de Compras</h3>
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead style={{ backgroundColor: "#f8f8f8", borderBottom: "2px solid #e0e0e0" }}>
@@ -121,7 +121,7 @@ function UserManagement() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </div> */}
 
             <button style={{ marginTop: "20px", backgroundColor: "#997C71", color: "#F5E3C3", border: "none", padding: "8px 16px", borderRadius: "5px", cursor: "pointer" }} onClick={() => setSelectedUser(null)}>
               Cerrar

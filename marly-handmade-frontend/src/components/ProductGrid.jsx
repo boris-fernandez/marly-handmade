@@ -1,7 +1,10 @@
 import ProductCard from "./ProductCard";
 
 export default function ProductGrid({ products = [] }) {
-  if (!products.length) {
+  // Filtrar solo productos activos
+  const activeProducts = products.filter((p) => p.status == 1);
+
+  if (!activeProducts.length) {
     return (
       <div className="flex-1 flex items-center justify-center text-[#997C71] font-light text-sm p-6">
         No products found.
@@ -23,7 +26,7 @@ export default function ProductGrid({ products = [] }) {
           sm:gap-6
         "
       >
-        {products.map((p) => (
+        {activeProducts.map((p) => (
           <ProductCard key={p.id} product={p} />
         ))}
       </div>

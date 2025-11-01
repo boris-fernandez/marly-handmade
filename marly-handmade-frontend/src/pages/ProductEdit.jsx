@@ -13,6 +13,7 @@ const ProductEdit = () => {
   const { token } = useAuth();
   const { listarProductos } = useProductos();
 
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -29,36 +30,38 @@ const ProductEdit = () => {
 
   const API_URL = "http://localhost:8080/producto";
 
-  useEffect(() => {
-    const fetchProducto = async () => {
-      try {
-  const response = await fetch(`${API_URL}/${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${tokenValue}`,
-    },
-    body: JSON.stringify(payload),
-  });
+  useEffect(
 
-  if (!response.ok) {
-    console.error(await response.text());
-    throw new Error("Error al actualizar el producto");
-  }
+    () => {
+      const fetchProducto = async () => {
+        try {
+          const response = await fetch(`${API_URL}/${id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${tokenValue}`,
+            },
+            body: JSON.stringify(payload),
+          });
 
-  console.log("✅ Producto actualizado con éxito");
+          if (!response.ok) {
+            console.error(await response.text());
+            throw new Error("Error al actualizar el producto");
+          }
 
-  await listarProductos(); 
+          console.log("✅ Producto actualizado con éxito");
 
-  navigate("/admin/inventory");
-} catch (err) {
-  console.error("❌ Error al actualizar el producto:", err);
-}
+          await listarProductos();
 
-    };
+          navigate("/admin/inventory");
+        } catch (err) {
+          console.error("❌ Error al actualizar el producto:", err);
+        }
 
-    fetchProducto();
-  }, [id]);
+      };
+
+      fetchProducto();
+    }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,40 +72,40 @@ const ProductEdit = () => {
   };
 
   const handleFileChange = async (e) => {
-  const { name, files } = e.target;
-  if (files.length > 0) {
-    const file = files[0];
-    try {
-      const url = await uploadImage(file);
-      console.log("✅ URL subida:", url); // <-- verifica en consola
-      setFormData((prev) => ({
-        ...prev,
-        [name]: url,
-      }));
-    } catch (err) {
-      console.error(`❌ Error al subir ${name}:`, err);
+    const { name, files } = e.target;
+    if (files.length > 0) {
+      const file = files[0];
+      try {
+        const url = await uploadImage(file);
+        console.log("✅ URL subida:", url); // <-- verifica en consola
+        setFormData((prev) => ({
+          ...prev,
+          [name]: url,
+        }));
+      } catch (err) {
+        console.error(`❌ Error al subir ${name}:`, err);
+      }
     }
-  }
-};
+  };
 
   const uploadImage = async (file) => {
-  const data = new FormData();
-  data.append("file", file);
-  data.append("upload_preset", "MarlyCloud");// reemplaza con tu preset
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "MarlyCloud");// reemplaza con tu preset
 
-  const res = await fetch("https://api.cloudinary.com/v1_1/cloudjosue/image/upload", {
-    method: "POST",
-    body: data,
-  });
+    const res = await fetch("https://api.cloudinary.com/v1_1/cloudjosue/image/upload", {
+      method: "POST",
+      body: data,
+    });
 
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`Cloudinary error: ${errorText}`);
-  }
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Cloudinary error: ${errorText}`);
+    }
 
-  const result = await res.json();
-  return result.secure_url;
-};
+    const result = await res.json();
+    return result.secure_url;
+  };
 
 
   const getImageSrc = (image) => {
@@ -123,8 +126,8 @@ const ProductEdit = () => {
     let urlSecundario = formData.fotoSecundario;
     let urlTerciario = formData.fotoTerciario;
 
-    
-    
+
+
 
     const payload = {
       nombre: formData.name,
@@ -213,47 +216,47 @@ const ProductEdit = () => {
 
           {/* Subida de imágenes con vista previa */}
           {/* Subida de imágenes con ícono y vista previa */}
-<div className="col-span-2 grid grid-cols-3 gap-4">
-  {[
-    { name: "fotoPrincipal", label: "Imagen principal" },
-    { name: "fotoSecundario", label: "Imagen secundaria" },
-    { name: "fotoTerciario", label: "Imagen terciaria" },
-  ].map(({ name, label }) => (
-    <label key={name} className="flex flex-col items-center justify-center border border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-[#997C71] transition-all h-48">
-      <span className="text-sm text-gray-700 mb-2">{label}</span>
-      <input
-        type="file"
-        name={name}
-        accept="image/*"
-        onChange={handleFileChange}
-        className="hidden"
-      />
-      {formData[name] ? (
-  <img
-    src={formData[name]}
-    alt={`Vista previa ${name}`}
-    className="rounded-md object-cover w-full h-full"
-  />
-) : (
-  <>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="w-6 h-6 text-gray-400"
-          >
-            <path d="M3 16l4-4a3 3 0 014 0l4 4m0 0l4-4a3 3 0 014 0l4 4M3 10h18" />
-          </svg>
-          <span className="text-xs text-gray-500 mt-1">Subir imagen</span>
-        </>
-      )}
-    </label>
-  ))}
-</div>
+          <div className="col-span-2 grid grid-cols-3 gap-4">
+            {[
+              { name: "fotoPrincipal", label: "Imagen principal" },
+              { name: "fotoSecundario", label: "Imagen secundaria" },
+              { name: "fotoTerciario", label: "Imagen terciaria" },
+            ].map(({ name, label }) => (
+              <label key={name} className="flex flex-col items-center justify-center border border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-[#997C71] transition-all h-48">
+                <span className="text-sm text-gray-700 mb-2">{label}</span>
+                <input
+                  type="file"
+                  name={name}
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                {formData[name] ? (
+                  <img
+                    src={formData[name]}
+                    alt={`Vista previa ${name}`}
+                    className="rounded-md object-cover w-full h-full"
+                  />
+                ) : (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="w-6 h-6 text-gray-400"
+                    >
+                      <path d="M3 16l4-4a3 3 0 014 0l4 4m0 0l4-4a3 3 0 014 0l4 4M3 10h18" />
+                    </svg>
+                    <span className="text-xs text-gray-500 mt-1">Subir imagen</span>
+                  </>
+                )}
+              </label>
+            ))}
+          </div>
 
           <div className="col-span-2 text-right mt-4">
             <button
