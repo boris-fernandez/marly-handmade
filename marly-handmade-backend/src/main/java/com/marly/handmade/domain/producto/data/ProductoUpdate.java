@@ -7,6 +7,11 @@ public record ProductoUpdate(
         String fotoPrincipal,
         String fotoSecundario,
         String fotoTerciario,
-        String categoria
+        String categoria,
+        String descripcion,
+        String details,
+        String care,
+        String shippingInfo,
+        Boolean status
 ) {
 }

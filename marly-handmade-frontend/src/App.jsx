@@ -33,7 +33,7 @@ import ProductGallery from "./pages/ProductGallery";
 import UserManagement from "./pages/UserManagement";
 import ProductRegister from "./pages/ProductRegister";
 import Buy from "./pages/Buy.jsx";
-//import ComplaintsBookAdmin from "./pages/ComplaintsBookAdmin.jsx";
+import ComplaintsBookAdmin from "./pages/ComplaintsBookAdmin.jsx";
 
 import { FilterProvider } from "./contexts/FilterContext.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
@@ -79,7 +79,7 @@ function App() {
         <Route path="orders" element={<Orders />} />
         <Route path="content" element={<ContentManagement />} />
         <Route path="reports" element={<ReportsAnalytics />} />
-        <Route path="complaints" element={<ComplaintsBook/>} />
+        <Route path="complaints" element={<ComplaintsBookAdmin/>} />
         <Route path="profile" element={<Profile />} />
         <Route path="product-gallery" element={<ProductGallery />} />
         <Route path="inventory/edit/:id" element={<ProductUpload />} />
