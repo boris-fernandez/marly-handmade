@@ -116,7 +116,7 @@ export default function Header() {
             }}
           >
             <User className="w-5 h-5 text-[#040F2E]" />
-            <div className="text-sm text-[#040F2E] hidden sm:block">
+            <div className="text-sm text-[#040F2E] block max-[859px]:hidden">
               <p>
                 Hello, <span className="font-medium">{userName}</span>
               </p>
@@ -296,7 +296,7 @@ export default function Header() {
     if (!menuOpen) return null;
 
     return (
-      <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 font-serif">
+      <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 font-serif mt-3">
         <button
           onClick={() => setShopOpen((v) => !v)}
           className="w-full flex justify-between items-center py-2 text-left hover:text-[#040F2E]"
@@ -349,6 +349,17 @@ export default function Header() {
             Admin Panel
           </Link>
         )}
+        <div className="mt-4 border-t border-gray-200 pt-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {renderLanguageSelector()}
+            <span className="text-sm text-gray-600">Language</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">Currency</span>
+            {renderCurrencySelector()}
+          </div>
+        </div>
       </div>
     );
   }
@@ -377,26 +388,31 @@ export default function Header() {
       </div>
 
       {/* NAV RESPONSIVO */}
-      <nav className="md:hidden px-4 py-2 bg-white">
-        {/* Logo centrado */}
-        <div className="flex justify-center mb-4">
-          {renderLogo()}
-        </div>
+      <nav className="md:hidden px-4 py-4 bg-white relative">
+        <div className="flex items-center justify-between relative flex-wrap min-[320px]:flex-nowrap">
 
-        {/* Hamburguesa + iconos */}
-        <div className="flex justify-between items-center w-full">
-          <button onClick={toggleMenu} aria-label="Toggle menu" className="text-[#040F2E]">
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Menú hamburguesa - izquierda */}
+          <div className="flex-shrink-0 order-1 min-[320px]:order-1 mt-3">
+            <button onClick={toggleMenu} aria-label="Toggle menu" className="text-[#040F2E]">
+              {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
 
-          <div className="flex items-center gap-2">
+          {/* Logo - centrado */}
+          <div className="w-full order-0 min-[320px]:order-2 flex justify-center min-[320px]:justify-center min-[320px]:mb-0 min-[320px]:absolute min-[320px]:left-1/2 min-[320px]:-translate-x-1/2 min-[320px]:pointer-events-none">
+            <div className="max-w-[150px] w-full pointer-events-auto">
+              {renderLogo()}
+            </div>
+          </div>
+
+          {/* Iconos - derecha */}
+          <div className="flex-shrink-0 flex items-center gap-2 order-2 min-[320px]:order-3 min-[320px]:ml-auto mt-2">
             {renderSearchIcon()}
-            {renderLanguageSelector()}
-            {renderCurrencySelector()}
             {renderUserMenu()}
             {renderCartButton()}
           </div>
         </div>
+
         {renderMobileMenu()}
       </nav>
     </header>
