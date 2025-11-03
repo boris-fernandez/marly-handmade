@@ -1,6 +1,7 @@
-// UserManagement.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAdmin } from "../contexts/AdminContext.jsx";
+import Pagination from "../components/Pagination.jsx";
+import "../styles/UserManagement.css";
 
 function UserManagement() {
   const { users, loading, error } = useAdmin();
@@ -9,125 +10,168 @@ function UserManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const getPurchaseHistory = () => [
-    { code: "PUR001", date: "2024-05-15", product: "Golden Sun Necklace", category: "Jewelry", price: 850.0, method: "Credit Card", status: "Completed" },
-    { code: "PUR002", date: "2024-04-22", product: "Silver Moon Ring", category: "Jewelry", price: 320.0, method: "PayPal", status: "Completed" },
-    { code: "PUR003", date: "2024-03-18", product: "Emerald Earrings", category: "Jewelry", price: 1200.0, method: "Debit Card", status: "Completed" },
-  ];
+  useEffect(() => {
+    console.log(" Datos desde backend:", users);
+  }, [users]);
 
-  if (loading) return <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>Cargando usuarios...</div>;
-  if (error) return <div style={{ padding: "40px" }}>Error: {error}</div>;
+  if (loading) return <div className="loading">Cargando clientes...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
+  if (!users?.length) return <div className="no-users">No hay datos de clientes</div>;
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  //  Filtrado simple por texto
+  const filteredUsers = users.filter((u) => {
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      u.nombres?.toLowerCase().includes(q) ||
+      u.apellidos?.toLowerCase().includes(q) ||
+      u.username?.toLowerCase().includes(q) ||
+      u.correo?.toLowerCase().includes(q) ||
+      u.identificacion?.toLowerCase().includes(q)
+    );
+  });
 
+  //  Paginación
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
 
+  //  Formato de fecha
+  const formatearFecha = (fecha) => {
+    if (!fecha) return "—";
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+      const [year, month, day] = fecha.split("-");
+      return `${day}/${month}/${year}`;
+    }
+
+    const soloFecha = fecha.split("T")[0];
+    const [year, month, day] = soloFecha.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
   return (
-    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#f5f5f5", fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-
-
-      <main style={{ flex: 1, padding: "40px", backgroundColor: "#f5f5f5",  minHeight: "100vh", overflowX: "hidden" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
-          <h1 style={{ fontSize: "36px", margin: 0, color: "#333", fontWeight: "400" }}>Gestión de Usuarios</h1>
+    <div className="user-management">
+      <main className="main-content">
+        <div className="section-header">
+          <h1 className="user-title">User Management</h1>
         </div>
 
-        {/* Buscador */}
-        <input
-          type="text"
-          placeholder="Buscar usuario..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ marginBottom: "20px", padding: "10px", width: "300px", fontSize: "14px", borderRadius: "5px", border: "1px solid #ccc" }}
-        />
+        <div className="search-wrapper">
+          <i className="fa-solid fa-magnifying-glass search-icon"></i>
+          <input
+            type="text"
+            placeholder="Buscar cliente..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+        </div>
 
-        {/* Tabla de usuarios */}
-        <div style={{ background: "white", borderRadius: "8px", border: "1px solid #e0e0e0", overflow: "hidden" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead style={{ backgroundColor: "#f8f8f8", borderBottom: "2px solid #e0e0e0" }}>
+        <div className="table-container">
+          <table className="user-table">
+            <thead>
               <tr>
-                {["No", "Username", "Nombre", "Email", "Registrado", "Acciones"].map((th) => (
-                  <th key={th} style={{ padding: "12px", textAlign: "left", fontSize: "13px", fontWeight: "500", color: "#666" }}>{th}</th>
+                {[
+                  "No",
+                  "Usuario",
+                  "Nombre Completo",
+                  "Dirección",
+                  "Fecha Nacimiento",
+                  "Identificación",
+                  "Puntos Fidelización",
+                  "Correo",
+                  "Teléfono",
+                  "ID Cliente",
+                  "ID Usuario",
+                  "Acciones",
+                ].map((th) => (
+                  <th key={th}>{th}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {currentUsers.length === 0 && (
+              {currentUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: "center", padding: "15px", color: "#666" }}>No hay usuarios</td>
-                </tr>
-              )}
-              {currentUsers.map((user, i) => (
-                <tr key={user.id} style={{ borderBottom: "1px solid #f0f0f0", backgroundColor: i % 2 === 0 ? "white" : "#fafafa" }}>
-                  <td style={{ padding: "15px 12px", fontSize: "14px", color: "#333" }}>{startIndex + i + 1}</td>
-                  <td style={{ padding: "15px 12px", fontSize: "14px", color: "#333" }}>{user.username}</td>
-                  <td style={{ padding: "15px 12px", fontSize: "14px", color: "#333" }}>{user.name}</td>
-                  <td style={{ padding: "15px 12px", fontSize: "14px", color: "#333" }}>{user.email}</td>
-                  <td style={{ padding: "15px 12px", fontSize: "14px", color: "#333" }}>{user.registered}</td>
-                  <td style={{ padding: "15px 12px" }}>
-                    <button onClick={() => setSelectedUser(user)} style={{ backgroundColor: "#997C71", color: "#F5E3C3", border: "none", padding: "6px 12px", borderRadius: "4px", cursor: "pointer" }}>Ver</button>
+                  <td colSpan="12" className="no-users">
+                    No hay clientes
                   </td>
                 </tr>
-              ))}
+              ) : (
+                currentUsers.map((u, i) => (
+                  <tr
+                    key={u.idCliente ?? i}
+                    className={i % 2 === 0 ? "even-row" : "odd-row"}
+                  >
+                    <td>{startIndex + i + 1}</td>
+                    <td>{u.username}</td>
+                    <td>{u.nombres} {u.apellidos}</td>
+                    <td>{u.direccion}</td>
+                    <td>{formatearFecha(u.fechaNacimiento)}</td>
+                    <td>{u.identificacion}</td>
+                    <td>{u.puntosFidelizacion}</td>
+                    <td>{u.correo}</td>
+                    <td>{u.telefono}</td>
+                    <td>{u.idCliente}</td>
+                    <td>{u.idUsuario}</td>
+                    <td>
+                      <button
+                        className="btn-primary-users"
+                        onClick={() => setSelectedUser(u)}
+                      >
+                        Ver
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
 
-        {/* Paginación */}
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginTop: "20px" }}>
-          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} style={{ padding: "8px 12px", border: "1px solid #ddd", background: "white", cursor: currentPage === 1 ? "not-allowed" : "pointer", borderRadius: "4px" }}>«</button>
-          <button onClick={() => setCurrentPage(Math.max(1, currentPage - 1))} disabled={currentPage === 1} style={{ padding: "8px 12px", border: "1px solid #ddd", background: "white", cursor: currentPage === 1 ? "not-allowed" : "pointer", borderRadius: "4px" }}>‹</button>
-          {[...Array(totalPages)].map((_, idx) => (
-            <button key={idx} onClick={() => setCurrentPage(idx + 1)} style={{ padding: "8px 12px", border: "1px solid #ddd", background: currentPage === idx + 1 ? "#997C71" : "#F5E3C3", color: currentPage === idx + 1 ? "white" : "#333", cursor: "pointer", borderRadius: "4px" }}>{idx + 1}</button>
-          ))}
-          <button onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))} disabled={currentPage === totalPages} style={{ padding: "8px 12px", border: "1px solid #ddd", background: "white", cursor: currentPage === totalPages ? "not-allowed" : "pointer", borderRadius: "4px" }}>›</button>
-          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} style={{ padding: "8px 12px", border: "1px solid #ddd", background: "white", cursor: currentPage === totalPages ? "not-allowed" : "pointer", borderRadius: "4px" }}>»</button>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
 
-        {/* Detalle del usuario seleccionado */}
         {selectedUser && (
-          <div style={{ marginTop: "30px", padding: "20px", border: "1px solid #e0e0e0", borderRadius: "8px", background: "white" }}>
-            <h2 style={{ marginBottom: "15px", color: "#333" }}>Detalle de {selectedUser.name}</h2>
-            <p><strong>Username:</strong> {selectedUser.username}</p>
-            <p><strong>Email:</strong> {selectedUser.email}</p>
-            <p><strong>Registrado:</strong> {selectedUser.registered}</p>
-
-            <h3 style={{ marginTop: "20px" }}>Historial de Compras</h3>
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead style={{ backgroundColor: "#f8f8f8", borderBottom: "2px solid #e0e0e0" }}>
-                  <tr>
-                    {["Código", "Fecha", "Producto", "Categoría", "Precio", "Método", "Estado"].map((th) => (
-                      <th key={th} style={{ padding: "12px", textAlign: "left", fontSize: "13px", fontWeight: "500", color: "#666" }}>{th}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {getPurchaseHistory().map((purchase) => (
-                    <tr key={purchase.code} style={{ borderBottom: "1px solid #f0f0f0" }}>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.code}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.date}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.product}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.category}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>S/ {purchase.price.toFixed(2)}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.method}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <div className="modal-overlay" onClick={() => setSelectedUser(null)}>
+            <div
+              className="modal-content"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="modal-title">Detalle del Cliente</h2>
+              <div className="modal-body">
+                {[
+                  ["Usuario", selectedUser.username],
+                  ["Nombre Completo", `${selectedUser.nombres} ${selectedUser.apellidos}`],
+                  ["Dirección", selectedUser.direccion],
+                  ["Fecha Nacimiento", formatearFecha(selectedUser.fechaNacimiento)],
+                  ["Identificación", selectedUser.identificacion],
+                  ["Puntos Fidelización", selectedUser.puntosFidelizacion],
+                  ["Correo", selectedUser.correo],
+                  ["Teléfono", selectedUser.telefono],
+                  ["ID Cliente", selectedUser.idCliente],
+                  ["ID Usuario", selectedUser.idUsuario],
+                ].map(([label, value]) => (
+                  <p key={label}>
+                    <strong>{label}:</strong> {value}
+                  </p>
+                ))}
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn-primary close-btn"
+                  onClick={() => setSelectedUser(null)}
+                >
+                  Cerrar
+                </button>
+              </div>
             </div>
-
-            <button style={{ marginTop: "20px", backgroundColor: "#997C71", color: "#F5E3C3", border: "none", padding: "8px 16px", borderRadius: "5px", cursor: "pointer" }} onClick={() => setSelectedUser(null)}>
-              Cerrar
-            </button>
-            </div>
+          </div>
         )}
+
       </main>
     </div>
   );

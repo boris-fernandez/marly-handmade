@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useProductos } from "../contexts/ProductoContext.jsx";
+import Pagination from "../components/Pagination.jsx";
+import FiltersBar from "../components/FiltersBar";
 
 import "../styles/Inventory.css";
 
@@ -14,7 +16,7 @@ function Inventory() {
   const [sortField, setSortField] = useState("id");
   const [sortDirection, setSortDirection] = useState("asc");
 
-  // 🔍 Filtrar y ordenar productos directamente del contexto
+  //  Filtrar y ordenar productos directamente del contexto
   const filteredProducts = productos
     .filter((item) => {
       const matchesName = item.name
@@ -35,6 +37,7 @@ function Inventory() {
         return sortDirection === "asc" ? valA - valB : valB - valA;
       }
     });
+  const uniqueCategories = ["Todos", ...new Set(productos.map((p) => p.category))];
 
   // 🧮 Paginación
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
@@ -63,58 +66,28 @@ function Inventory() {
 
   return (
     <div className="admin-layout">
-      
+
 
       <div className="admin-content">
         <main className="inventory-main">
-          <div className="inventory-header">
-            <h1>Inventario</h1>
+          <div className="inv-section-header">
+            <h1 className="inv-title">Inventario</h1>
             <Link to="/admin/product-gallery">
-              <button className="gallery-button">Ver galería</button>
+              <button className="gallery-button">Product Gallery</button>
             </Link>
           </div>
+          <FiltersBar
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            uniqueCategories={uniqueCategories}
+            sortField={sortField}
+            onSortFieldChange={setSortField}
+            sortDirection={sortDirection}
+            onSortDirectionChange={setSortDirection}
+          />
 
-          <div className="filter-panel">
-            <input
-              type="text"
-              placeholder="Buscar por nombre"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
-              {["Todos", ...new Set(productos.map((p) => p.category))].map(
-                (cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                )
-              )}
-            </select>
-
-            <div className="sort-combo">
-              <label>Ordenar por:</label>
-              <select
-                value={sortField}
-                onChange={(e) => setSortField(e.target.value)}
-              >
-                <option value="id">ID</option>
-                <option value="name">Nombre</option>
-                <option value="price">Precio</option>
-                <option value="stock">Stock</option>
-              </select>
-              <select
-                value={sortDirection}
-                onChange={(e) => setSortDirection(e.target.value)}
-              >
-                <option value="asc">Ascendente</option>
-                <option value="desc">Descendente</option>
-              </select>
-            </div>
-          </div>
 
           <div className="inventory-table-wrapper">
             <table className="inventory-table">
@@ -168,43 +141,11 @@ function Inventory() {
             </table>
           </div>
 
-          <div className="pagination">
-            <button
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
-            >
-              «
-            </button>
-            <button
-              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-            >
-              ‹
-            </button>
-            {[...Array(totalPages).keys()].map((page) => (
-              <button
-                key={page + 1}
-                onClick={() => setCurrentPage(page + 1)}
-                className={currentPage === page + 1 ? "active" : ""}
-              >
-                {page + 1}
-              </button>
-            ))}
-            <button
-              onClick={() =>
-                setCurrentPage(Math.min(totalPages, currentPage + 1))
-              }
-              disabled={currentPage === totalPages}
-            >
-              ›
-            </button>
-            <button
-              onClick={() => setCurrentPage(totalPages)}
-              disabled={currentPage === totalPages}
-            >
-              »
-            </button>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </main>
       </div>
     </div>
