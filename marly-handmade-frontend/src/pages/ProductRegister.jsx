@@ -248,7 +248,7 @@ export default function ProductRegister() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-[#997C71] hover:bg-[#85695F] text-[#F5E3C3] font-semibold py-3 px-6 rounded-lg shadow-sm transition-all"
+                  className="bg-[#1B2A40] text-[#F5E3C3] rounded-[5px] font-semibold py-3 px-6 shadow-sm transition-all"
                 >
                   {loading ? "Uploading..." : "Upload Product"}
                 </button>

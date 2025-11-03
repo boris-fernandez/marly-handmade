@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/ProductGallery.css";
+import FiltersBar from "../components/FiltersBar";
 
 const getProductsData = async () => {
   const response = await fetch("http://localhost:8080/producto/all");
@@ -64,7 +65,7 @@ function ProductGallery() {
   }
 
   return (
-      <div className="gallery-container">
+    <div className="gallery-container">
       <main className="gallery-main">
         <div className="gallery-header">
           <h1 className="gallery-title">Product Gallery</h1>
@@ -73,32 +74,17 @@ function ProductGallery() {
           </Link>
         </div>
 
-        <div className="gallery-filters">
-          <input
-            type="text"
-            placeholder="Buscar por nombre..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            {uniqueCategories.map((cat) => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-          <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
-            <option value="id">ID</option>
-            <option value="nombre">Nombre</option>
-            <option value="precio">Precio</option>
-            <option value="stock">Stock</option>
-          </select>
-          <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
-            <option value="asc">Ascendente</option>
-            <option value="desc">Descendente</option>
-          </select>
-        </div>
+        <FiltersBar
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+          uniqueCategories={uniqueCategories}
+          sortField={sortField}
+          onSortFieldChange={setSortField}
+          sortDirection={sortDirection}
+          onSortDirectionChange={setSortDirection}
+        />
 
         <div className="gallery-grid">
           {filteredProducts.map((product) => (
@@ -127,12 +113,14 @@ function ProductGallery() {
 
               <div className="gallery-footer">
                 <span className={`gallery-stock ${product.stock <= 10 ? "low" : "ok"}`}>
-                  {product.stock <= 10 ? "⚠ Stock bajo" : `✓ ${product.stock} en stock`}
+                  {product.stock <= 10 ? ` ⚠ ${product.stock} en stock` : `✓ ${product.stock} en stock`}
                 </span>
-                <Link to={`/admin/inventory/edit/${product.id}`} className="gallery-edit-button">
-                  Editar
-                </Link>
-                <button onClick={() => alert(`Editar producto: ${product.nombre}`)} className="gallery-edit-button" > Eliminar </button>
+                <div className="gallery-actions">
+                  <Link to={`/admin/inventory/edit/${product.id}`} className="gallery-edit-button">
+                    Editar
+                  </Link>
+                  <button onClick={() => alert(`Editar producto: ${product.nombre}`)} className="gallery-edit-button" > Eliminar </button>
+                </div>
               </div>
             </div>
           ))}
