@@ -1,6 +1,4 @@
-/* =========================
-   RESETEO GLOBAL
-   ========================= */
+/* RESETEO GLOBAL */
 * {
   box-sizing: border-box;
 }
@@ -11,9 +9,7 @@ html, body {
   overflow-x: hidden;
 }
 
-/* =========================
-   COLORES BASE
-   ========================= */
+/* COLORES BASE */
 :root {
   --ord-color-principal: #1B2A40;  
   --ord-color-secundario: #F5E3C3; 
@@ -22,9 +18,7 @@ html, body {
   --ord-color-fondo-fila: #f9fafb;
 }
 
-/* =========================
-   ESTRUCTURA PRINCIPAL
-   ========================= */
+/* ESTRUCTURA PRINCIPAL */
 .orders-main {
   padding: 0 2rem;
   color: var(--ord-color-principal);
@@ -33,9 +27,7 @@ html, body {
   overflow-x: hidden;
 }
 
-/* =========================
-   ENCABEZADO
-   ========================= */
+/*ENCABEZADO */
 .orders-header {
   display: flex;
   flex-direction: row;
@@ -90,9 +82,7 @@ html, body {
 .even-row { background-color: var(--ord-color-fondo-fila); }
 .odd-row  { background-color: var(--ord-color-fondo-tabla); }
 
-/* =========================
-   BOTONES DE ACCIÓN
-   ========================= */
+/*BOTONES DE ACCIÓN*/
 .order-actions {
   display: flex;
   gap: 0.5rem;
@@ -115,32 +105,22 @@ html, body {
 
 /* Colores diferenciados */
 .order-actions button:nth-child(1) {
-  background-color: #facc15; /* amarillo */
-  color: #000;
+  background-color: var(--ord-color-secundario);
+  color: var(--ord-color-principal);
 }
 .order-actions button:nth-child(1):hover {
   background-color: #eab308;
 }
 
 .order-actions button:nth-child(2) {
-  background-color: #3b82f6; /* azul */
+  background-color: var(--ord-color-principal);
   color: #fff;
 }
 .order-actions button:nth-child(2):hover {
   background-color: #2563eb;
 }
 
-.order-actions button:nth-child(3) {
-  background-color: #16a34a; /* verde */
-  color: #fff;
-}
-.order-actions button:nth-child(3):hover {
-  background-color: #15803d;
-}
-
-/* =========================
-   ESTADOS
-   ========================= */
+/* ESTADOS*/
 .orders-loading,
 .orders-empty,
 .orders-error {
