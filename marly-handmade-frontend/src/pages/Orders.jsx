@@ -9,29 +9,28 @@ const Orders = () => {
 
   const API_URL = "http://localhost:8080/pedido";
 
+  const fetchPedidos = async () => {
+    try {
+      const stored = localStorage.getItem("token");
+      const parsed = stored ? JSON.parse(stored) : null;
+      const tokenValue = parsed?.token || parsed;
+
+      const response = await fetch(API_URL, {
+        headers: {
+          Authorization: `Bearer ${tokenValue}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Error al obtener pedidos");
+      const data = await response.json();
+      setPedidos(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchPedidos = async () => {
-      try {
-        const stored = localStorage.getItem("token");
-        const parsed = stored ? JSON.parse(stored) : null;
-        const tokenValue = parsed?.token || parsed;
-
-        const response = await fetch(API_URL, {
-          headers: {
-            Authorization: `Bearer ${tokenValue}`,
-          },
-        });
-
-        if (!response.ok) throw new Error("Error al obtener pedidos");
-        const data = await response.json();
-        setPedidos(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPedidos();
   }, []);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,7 +47,7 @@ const Orders = () => {
       const tokenValue = parsed?.token || parsed;
 
       const response = await fetch(`${API_URL}/${id}/estado`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${tokenValue}`,
@@ -110,20 +109,16 @@ const Orders = () => {
                         <td>{p.cliente.nombres} {p.cliente.apellidos}</td>
                         <td>{new Date(p.fechaPedido).toLocaleDateString("es-PE")}</td>
                         <td>{p.direccionEnvio}</td>
-                        <td>{p.estado}</td>
+                        <td className={`estado-cell ${p.estado ? "estado-entregado" : "estado-pendiente"}`}>
+                          {p.estado ? "Entregado" : "Pendiente"}
+                        </td>
+
                         <td>{productosTexto}</td>
                         <td>S/ {p.total.toFixed(2)}</td>
                         <td>
                           <div className="order-actions">
-                            <button onClick={() => actualizarEstado(p.id, "Pendiente")}>
-                              Pendiente
-                            </button>
-                            <button onClick={() => actualizarEstado(p.id, "Entregado")}>
-                              Entregado
-                            </button>
-                            <button onClick={() => actualizarEstado(p.id, "Recibido")}>
-                              Recibido
-                            </button>
+                            <button onClick={() => actualizarEstado(p.id, true)}>Entregado</button>
+                            <button onClick={() => actualizarEstado(p.id, false)}>Pendiente</button>
                           </div>
                         </td>
                       </tr>

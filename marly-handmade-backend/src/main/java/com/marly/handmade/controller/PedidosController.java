@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("pedido")
@@ -74,4 +75,13 @@ public class PedidosController {
     public void generarExcelReporte(HttpServletResponse response) throws IOException {
         reporteService.generateExcel(response);
     }
+
+    @PatchMapping("{id}/estado")
+    @Transactional
+    public ResponseEntity<Void> updateEstadoPedido(@PathVariable long id, @RequestBody Map<String, Boolean> body) {
+        Boolean nuevoEstado = body.get("estado");
+        pedidoService.updateEstado(id, nuevoEstado);
+        return ResponseEntity.ok().build();
+    }
+
 }

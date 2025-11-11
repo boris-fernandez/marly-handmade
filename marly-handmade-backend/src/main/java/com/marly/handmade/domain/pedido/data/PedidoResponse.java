@@ -14,6 +14,7 @@ public record PedidoResponse(
         Date fechaPedido,
         String direccionEnvio,
         Double total,
+        boolean estado,
         DatosCliente cliente,
         List<DetallePedidoResponse> detallesPedido
 ) {
@@ -23,6 +24,7 @@ public record PedidoResponse(
                 pedido.getFechaPedido(),
                 pedido.getDireccionEnvio(),
                 pedido.getTotal(),
+                pedido.getEstado(),
                 new DatosCliente(cliente),
                 detallesPedido.stream()
                         .map(DetallePedidoResponse::new)
