@@ -1,5 +1,6 @@
 package com.marly.handmade.infrastructure.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,39 +14,107 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfigurations {
-    private final SecurityFilter securityFilter;
-    private final CorsConfigurationSource corsConfigurationSource;
 
-    public SecurityConfigurations(SecurityFilter securityFilter, CorsConfigurationSource corsConfigurationSource) {
-        this.securityFilter = securityFilter;
-        this.corsConfigurationSource = corsConfigurationSource;
-    }
+    @Autowired
+    private SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(req -> req
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register", "/auth/forgot-password"
-                               )
-                        .permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/producto/all", "/promociones/{nombre}",
-                                "/promociones/mostrar/{id}", "/promociones", "/usuario/all", "/clientes/all")
-                        .permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/auth/update-password")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                .authorizeHttpRequests(req -> req
+
+                        // 🔓 Auth público
+                        .requestMatchers(
+                                "/auth/login",
+                                "/auth/registrar",
+                                "/auth/forgot-password",
+                                "/auth/update-password"
+                        ).permitAll()
+
+                        // 🔓 Catalogo público
+                        .requestMatchers(HttpMethod.GET,
+                                "/producto/all",
+                                "/promociones/**",
+                                "/usuario/all",
+                                "/clientes/all"
+                        ).permitAll()
+
+                        // 🔔 Mercado Pago WEBHOOK (debe ser público)
+                        .requestMatchers(HttpMethod.POST, "/api/pagos/webhook").permitAll()
+
+                        // 🔒 PAGO SOLO USUARIOS AUTENTICADOS
+                        .requestMatchers("/api/pagos/**").authenticated()
+
+                        // 🔐 Cualquier otra ruta requiere login
+                        .anyRequest().authenticated()
+                )
+
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        
+        // Orígenes permitidos (tu frontend)
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "http://localhost:5174"
+        ));
+        
+        // Métodos HTTP permitidos
+        configuration.setAllowedMethods(Arrays.asList(
+            "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"
+        ));
+        
+        // Headers permitidos
+        configuration.setAllowedHeaders(Arrays.asList(
+            "Authorization",
+            "Content-Type",
+            "X-Requested-With",
+            "Accept",
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
+        ));
+        
+        // Headers expuestos
+        configuration.setExposedHeaders(Arrays.asList(
+            "Authorization",
+            "Content-Type",
+            "Access-Control-Allow-Origin",
+            "Access-Control-Allow-Credentials"
+        ));
+        
+        // CRÍTICO: Permitir credenciales (JWT)
+        configuration.setAllowCredentials(true);
+        
+        // Tiempo de cache para preflight
+        configuration.setMaxAge(3600L);
+        
+        // Aplicar a todas las rutas
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        
+        return source;
     }
 
     @Bean

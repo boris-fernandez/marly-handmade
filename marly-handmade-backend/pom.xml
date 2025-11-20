@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-            <optional>true</optional>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>
@@ -104,17 +104,17 @@
 			<version>1.0.0</version>
 		</dependency>
 
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>32.1.2-jre</version>
-        </dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>32.1.2-jre</version>
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>5.3.0</version>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.3.0</version>
+		</dependency>
 
 		<!-- Apache Commons utilities (added: commons-lang3 and commons-io) -->
 		<dependency>
@@ -129,6 +129,19 @@
 			<version>2.19.0</version>
 		</dependency>
 
+		<!-- Mercado Pago SDK -->
+		<dependency>
+			<groupId>com.mercadopago</groupId>
+			<artifactId>sdk-java</artifactId>
+			<version>2.1.7</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>io.bitbucket.supportomateinc</groupId>
+			<artifactId>restcomm-connect.email</artifactId>
+			<version>9.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
