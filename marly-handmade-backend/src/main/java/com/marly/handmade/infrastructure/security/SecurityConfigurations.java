@@ -42,9 +42,9 @@ public class SecurityConfigurations {
                         // 🔓 Auth público
                         .requestMatchers(
                                 "/auth/login",
-                                "/auth/registrar",
                                 "/auth/forgot-password",
-                                "/auth/update-password"
+                                "/auth/update-password",
+                                "/auth/register"
                         ).permitAll()
 
                         // 🔓 Catalogo público

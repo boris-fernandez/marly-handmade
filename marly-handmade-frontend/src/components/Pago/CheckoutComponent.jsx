@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
-import api from "../../api/axiosConfig";
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { initMercadoPago } from '@mercadopago/sdk-react';
+import * as MP from '@mercadopago/sdk-react';
+
 
 const CheckoutComponent = React.forwardRef(({ carrito, totalCompra, datosCliente }, ref) => {
     const [loading, setLoading] = useState(false);
+    const [preferenceId, setPreferenceId] = useState(null);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const API_URL = 'http://localhost:8080/api/pagos/crear-preferencia';
+    const CardPaymentComp = MP.CardPayment || (MP.default && MP.default.CardPayment) || null;
+
+    const PAYMENT_URL = 'http://localhost:8080/api/pagos/crear-preferencia';
     const SUCCESS_URL = 'http://localhost:5173/compra-exitosa';
+
+    useEffect(() => {
+        // Initialize MercadoPago once. For testing use your TEST public key (starts with "TEST-")
+        const publicKey = import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY || 'APP_USR-27526960-6686-4e4e-8da0-05b3b3c66bd7';
+        if (!publicKey) {
+            console.warn('[Checkout] No MercadoPago public key found in VITE_MERCADO_PAGO_PUBLIC_KEY. The Brick may not render.');
+        }
+        initMercadoPago(publicKey);
+    }, []);
 
     const procesarPago = async () => {
         try {
@@ -16,12 +30,15 @@ const CheckoutComponent = React.forwardRef(({ carrito, totalCompra, datosCliente
             setError(null);
 
             // Obtener token JWT
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('authToken');
+
             if (!token) {
                 setError('Debes iniciar sesión para procesar tu compra.');
                 setTimeout(() => navigate('/login'), 1500);
                 return;
             }
+
+            console.log("Token JWT obtenido:", token);
 
             // Headers
             const config = {
@@ -31,47 +48,61 @@ const CheckoutComponent = React.forwardRef(({ carrito, totalCompra, datosCliente
                 }
             };
 
+            console.log('CARRITO:', carrito);
+
             // Items del carrito
             const items = carrito.map(item => ({
-                titulo: item.nombre,
-                descripcion: item.descripcion || `${item.nombre} - Joyería artesanal`,
+                titulo: item.name,
                 cantidad: item.quantity,
                 precioUnitario: parseFloat(item.price),
-                imagenUrl: item.image,
+                // imagenUrl: item.image,
                 productoId: item.id
             }));
 
-            // Comprador
-            const comprador = {
-                nombre: datosCliente.nombre,
-                apellido: datosCliente.apellido,
-                email: datosCliente.email,
-                telefono: datosCliente.telefono || '999999999',
-                identificacion: datosCliente.identificacion || '00000000',
-                tipoIdentificacion: 'DNI'
-            };
+            console.log("Items del carrito para el pago:", items);
 
             const requestData = {
                 items,
-                comprador,
-                clienteId: datosCliente.id || null,
+                comprador: {
+                    nombre: "Juan",
+                    apellido: "Doe Pérez",
+                    email: "juan.doe@example.com",
+                    telefono: "0999999999",
+                    identificacion: "1234567890",
+                    tipoIdentificacion: "CEDULA"
+                },
                 emailCliente: datosCliente.email
             };
 
             console.log("📤 Enviando request a backend:", requestData);
 
-            const response = await api.post('/api/pagos/crear-preferencia', requestData);
+            const response = await fetch(PAYMENT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(requestData)
+            });
 
+            console.log('RESPONSE:', response);
 
-            console.log("📥 Respuesta de backend:", response.data);
+            const mercadoPagoResponse = await response.json();
 
-            if (response.data.sandboxInitPoint) {
-                localStorage.setItem('preferenceId', response.data.preferenceId);
-                window.location.href = response.data.sandboxInitPoint;
+            console.log("📥 Respuesta de backend:", mercadoPagoResponse.sandboxInitPoint);
+
+            if (mercadoPagoResponse.sandboxInitPoint) {
+                localStorage.setItem('preferenceId', mercadoPagoResponse.preferenceId);
+                window.location.href = mercadoPagoResponse.sandboxInitPoint;
+                console.log('Redirigiendo a:', mercadoPagoResponse.sandboxInitPoint);
             } else {
                 setError("No se pudo generar el link de pago");
             }
 
+            const { preferenceId: prefId } = mercadoPagoResponse;
+
+            setPreferenceId(prefId);
+            console.log("✅ Preference ID recibido:", prefId);
         } catch (err) {
             console.error("❌ Error al procesar pago:", err);
 
@@ -124,6 +155,23 @@ const CheckoutComponent = React.forwardRef(({ carrito, totalCompra, datosCliente
                     <p>{error}</p>
                 </div>
             )}
+
+            {preferenceId && CardPaymentComp ? (
+                <CardPaymentComp
+                    locale="es-PE"
+                    initialization={{
+                        // Use the real totalCompra so the Brick shows the correct amount
+                        amount: Number(totalCompra) || 0,
+                        // Some integrations may use preferenceId; include it if available
+                        preferenceId: preferenceId
+                    }}
+                    onSubmit={(cardFormData) => {
+                        console.log("enviado:", cardFormData);
+                    }}
+                />
+            ) : preferenceId ? (
+                <div className="alert-info">Componente de pago no disponible. Se abrirá el flujo de pago en el servidor.</div>
+            ) : null}
         </div>
     );
 });

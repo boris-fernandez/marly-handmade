@@ -11,6 +11,7 @@ import com.mercadopago.resources.preference.Preference;
 import com.marly.handmade.domain.Pago;
 import com.marly.handmade.dto.*;
 import com.marly.handmade.repository.PagoRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,15 +41,14 @@ public class MercadoPagoService {
 
     @Autowired
     private PagoRepository pagoRepository;
-
-    // ⬅️ INYECCIÓN DEL SERVICIO DE CORREO (Opcional, si no lo has implementado aún)
-    @Autowired(required = false) 
+    @Autowired
     private EmailService emailService;
 
     @PostConstruct
     public void init() {
+        log.info("Access Token recibido (inicio): {}",
+                accessToken.substring(0, Math.min(accessToken.length(), 10)));
         MercadoPagoConfig.setAccessToken(accessToken);
-        log.info("MercadoPago configurado correctamente con Access Token");
     }
 
     @Transactional
@@ -62,8 +62,6 @@ public class MercadoPagoService {
             for (ItemPago item : request.getItems()) {
                 PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                     .title(item.getTitulo())
-                    .description(item.getDescripcion())
-                    .pictureUrl(item.getImagenUrl())
                     .categoryId("jewelry")
                     .quantity(item.getCantidad())
                     .currencyId("PEN")
@@ -85,7 +83,6 @@ public class MercadoPagoService {
                     .number(request.getComprador().getIdentificacion())
                     .build())
                 .build();
-
             PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
                 .success(frontendUrl + "/compra-exitosa")
                 .failure(frontendUrl + "/compra-fallida")
@@ -106,6 +103,7 @@ public class MercadoPagoService {
                 .build();
 
             PreferenceClient client = new PreferenceClient();
+            log.info("PreferenceRequest: {}", preferenceRequest.toString());
             Preference preference = client.create(preferenceRequest);
 
             Pago pago = new Pago();
@@ -114,8 +112,8 @@ public class MercadoPagoService {
             pago.setMonto(montoTotal);
             pago.setDescripcion("Compra en Marly Handmade - " + items.size() + " productos");
             pago.setEmailCliente(request.getEmailCliente());
-            pago.setClienteId(request.getClienteId());
-            pagoRepository.save(pago);
+            pago.setClienteId(request.getComprador().getClienteId());
+            this.pagoRepository.save(pago);
 
             log.info("Preferencia creada exitosamente: {}", preference.getId());
             log.info("Monto total: S/ {}", montoTotal);

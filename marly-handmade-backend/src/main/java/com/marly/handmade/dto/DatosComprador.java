@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DatosComprador {
+    private Long clienteId;
     private String nombre;
     private String apellido;
     private String email;

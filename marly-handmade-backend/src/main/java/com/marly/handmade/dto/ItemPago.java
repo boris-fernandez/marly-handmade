@@ -11,9 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ItemPago {
     private String titulo;
-    private String descripcion;
     private Integer cantidad;
     private BigDecimal precioUnitario;
-    private String imagenUrl;
     private Long productoId;
 }

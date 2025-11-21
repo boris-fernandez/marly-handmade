@@ -180,7 +180,7 @@ const Buy = () => {
                     <CheckoutComponent
                         ref={checkoutRef}
                         carrito={cartItems}
-                        totalCompra={getCartTotal() + 10}
+                        totalCompra={getCartTotal() + 0.05}
                         datosCliente={datosParaMP.datosComprador}
                     />
                     

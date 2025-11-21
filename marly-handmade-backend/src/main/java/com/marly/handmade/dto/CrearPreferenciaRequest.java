@@ -12,6 +12,5 @@ import java.util.List;
 public class CrearPreferenciaRequest {
     private List<ItemPago> items;
     private DatosComprador comprador;
-    private Long clienteId;
     private String emailCliente;
 }

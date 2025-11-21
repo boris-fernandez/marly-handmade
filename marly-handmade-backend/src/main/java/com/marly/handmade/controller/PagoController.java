@@ -43,12 +43,12 @@ public class PagoController {
             PreferenciaResponse response = mercadoPagoService.crearPreferencia(request);
             return ResponseEntity.ok(response);
 
-        } catch (MPException | MPApiException e) {
-            log.error("Error de MercadoPago: {}", e.getMessage());
+        } catch (MPApiException e) {
+            log.error("Error de MercadoPago: {}", e.getApiResponse().getContent());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of(
                     "error", "Error al procesar el pago",
-                    "mensaje", e.getMessage()
+                    "mensaje", e.getApiResponse().getContent()
                 ));
         } catch (Exception e) {
             log.error("Error inesperado: {}", e.getMessage());
