@@ -41,4 +41,30 @@ class ApacheCommonsUtilsTest {
         assertEquals("def", ApacheCommonsUtils.defaultIfBlank("", "def"));
         assertEquals("val", ApacheCommonsUtils.defaultIfBlank("val", "def"));
     }
+    @Test
+    void requireNonNullRuntime_throwsOnNull() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> ApacheCommonsUtils.requireNonNullRuntime(null, "msg"));
+        assertTrue(ex.getMessage().contains("msg"));
+    }
+
+    @Test
+    void checkArgumentRuntime_throwsOnFalse() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> ApacheCommonsUtils.checkArgumentRuntime(false, "bad"));
+        assertTrue(ex.getMessage().contains("bad"));
+    }
+
+    @Test
+    void isBlank_and_defaultIfBlank_behaveAsExpected() {
+        assertTrue(ApacheCommonsUtils.isBlank(null));
+        assertTrue(ApacheCommonsUtils.isBlank(""));
+        assertTrue(ApacheCommonsUtils.isBlank("   \t\n"));
+        assertFalse(ApacheCommonsUtils.isBlank("x"));
+
+        assertEquals("def", ApacheCommonsUtils.defaultIfBlank(null, "def"));
+        assertEquals("def", ApacheCommonsUtils.defaultIfBlank("", "def"));
+        assertEquals("val", ApacheCommonsUtils.defaultIfBlank("val", "def"));
+    }
+
 }
