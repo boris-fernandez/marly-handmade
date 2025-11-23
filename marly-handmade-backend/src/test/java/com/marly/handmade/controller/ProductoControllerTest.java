@@ -41,8 +41,8 @@ class ProductoControllerTest extends ControllerTestBase{
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void crearProducto() throws Exception {
-        ProductoRequest productoRequest = new ProductoRequest("joya", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA");
-        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA");
+        ProductoRequest productoRequest = new ProductoRequest("joya", "", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "");
+        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "", "", true);
         BDDMockito.given(productoService.crearProducto(productoRequest)).willReturn(productoResponse);
 
         ResultActions response = mockMvc.perform(
@@ -60,7 +60,7 @@ class ProductoControllerTest extends ControllerTestBase{
     @Test
     @WithMockUser(username = "user", roles = {"Cliente"})
     void crearProducto_sinRolAdmin_retornaForbidden() throws Exception {
-        ProductoRequest productoRequest = new ProductoRequest("joya", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA");
+        ProductoRequest productoRequest = new ProductoRequest("joya", "", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "");
 
         ResultActions response = mockMvc.perform(
                         post("/producto")
@@ -73,7 +73,7 @@ class ProductoControllerTest extends ControllerTestBase{
     @Test
     @WithMockUser(username = "user", roles = {"Cliente"})
     void listarProductos() throws Exception {
-        List<ProductoResponse> productosResponses = Arrays.asList(new ProductoResponse(1L, "joya", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA"));
+        List<ProductoResponse> productosResponses = Arrays.asList(new ProductoResponse(1L, "joya", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "", "", true));
         BDDMockito.given(productoService.listarProductos()).willReturn(productosResponses);
 
         ResultActions response = mockMvc.perform(
@@ -88,7 +88,7 @@ class ProductoControllerTest extends ControllerTestBase{
     @Test
     @WithMockUser(username = "user", roles = {"Cliente"})
     void buscarPorId() throws Exception {
-        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA");
+        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "", "", true);
         BDDMockito.given(productoService.buscar(null, 1L)).willReturn(productoResponse);
 
         ResultActions response = mockMvc.perform(
@@ -103,7 +103,7 @@ class ProductoControllerTest extends ControllerTestBase{
     @Test
     @WithMockUser(username = "user", roles = {"Cliente"})
     void buscarPorNombre() throws Exception {
-        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA");
+        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 20.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "", "", true);
         BDDMockito.given(productoService.buscar("joya", null)).willReturn(productoResponse);
 
         ResultActions response = mockMvc.perform(
@@ -118,8 +118,8 @@ class ProductoControllerTest extends ControllerTestBase{
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void update() throws Exception {
-        ProductoUpdate productoUpdate = new ProductoUpdate("", 30.0, 0, "", "", "", "");
-        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 30.0, 1, "foto1", "foto2", "foto3", "categoriaA");
+        ProductoUpdate productoUpdate = new ProductoUpdate("", 30.0, 0, "", "", "", "", "", "", "", "", true);
+        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 30.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "", "", true);
         BDDMockito.given(productoService.update(1L, productoUpdate)).willReturn(productoResponse);
 
         ResultActions response = mockMvc.perform(

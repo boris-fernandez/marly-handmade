@@ -32,7 +32,8 @@ class ProductoRepositoryTest {
                 .categoria("categoria A")
                 .care("")
                 .details("")
-                .Shipping_info("")
+                .shippingInfo("")
+                .status(true)
                 .build();
         productoRepository.save(producto);
     }
