@@ -28,15 +28,7 @@ export const AdminProvider = ({ children }) => {
     // Intentamos parsear JSON
     const data = JSON.parse(text);
 
-    const transformed = data.map((user) => ({
-      id: user.idCliente,
-      username: user.username,
-      name: `${user.nombres} ${user.apellidos}`,
-      email: user.correo,
-      registered: new Date(user.fechaNacimiento).toLocaleDateString("es-PE"),
-    }));
-
-    setUsers(transformed);
+    setUsers(data);
   } catch (err) {
     console.error("💥 Error en fetchUsers:", err);
     setError(err.message);

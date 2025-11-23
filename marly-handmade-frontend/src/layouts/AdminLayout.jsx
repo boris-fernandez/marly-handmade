@@ -13,8 +13,8 @@ function AdminLayout() {
           <AdminSidebar />
         </div>
         <div className="flex-1 flex flex-col justify-between overflow-y-auto bg-gray-50">
-          <main className="w-full px-10 py-6">
-            <div className="bg-white rounded-lg shadow-sm p-6">
+          <main className="w-full px-3 py-3">
+            <div className="bg-white rounded-lg shadow-sm p-2">
               <Outlet />
             </div>
           </main>

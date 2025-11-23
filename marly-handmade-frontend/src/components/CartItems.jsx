@@ -46,11 +46,29 @@ const CartItems = () => {
             <h3>{item.name}</h3>
             <p>S/ {item.price.toFixed(2)}</p>
             <div className="quantity-controls">
-              <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
-              <span>{item.quantity}</span>
-              <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+              <button
+                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                disabled={item.quantity <= 1}
+              >
+                -
+              </button>
+
+              <span>
+                {item.quantity > item.stock ? item.stock : item.quantity}
+              </span>
+
+              <button
+                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                disabled={item.quantity >= item.stock}
+              >
+                +
+              </button>
             </div>
-            <button className="remove-btn remove-btnCart" onClick={() => removeFromCart(item.id)}>
+
+            <button
+              className="remove-btn remove-btnCart"
+              onClick={() => removeFromCart(item.id)}
+            >
               Eliminar
             </button>
           </div>

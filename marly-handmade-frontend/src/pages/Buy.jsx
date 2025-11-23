@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import CartItems from "../components/CartItems.jsx";
 import { useCart } from "../contexts/CartContext.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
+import { PedidoContext } from "../contexts/PedidoContext";
 import "../styles/Buy.css";
 import yape from "../assets/yape.jfif";
 import plin from "../assets/plin.jfif";
@@ -57,7 +58,7 @@ const Buy = () => {
     }
 
     clearCart();
-  };
+  };*/
 
   const handleMercadoPagoClick = () => {
     if (checkoutRef.current) {
@@ -146,7 +147,9 @@ const Buy = () => {
                     className={`payment-method ${
                       paymentMethod === method ? "selected" : ""
                     }`}
-                    onClick={() => setPaymentMethod(method)}
+                    onClick={() => {
+                      setPaymentMethod(method);
+                    }}
                   >
                     <input
                       type="radio"
