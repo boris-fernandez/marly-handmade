@@ -188,23 +188,6 @@ export const ProductoProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
-  /* const getProductoById = async (id) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${API_URL}?id=${id}`);
-      if (!response.ok) throw new Error("Error al obtener el producto");
-      const item = await response.json();
-
-      setProduct(item);
-    } catch (err) {
-      console.error(err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };*/
  
   useEffect(() => {
     listarProductos();
@@ -221,7 +204,7 @@ export const ProductoProvider = ({ children }) => {
         setFormData,
         handleImageUpload,
         handleSubmit,
-        getProductoById,
+        // getProductoById,
         product
       }}
     >

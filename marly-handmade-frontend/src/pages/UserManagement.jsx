@@ -168,45 +168,6 @@ function UserManagement() {
                   Cerrar
                 </button>
               </div>
-
-
-                  /*
-          <div style={{ marginTop: "30px", padding: "20px", border: "1px solid #e0e0e0", borderRadius: "8px", background: "white" }}>
-            <h2 style={{ marginBottom: "15px", color: "#333" }}>Detalle de {selectedUser.name}</h2>
-            <p><strong>Username:</strong> {selectedUser.username}</p>
-            <p><strong>Email:</strong> {selectedUser.email}</p>
-            <p><strong>Registrado:</strong> {selectedUser.registered}</p>
-              */
-
-            /*{ /<h3 style={{ marginTop: "20px" }}>Historial de Compras</h3>
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead style={{ backgroundColor: "#f8f8f8", borderBottom: "2px solid #e0e0e0" }}>
-                  <tr>
-                    {["Código", "Fecha", "Producto", "Categoría", "Precio", "Método", "Estado"].map((th) => (
-                      <th key={th} style={{ padding: "12px", textAlign: "left", fontSize: "13px", fontWeight: "500", color: "#666" }}>{th}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {getPurchaseHistory().map((purchase) => (
-                    <tr key={purchase.code} style={{ borderBottom: "1px solid #f0f0f0" }}>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.code}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.date}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.product}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.category}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>S/ {purchase.price.toFixed(2)}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.method}</td>
-                      <td style={{ padding: "12px", fontSize: "14px", color: "#333" }}>{purchase.status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div> }*/
-/*
-            <button style={{ marginTop: "20px", backgroundColor: "#997C71", color: "#F5E3C3", border: "none", padding: "8px 16px", borderRadius: "5px", cursor: "pointer" }} onClick={() => setSelectedUser(null)}>
-              Cerrar
-            </button>*/
             </div>
           </div>
         )}
