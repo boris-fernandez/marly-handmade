@@ -9,6 +9,7 @@ export const ProductoProvider = ({ children }) => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [product, setProduct] = useState();
 
   const API_URL = "http://localhost:8080/producto";
 
@@ -45,6 +46,7 @@ export const ProductoProvider = ({ children }) => {
         details: item.details,
         care: item.care,
         shippingInfo: item.shippingInfo,
+        status: item.status,
         slug: item.nombre
           .replace(/\s+/g, " ")
           .trim()
@@ -144,6 +146,7 @@ export const ProductoProvider = ({ children }) => {
         details: formData.details,
         care: formData.care,
         shippingInfo: formData.shippingInfo,
+        status: 1,
       };
 
       console.log("📤 Payload a enviar:", payload);
@@ -186,6 +189,23 @@ export const ProductoProvider = ({ children }) => {
     }
   };
 
+  /* const getProductoById = async (id) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${API_URL}?id=${id}`);
+      if (!response.ok) throw new Error("Error al obtener el producto");
+      const item = await response.json();
+
+      setProduct(item);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };*/
+ 
   useEffect(() => {
     listarProductos();
   }, []);
@@ -201,6 +221,8 @@ export const ProductoProvider = ({ children }) => {
         setFormData,
         handleImageUpload,
         handleSubmit,
+        getProductoById,
+        product
       }}
     >
       {children}

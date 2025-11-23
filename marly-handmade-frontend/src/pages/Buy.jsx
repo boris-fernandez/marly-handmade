@@ -7,6 +7,7 @@ import { PedidoContext } from "../contexts/PedidoContext";
 import "../styles/Buy.css";
 import yape from "../assets/yape.jfif";
 import plin from "../assets/plin.jfif";
+import { AuthContext } from "../contexts/AuthContext.jsx";
 
 const Buy = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
@@ -21,7 +22,9 @@ const Buy = () => {
     type: "",
   });
   const [errors, setErrors] = useState({});
+
   const [buttonState, setButtonState] = useState("idle");
+  /*const { token, logout } = useContext(AuthContext);*/
 
   const detectCardType = (number) => {
     const clean = number.replace(/\s+/g, "");
@@ -30,6 +33,51 @@ const Buy = () => {
     if (/^3[47]/.test(clean)) return "Amex";
     return "";
   };
+
+  /*const createMultiplePedidos = async () => {
+    if (cartItems.length === 0) return;
+
+    // Construir todos los pedidos primero
+    const pedidos = cartItems.map((item) => ({
+      detallePedido: [
+        {
+          cantidad: item.quantity,
+          idProducto: item.id,
+        },
+      ],
+    }));
+
+    // Imprimir todos los pedidos antes de enviarlos
+    console.log("Pedidos a enviar:", pedidos);
+
+    // Enviar los pedidos uno por uno
+    for (let pedidoBody of pedidos) {
+      try {
+        const res = await fetch("http://localhost:8080/pedido", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.token}`,
+          },
+          body: JSON.stringify(pedidoBody),
+        });
+
+        if (!res.ok)
+          throw new Error(
+            "Error al crear pedido para producto " +
+              pedidoBody.detallePedido[0].idProducto
+          );
+
+        const data = await res.json();
+        console.log("Pedido creado:", data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Limpiar carrito después de crear todos los pedidos
+    clearCart();
+  };*/
 
   const formatCardNumber = (value) =>
     value
@@ -95,9 +143,7 @@ const Buy = () => {
   // ==========================================
   const handleCheckout = async () => {
     if (cartItems.length === 0) {
-      alert(
-        "Tu carrito está vacío. Agrega productos antes de proceder al pago."
-      );
+      alert("Tu carrito está vacío.");
       return;
     }
 
