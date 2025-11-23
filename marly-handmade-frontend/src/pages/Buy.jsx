@@ -59,7 +59,7 @@ const Buy = () => {
     }
 
     clearCart();
-  };*/
+  };
 
 
   const handleMercadoPagoClick = () => {
@@ -252,5 +252,6 @@ const Buy = () => {
     </>
   );
 };
+
 
 export default Buy;
