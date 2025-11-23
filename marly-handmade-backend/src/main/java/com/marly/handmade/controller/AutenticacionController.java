@@ -7,7 +7,6 @@ import com.marly.handmade.domain.usuario.data.request.AutenticacionDto;
 import com.marly.handmade.domain.usuario.data.request.RegistrarUsuario;
 import com.marly.handmade.domain.usuario.data.responst.RespuestaRegistro;
 import com.marly.handmade.domain.usuario.modal.Usuario;
-import com.marly.handmade.domain.usuario.repository.UsuarioRepository;
 import com.marly.handmade.infrastructure.security.DatosJWTToken;
 import com.marly.handmade.infrastructure.security.TokenService;
 import com.marly.handmade.service.UsuarioService;
