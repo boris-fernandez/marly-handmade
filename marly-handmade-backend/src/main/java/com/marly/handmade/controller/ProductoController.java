@@ -90,4 +90,11 @@ public class ProductoController {
 
     }
 
+    @DeleteMapping("{id}")
+    @Transactional
+    public ResponseEntity<Void> delete(@PathVariable long id) {
+        productoService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

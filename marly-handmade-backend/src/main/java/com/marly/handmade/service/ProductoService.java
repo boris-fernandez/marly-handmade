@@ -49,6 +49,7 @@ public class ProductoService {
                 .details(productoRequest.details())
                 .care(productoRequest.care())
                 .shippingInfo(productoRequest.shippingInfo())
+                .status(true)
                 .build();
 
         productoRepository.save(producto);
@@ -105,4 +106,9 @@ public class ProductoService {
 
     }
 
+    public void delete(long id) {
+        Producto producto = productoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El producto con ese id no existe"));
+        producto.updateStatus();
+    }
 }

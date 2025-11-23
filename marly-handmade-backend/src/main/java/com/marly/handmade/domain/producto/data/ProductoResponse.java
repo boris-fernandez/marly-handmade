@@ -14,7 +14,8 @@ public record ProductoResponse(
         String details,
         String care,
         String shippingInfo,
-        String descripcion) {
+        String descripcion,
+        Boolean status) {
 
     public ProductoResponse(Producto producto) {
     this(
@@ -29,7 +30,8 @@ public record ProductoResponse(
         producto.getDetails(),        // String details
         producto.getCare(),           // String care
         producto.getShippingInfo(),
-        producto.getDescripcion()
+        producto.getDescripcion(),
+            producto.getStatus()
     );
 }
 

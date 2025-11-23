@@ -30,10 +30,10 @@ export default function Product() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quantity, setQuantity] = useState(1); // Estado de cantidad
+  const [quantity, setQuantity] = useState(1);
 
   const { openCart, addToCart } = useCart();
-  const { token, logout } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
 
   const API_URL = "http://localhost:8080/producto/all";
 
@@ -44,6 +44,7 @@ export default function Product() {
         setError(null);
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error("Error al obtener los productos");
+
         const data = await res.json();
 
         const formatted = data.map((item) => ({
@@ -56,13 +57,12 @@ export default function Product() {
           description: item.descripcion,
           details: item.details,
           care: item.care,
-          shippingInfo: item.shipping_info,
+          shippingInfo: item.shippingInfo,
           images: [
             item.fotoPrincipal,
             item.fotoSecundario,
             item.fotoTerciario,
           ].filter(Boolean),
-
           slug: item.nombre
             .replace(/\s+/g, " ")
             .trim()
@@ -77,10 +77,10 @@ export default function Product() {
 
         const match = formatted.find((p) => p.slug === slug);
         if (!match) throw new Error("Producto no encontrado");
+
         setProducto(match);
         setSelectedImage(match.images?.[0] || match.img);
       } catch (err) {
-        console.error(err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -130,55 +130,59 @@ export default function Product() {
           <p className="product-price">${producto.price}</p>
           <h2 className="product-variant-name">Stock: {producto.stock}</h2>
 
-          <div className="amaunt-select">
-            <SelectAmount quantity={quantity} setQuantity={setQuantity} />
-          </div>
+          {producto.stock !== 0 ? (
+            <>
+              <div className="amaunt-select">
+                <SelectAmount
+                  quantity={quantity}
+                  setQuantity={setQuantity}
+                  stock={producto.stock}
+                />
+              </div>
 
-          <div className="content">
-            {token ? (
-              <button
-                className="button-add-to-cart"
-                onClick={() => {
-                  addToCart(producto, quantity);
-                  openCart();
-                }}
-              >
-                ADD TO CART
-              </button>
-            ) : (
-              <button
-                className="button-add-to-cart"
-                onClick={() => {
-                  // alert("Debes iniciar sesión para agregar al carrito");
-                  openCart();
-                }}
-              >
-                ADD TO CART
-              </button>
-            )}
+              <div className="content">
+                {token ? (
+                  <button
+                    className="button-add-to-cart"
+                    onClick={() => {
+                      addToCart(producto, quantity);
+                      openCart();
+                    }}
+                  >
+                    ADD TO CART
+                  </button>
+                ) : (
+                  <button
+                    className="button-add-to-cart"
+                    onClick={() => openCart()}
+                  >
+                    ADD TO CART
+                  </button>
+                )}
 
-            {token ? (
-              <a href="/buy">
-                <button
-                  className="button-buy-now"
-                  onClick={() => {
-                    addToCart(producto, quantity);
-                  }}
-                >
-                  BUY NOW
-                </button>
-              </a>
-            ) : (
-              <button
-                className="button-buy-now"
-                onClick={() => {
-                  openCart();
-                }}
-              >
-                BUY NOW
-              </button>
-            )}
+                {token ? (
+                  <a href="/buy">
+                    <button
+                      className="button-buy-now"
+                      onClick={() => addToCart(producto, quantity)}
+                    >
+                      BUY NOW
+                    </button>
+                  </a>
+                ) : (
+                  <button className="button-buy-now" onClick={() => openCart()}>
+                    BUY NOW
+                  </button>
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="out-of-stock">
+              <i>Producto agotado</i>
+            </p>
+          )}
 
+          <div>
             <DescriptionItem title="Description">
               <p>{producto.description || "No hay descripción disponible."}</p>
             </DescriptionItem>
@@ -195,8 +199,7 @@ export default function Product() {
 
             <DescriptionItem title="Shipping Info">
               <p>
-                {producto.shippingInfo ||
-                  "No hay información de envío disponible."}
+                {producto.shippingInfo || "No hay información de envío disponible."}
               </p>
             </DescriptionItem>
           </div>

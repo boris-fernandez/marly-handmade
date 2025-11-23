@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CartItems from "../components/CartItems.jsx";
 import { useCart } from "../contexts/CartContext.jsx";
+import { PedidoContext } from "../contexts/PedidoContext";
 import "../styles/Buy.css";
 import yape from "../assets/yape.jfif";
 import plin from "../assets/plin.jfif";
+import { AuthContext } from "../contexts/AuthContext.jsx";
 
 const Buy = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
+  const { crearPedido } = useContext(PedidoContext);
 
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [cardData, setCardData] = useState({
@@ -19,9 +22,10 @@ const Buy = () => {
     type: "",
   });
   const [errors, setErrors] = useState({});
-  const [buttonState, setButtonState] = useState("idle"); // idle | loading | success | error
 
-  // Detectar tipo de tarjeta
+  const [buttonState, setButtonState] = useState("idle");
+  /*const { token, logout } = useContext(AuthContext);*/
+
   const detectCardType = (number) => {
     const clean = number.replace(/\s+/g, "");
     if (/^4/.test(clean)) return "Visa";
@@ -30,7 +34,51 @@ const Buy = () => {
     return "";
   };
 
-  // Formateo de número y fecha
+  /*const createMultiplePedidos = async () => {
+    if (cartItems.length === 0) return;
+
+    // Construir todos los pedidos primero
+    const pedidos = cartItems.map((item) => ({
+      detallePedido: [
+        {
+          cantidad: item.quantity,
+          idProducto: item.id,
+        },
+      ],
+    }));
+
+    // Imprimir todos los pedidos antes de enviarlos
+    console.log("Pedidos a enviar:", pedidos);
+
+    // Enviar los pedidos uno por uno
+    for (let pedidoBody of pedidos) {
+      try {
+        const res = await fetch("http://localhost:8080/pedido", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.token}`,
+          },
+          body: JSON.stringify(pedidoBody),
+        });
+
+        if (!res.ok)
+          throw new Error(
+            "Error al crear pedido para producto " +
+              pedidoBody.detallePedido[0].idProducto
+          );
+
+        const data = await res.json();
+        console.log("Pedido creado:", data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Limpiar carrito después de crear todos los pedidos
+    clearCart();
+  };*/
+
   const formatCardNumber = (value) =>
     value
       .replace(/\D/g, "")
@@ -44,11 +92,10 @@ const Buy = () => {
     return clean;
   };
 
-  // Validación
   const validateCard = () => {
     const errs = {};
-
     const cleanNumber = cardData.number.replace(/\s+/g, "");
+
     if (cleanNumber.length !== 16)
       errs.number = "Debe tener 16 dígitos reales.";
 
@@ -71,13 +118,11 @@ const Buy = () => {
     return Object.keys(errs).length === 0;
   };
 
-  // Manejo de cambio en inputs
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     let newValue = value;
 
     if (id === "card-cvv") {
-      // Filtra solo números y limita a 4 dígitos
       newValue = value.replace(/\D/g, "").slice(0, 4);
     }
 
@@ -93,33 +138,48 @@ const Buy = () => {
     setCardData((prev) => ({ ...prev, [id.split("-")[1]]: newValue }));
   };
 
-  // Procesar pago
-  // Antes de handleCheckout, agrega un chequeo rápido
-  const handleCheckout = () => {
+  // ==========================================
+  // 🚀 Checkout → Crear pedido en el backend
+  // ==========================================
+  const handleCheckout = async () => {
     if (cartItems.length === 0) {
-      alert(
-        "Tu carrito está vacío. Agrega productos antes de proceder al pago."
-      );
+      alert("Tu carrito está vacío.");
       return;
     }
 
-    if (paymentMethod === "card") {
-      if (!validateCard()) {
-        setButtonState("error");
-        setTimeout(() => setButtonState("idle"), 1500);
-        return;
-      }
+    if (paymentMethod === "card" && !validateCard()) {
+      setButtonState("error");
+      setTimeout(() => setButtonState("idle"), 1500);
+      return;
     }
 
     setButtonState("loading");
-    setTimeout(() => {
-      setButtonState("success");
 
-      // Simular limpieza tras el pago
-      clearCart();
-      setCardData({ number: "", expiry: "", cvv: "", name: "", type: "" });
-      setTimeout(() => setButtonState("idle"), 2000);
-    }, 2000);
+    setTimeout(async () => {
+      try {
+        // 🔥 Transformar cartItems → detallePedido que tu backend exige
+        const detallePedido = cartItems.map((item) => ({
+          cantidad: item.quantity,
+          idProducto: item.id,
+        }));
+
+        // 🔥 Llamar al backend para crear el pedido
+        const response = await crearPedido({ detallePedido });
+
+        if (!response) throw new Error("No se pudo crear el pedido");
+
+        setButtonState("success");
+
+        clearCart();
+        setCardData({ number: "", expiry: "", cvv: "", name: "", type: "" });
+
+        setTimeout(() => setButtonState("idle"), 2000);
+      } catch (error) {
+        console.error("Error durante el checkout:", error);
+        setButtonState("error");
+        setTimeout(() => setButtonState("idle"), 2000);
+      }
+    }, 1500);
   };
 
   return (
@@ -158,7 +218,6 @@ const Buy = () => {
                 <span>$ {(getCartTotal() + 10).toFixed(2)}</span>
               </div>
 
-              {/* Métodos de pago */}
               <div className="payment-methods">
                 <h3 className="payment-title">Métodos de Pago</h3>
 
@@ -168,7 +227,9 @@ const Buy = () => {
                     className={`payment-method ${
                       paymentMethod === method ? "selected" : ""
                     }`}
-                    onClick={() => setPaymentMethod(method)}
+                    onClick={() => {
+                      setPaymentMethod(method);
+                    }}
                   >
                     <input
                       type="radio"
@@ -195,7 +256,6 @@ const Buy = () => {
                 ))}
               </div>
 
-              {/* Tarjeta */}
               {paymentMethod === "card" && (
                 <div className="card-form">
                   <h4 className="form-title">
@@ -239,6 +299,7 @@ const Buy = () => {
                       />
                       {errors.expiry && <small>{errors.expiry}</small>}
                     </div>
+
                     <div className={`form-group ${errors.cvv ? "error" : ""}`}>
                       <label htmlFor="card-cvv">CVV</label>
                       <input
@@ -267,7 +328,6 @@ const Buy = () => {
                 </div>
               )}
 
-              {/* QR Yape / Plin */}
               {(paymentMethod === "yape" || paymentMethod === "plin") && (
                 <div className="qr-section">
                   <h4 className="form-title">
@@ -289,11 +349,10 @@ const Buy = () => {
                 </div>
               )}
 
-              {/* Botón de pago */}
               <button
                 className={`checkout-btn ${buttonState}`}
                 onClick={handleCheckout}
-                disabled={buttonState === "loading" || cartItems.length === 0} // deshabilitado si carrito vacío
+                disabled={buttonState === "loading" || cartItems.length === 0}
               >
                 {cartItems.length === 0 ? (
                   <>Carrito vacío</>

@@ -45,6 +45,8 @@ public class Producto {
     @Column(name = "shipping_info", columnDefinition = "TEXT")
     private String shippingInfo; // ✅ camelCase
 
+    private Boolean status;
+
     public void update(ProductoUpdate productoUpdate) {
         if (productoUpdate.nombre() != null)
             setNombre(productoUpdate.nombre());
@@ -68,5 +70,11 @@ public class Producto {
             setCare(productoUpdate.care());
         if (productoUpdate.shippingInfo() != null)
             setShippingInfo(productoUpdate.shippingInfo());
+        if(productoUpdate.status() != null)
+            setStatus(productoUpdate.status());
+    }
+
+    public void updateStatus(){
+        setStatus(!status);
     }
 }
