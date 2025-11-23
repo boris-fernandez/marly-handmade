@@ -344,3 +344,8 @@ body {
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+.out-of-stock{
+  font-size: 30px;
+  background-color: rgb(232, 243, 255);
+}

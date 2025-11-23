@@ -16,7 +16,6 @@ function Inventory() {
   const [sortField, setSortField] = useState("id");
   const [sortDirection, setSortDirection] = useState("asc");
 
-  //  Filtrar y ordenar productos directamente del contexto
   const filteredProducts = productos
     .filter((item) => {
       const matchesName = item.name
