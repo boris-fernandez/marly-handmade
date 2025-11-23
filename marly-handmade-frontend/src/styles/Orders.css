@@ -1,133 +1,132 @@
-/* Layout general */
-.orders-container {
-  display: flex;
-  min-height: 100vh;
-  background-color: #f5f5f5;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+/* RESETEO GLOBAL */
+* {
+  box-sizing: border-box;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* COLORES BASE */
+:root {
+  --ord-color-principal: #1B2A40;  
+  --ord-color-secundario: #F5E3C3; 
+  --ord-color-borde: #d1d5db;
+  --ord-color-fondo-tabla: #ffffff;
+  --ord-color-fondo-fila: #f9fafb;
+}
+
+/* ESTRUCTURA PRINCIPAL */
 .orders-main {
-  flex: 1;
-  padding: 40px;
-  background-color: #fff;
-  box-shadow: 0px 6px 50px -30px rgba(0, 0, 0, 0.61);
-  border-radius: 0 12px 12px 0;
+  padding: 0 2rem;
+  color: var(--ord-color-principal);
+  font-family: "Inter", sans-serif;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-/* Encabezado */
+/*ENCABEZADO */
 .orders-header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .orders-title {
-  font-size: 34px;
-  font-weight: bold;
-  color: #040F2F;
-  font-family: 'Irian Serif', serif;
-  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ord-color-principal);
 }
 
-/* Tabla */
+@media (min-width: 640px) {
+  .orders-title { font-size: 1.875rem; }
+}
+@media (min-width: 1024px) {
+  .orders-title { font-size: 2.25rem; }
+}
+
+/* =========================
+   TABLA DE PEDIDOS
+   ========================= */
 .orders-table-wrapper {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow-x: auto;
-  margin-bottom: 30px;
+  background-color: var(--ord-color-fondo-tabla);
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .orders-table {
   width: 100%;
+  min-width: 960px;
   border-collapse: collapse;
-  min-width: 800px;
+}
+
+.orders-table thead tr {
+  background-color: #f3f4f6;
 }
 
 .orders-table th,
 .orders-table td {
-  padding: 14px;
-  font-size: 14px;
+  padding: 0.75rem;
   text-align: left;
-  color: #333;
-  font-family: 'Inter', sans-serif;
-  border-right: 1px solid #e0e0e0;
+  font-size: 0.875rem;
+  border: 1px solid var(--ord-color-borde);
+  color: var(--ord-color-principal);
 }
 
-.orders-table th {
-  background-color: #f8f8f8;
-  font-weight: 500;
-  color: #666;
-  border-bottom: 2px solid #e0e0e0;
+.even-row { background-color: var(--ord-color-fondo-fila); }
+.odd-row  { background-color: var(--ord-color-fondo-tabla); }
+
+/*BOTONES DE ACCIÓN*/
+.order-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.orders-table th:last-child,
-.orders-table td:last-child {
-  border-right: none;
-}
-
-.even-row {
-  background-color: white;
-}
-
-.odd-row {
-  background-color: #fafafa;
-}
-
-/* Fila de detalles */
-.order-detail-header td {
-  background-color: #f0f0f0;
+.order-actions button {
+  padding: 0.4rem 0.75rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: #444;
-  font-size: 13px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.order-detail-row td {
-  font-size: 13px;
-  color: #555;
-  border-top: 1px dashed #ddd;
+.order-actions button:hover {
+  transform: scale(1.05);
 }
 
-/* Estados */
+/* Colores diferenciados */
+.order-actions button:nth-child(1) {
+  background-color: var(--ord-color-secundario);
+  color: var(--ord-color-principal);
+}
+.order-actions button:nth-child(1):hover {
+  background-color: #eab308;
+}
+
+.order-actions button:nth-child(2) {
+  background-color: var(--ord-color-principal);
+  color: #fff;
+}
+.order-actions button:nth-child(2):hover {
+  background-color: #2563eb;
+}
+
+/* ESTADOS*/
 .orders-loading,
-.orders-error,
-.orders-empty {
+.orders-empty,
+.orders-error {
   text-align: center;
-  margin-top: 100px;
-  font-size: 18px;
-  font-family: 'Inter', sans-serif;
+  margin-top: 2rem;
+  font-size: 1rem;
   color: #666;
 }
-
-/* Responsivo */
-@media (max-width: 768px) {
-  .orders-main {
-    padding: 20px;
-    border-radius: 0;
-  }
-
-  .orders-title {
-    font-size: 30px;
-    margin-bottom: 20px;
-  }
-
-  .orders-table th,
-  .orders-table td {
-    padding: 12px;
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 480px) {
-  .orders-title {
-    font-size: 26px;
-  }
-
-  .orders-table th,
-  .orders-table td {
-    padding: 10px;
-    font-size: 12px;
-  }
-}
+.orders-error { color: #dc2626; }

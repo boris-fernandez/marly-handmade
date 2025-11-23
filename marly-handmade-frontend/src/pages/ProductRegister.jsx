@@ -156,7 +156,7 @@ export default function ProductRegister() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Material
+                      Category
                     </label>
                     <input
                       type="text"
@@ -248,7 +248,7 @@ export default function ProductRegister() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-[#997C71] hover:bg-[#85695F] text-[#F5E3C3] font-semibold py-3 px-6 rounded-lg shadow-sm transition-all"
+                  className="bg-[#1B2A40] text-[#F5E3C3] rounded-[5px] font-semibold py-3 px-6 shadow-sm transition-all"
                 >
                   {loading ? "Uploading..." : "Upload Product"}
                 </button>

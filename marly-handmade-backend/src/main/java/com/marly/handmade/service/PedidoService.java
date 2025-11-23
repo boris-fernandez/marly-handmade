@@ -150,4 +150,12 @@ public class PedidoService{
             productoRepository.save(producto);
         }
     }
+
+    public void updateEstado(long id, boolean nuevoEstado) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No existe un pedido con el id: " + id));
+        pedido.setEstado(nuevoEstado);
+        pedidoRepository.save(pedido);
+    }
+
 }

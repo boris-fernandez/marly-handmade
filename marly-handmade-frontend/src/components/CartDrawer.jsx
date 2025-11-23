@@ -75,6 +75,7 @@ export function CartDrawer({ open, onClose }) {
                   subtitle={item.category}
                   price={item.price}
                   quantity={item.quantity}
+                  stock={item.stock}
                   onAdd={() => handleAdd(item.id)}
                   onDecrease={() => handleDecrease(item.id)}
                   onDelete={() => handleDelete(item.id)}

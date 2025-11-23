@@ -11,4 +11,5 @@ public interface ClienteConUsuarioResponse {
     Integer getPuntosFidelizacion();
     String getCorreo();
     String getTelefono();
+    Long getIdUsuario();
 }

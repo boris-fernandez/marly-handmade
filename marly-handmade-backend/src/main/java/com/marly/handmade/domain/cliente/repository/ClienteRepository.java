@@ -25,12 +25,21 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     @Query(value = """
                 SELECT
-                id_cliente, usuarios.username, nombres, apellidos, direccion, fecha_nacimiento, identificacion, puntos_fidelizacion, correo, telefono
-                FROM usuarios
-                INNER JOIN clientes
-                ON usuarios.id_usuario = clientes.id_usuario
-                WHERE usuarios.rol = 1;
-                """, nativeQuery = true)
+        c.id_cliente AS idCliente,
+        u.username AS username,
+        c.nombres AS nombres,
+        c.apellidos AS apellidos,
+        c.direccion AS direccion,
+        c.fecha_nacimiento AS fechaNacimiento,
+        c.identificacion AS identificacion,
+        c.puntos_fidelizacion AS puntosFidelizacion,
+        c.correo AS correo,
+        c.telefono AS telefono,
+        u.id_usuario AS idUsuario
+    FROM clientes c
+    INNER JOIN usuarios u ON u.id_usuario = c.id_usuario
+    WHERE u.rol = 1
+    """, nativeQuery = true)
     List<ClienteConUsuarioResponse> listarClientesConRol1();
 
 }
