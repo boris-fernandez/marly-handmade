@@ -14,7 +14,7 @@ function obtenerSubDesdeToken(token) {
   } catch {
     return null;
   }
-}
+} 
 
 function verificarAdmin(token) {
   try {

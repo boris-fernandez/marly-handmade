@@ -3,41 +3,28 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CartItems from "../components/CartItems.jsx";
 import { useCart } from "../contexts/CartContext.jsx";
+import { AuthContext } from "../contexts/AuthContext.jsx";
 import { PedidoContext } from "../contexts/PedidoContext";
 import "../styles/Buy.css";
 import yape from "../assets/yape.jfif";
 import plin from "../assets/plin.jfif";
-import { AuthContext } from "../contexts/AuthContext.jsx";
+import CheckoutComponent from "../components/Pago/CheckoutComponent.jsx";
 
 const Buy = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
-  const { crearPedido } = useContext(PedidoContext);
-
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [cardData, setCardData] = useState({
-    number: "",
-    expiry: "",
-    cvv: "",
-    name: "",
-    type: "",
-  });
-  const [errors, setErrors] = useState({});
-
+  const { user, token } = useContext(AuthContext);
+  
+  const [paymentMethod, setPaymentMethod] = useState("mercadopago");
   const [buttonState, setButtonState] = useState("idle");
-  /*const { token, logout } = useContext(AuthContext);*/
+  const [errors, setErrors] = useState({});
+  
+  const checkoutRef = React.useRef(null);
 
-  const detectCardType = (number) => {
-    const clean = number.replace(/\s+/g, "");
-    if (/^4/.test(clean)) return "Visa";
-    if (/^5[1-5]/.test(clean)) return "MasterCard";
-    if (/^3[47]/.test(clean)) return "Amex";
-    return "";
-  };
+  // Lógica original para crear pedidos (asumido para Yape/Plin/Transferencia)
+  const createMultiplePedidos = async () => {
 
-  /*const createMultiplePedidos = async () => {
     if (cartItems.length === 0) return;
 
-    // Construir todos los pedidos primero
     const pedidos = cartItems.map((item) => ({
       detallePedido: [
         {
@@ -47,10 +34,6 @@ const Buy = () => {
       ],
     }));
 
-    // Imprimir todos los pedidos antes de enviarlos
-    console.log("Pedidos a enviar:", pedidos);
-
-    // Enviar los pedidos uno por uno
     for (let pedidoBody of pedidos) {
       try {
         const res = await fetch("http://localhost:8080/pedido", {
@@ -75,111 +58,51 @@ const Buy = () => {
       }
     }
 
-    // Limpiar carrito después de crear todos los pedidos
     clearCart();
   };*/
 
-  const formatCardNumber = (value) =>
-    value
-      .replace(/\D/g, "")
-      .slice(0, 16)
-      .replace(/(.{4})/g, "$1 ")
-      .trim();
 
-  const formatExpiry = (value) => {
-    const clean = value.replace(/\D/g, "").slice(0, 4);
-    if (clean.length >= 3) return clean.slice(0, 2) + "/" + clean.slice(2);
-    return clean;
+  const handleMercadoPagoClick = () => {
+    if (checkoutRef.current) {
+        checkoutRef.current.procesarPago();
+    }
   };
 
-  const validateCard = () => {
-    const errs = {};
-    const cleanNumber = cardData.number.replace(/\s+/g, "");
 
-    if (cleanNumber.length !== 16)
-      errs.number = "Debe tener 16 dígitos reales.";
-
-    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(cardData.expiry)) {
-      errs.expiry = "Formato inválido (MM/AA).";
-    }
-
-    if (!/^\d{3,4}$/.test(cardData.cvv)) {
-      errs.cvv = "Debe tener 3 o 4 dígitos.";
-    }
-
-    if (
-      !/^[a-zA-Z\sáéíóúÁÉÍÓÚ]+$/.test(cardData.name) ||
-      cardData.name.trim().length < 3
-    ) {
-      errs.name = "Solo letras y mínimo 3 caracteres.";
-    }
-
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  };
-
-  const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    let newValue = value;
-
-    if (id === "card-cvv") {
-      newValue = value.replace(/\D/g, "").slice(0, 4);
-    }
-
-    if (id === "card-number") {
-      newValue = formatCardNumber(value);
-      const type = detectCardType(newValue);
-      setCardData((prev) => ({ ...prev, number: newValue, type }));
-      return;
-    }
-
-    if (id === "card-expiry") newValue = formatExpiry(value);
-
-    setCardData((prev) => ({ ...prev, [id.split("-")[1]]: newValue }));
-  };
-
-  // ==========================================
-  // 🚀 Checkout → Crear pedido en el backend
-  // ==========================================
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (cartItems.length === 0) {
       alert("Tu carrito está vacío.");
       return;
     }
-
-    if (paymentMethod === "card" && !validateCard()) {
-      setButtonState("error");
-      setTimeout(() => setButtonState("idle"), 1500);
-      return;
-    }
-
+    
     setButtonState("loading");
 
-    setTimeout(async () => {
-      try {
-        // 🔥 Transformar cartItems → detallePedido que tu backend exige
-        const detallePedido = cartItems.map((item) => ({
-          cantidad: item.quantity,
-          idProducto: item.id,
-        }));
-
-        // 🔥 Llamar al backend para crear el pedido
-        const response = await crearPedido({ detallePedido });
-
-        if (!response) throw new Error("No se pudo crear el pedido");
-
-        setButtonState("success");
-
-        clearCart();
-        setCardData({ number: "", expiry: "", cvv: "", name: "", type: "" });
-
-        setTimeout(() => setButtonState("idle"), 2000);
-      } catch (error) {
-        console.error("Error durante el checkout:", error);
-        setButtonState("error");
-        setTimeout(() => setButtonState("idle"), 2000);
-      }
-    }, 1500);
+    if (paymentMethod === "mercadopago") {
+        handleMercadoPagoClick();
+        setButtonState("idle");
+        return;
+    } 
+    
+    if (paymentMethod === "yape" || paymentMethod === "plin") {
+        setTimeout(async () => {
+            await createMultiplePedidos(); 
+            setButtonState("success");
+            setTimeout(() => setButtonState("idle"), 2000);
+        }, 1000);
+    }
+  };
+  
+  const datosParaMP = {
+    clienteId: user?.id || null, 
+    emailCliente: user?.email || '',
+    datosComprador: {
+        nombre: user?.firstName || 'Invitado', 
+        apellido: user?.lastName || 'Cliente', 
+        email: user?.email || 'invitado@temp.com',
+        telefono: '999999999', 
+        identificacion: '00000000',
+        tipoIdentificacion: 'DNI'
+    }
   };
 
   return (
@@ -221,7 +144,7 @@ const Buy = () => {
               <div className="payment-methods">
                 <h3 className="payment-title">Métodos de Pago</h3>
 
-                {["card", "yape", "plin"].map((method) => (
+                {["mercadopago", "yape", "plin"].map((method) => (
                   <div
                     key={method}
                     className={`payment-method ${
@@ -240,15 +163,15 @@ const Buy = () => {
                     />
                     <div className="payment-info">
                       <div className="payment-brand">
-                        {method === "card"
-                          ? "Tarjeta de Crédito/Débito"
+                        {method === "mercadopago"
+                          ? "Mercado Pago (Tarjeta, Pago Efectivo, etc.)"
                           : method === "yape"
                           ? "Yape"
                           : "Plin"}
                       </div>
                       <div className="payment-desc">
-                        {method === "card"
-                          ? "Visa, MasterCard, American Express"
+                        {method === "mercadopago"
+                          ? "Recomendado. Pago seguro y automático."
                           : "Billetera Digital"}
                       </div>
                     </div>
@@ -256,75 +179,20 @@ const Buy = () => {
                 ))}
               </div>
 
-              {paymentMethod === "card" && (
-                <div className="card-form">
-                  <h4 className="form-title">
-                    <i className="fas fa-credit-card"></i> Información de la
-                    Tarjeta
-                  </h4>
-
-                  <div className={`form-group ${errors.number ? "error" : ""}`}>
-                    <label htmlFor="card-number">Número de Tarjeta</label>
-                    <input
-                      type="text"
-                      id="card-number"
-                      value={cardData.number}
-                      onChange={handleInputChange}
-                      placeholder="1234 5678 9012 3456"
+              {paymentMethod === "mercadopago" && (
+                <div className="mercadopago-section">
+                    <h4 className="form-title"><i className="fas fa-hand-holding-usd"></i> Pago Automático</h4>
+                    
+                    <CheckoutComponent
+                        ref={checkoutRef}
+                        carrito={cartItems}
+                        totalCompra={getCartTotal() + 0.05}
+                        datosCliente={datosParaMP.datosComprador}
                     />
-                    <div className="card-icons">
-                      {cardData.type && (
-                        <i
-                          className={`fab fa-cc-${cardData.type
-                            .toLowerCase()
-                            .replace(" ", "")}`}
-                          title={cardData.type}
-                        ></i>
-                      )}
-                    </div>
-                    {errors.number && <small>{errors.number}</small>}
-                  </div>
-
-                  <div className="form-row">
-                    <div
-                      className={`form-group ${errors.expiry ? "error" : ""}`}
-                    >
-                      <label htmlFor="card-expiry">Fecha de Vencimiento</label>
-                      <input
-                        type="text"
-                        id="card-expiry"
-                        value={cardData.expiry}
-                        onChange={handleInputChange}
-                        placeholder="MM/AA"
-                      />
-                      {errors.expiry && <small>{errors.expiry}</small>}
-                    </div>
-
-                    <div className={`form-group ${errors.cvv ? "error" : ""}`}>
-                      <label htmlFor="card-cvv">CVV</label>
-                      <input
-                        type="text"
-                        id="card-cvv"
-                        value={cardData.cvv}
-                        onChange={handleInputChange}
-                        placeholder="123"
-                        maxLength={4}
-                      />
-                      {errors.cvv && <small>{errors.cvv}</small>}
-                    </div>
-                  </div>
-
-                  <div className={`form-group ${errors.name ? "error" : ""}`}>
-                    <label htmlFor="card-name">Nombre del Titular</label>
-                    <input
-                      type="text"
-                      id="card-name"
-                      value={cardData.name}
-                      onChange={handleInputChange}
-                      placeholder="Nombre como aparece en la tarjeta"
-                    />
-                    {errors.name && <small>{errors.name}</small>}
-                  </div>
+                    
+                    <p style={{marginTop: '10px', fontSize: '0.9em', color: '#666'}}>
+                        Serás redirigido a la plataforma de Mercado Pago para completar el pago.
+                    </p>
                 </div>
               )}
 

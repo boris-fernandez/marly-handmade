@@ -18,7 +18,7 @@ export default function Hero({ texto }: HeroProps) {
     const handleEnd = () => {
       setTimeout(() => setShowVideo(false), 400);
     };
-
+ 
     video.addEventListener("ended", handleEnd);
     return () => video.removeEventListener("ended", handleEnd);
   }, []);
