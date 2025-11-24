@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Service
 
-public class ProductoService {
+public class ProductoService { 
 
     private ProductoRepository productoRepository;
 
@@ -100,6 +100,11 @@ public class ProductoService {
 
         producto.update(productoUpdate);
 
+        // Ensure inventory data is updated correctly
+        if (productoUpdate.stock() != null) {
+            producto.setStock(productoUpdate.stock());
+        }
+
         productoRepository.save(producto);
 
         return new ProductoResponse(producto);
@@ -109,6 +114,11 @@ public class ProductoService {
     public void delete(long id) {
         Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("El producto con ese id no existe"));
+
+        // Adjust inventory or remove product from inventory
+        producto.setStock(0); // Assuming setting stock to 0 means removing from inventory
         producto.updateStatus();
+
+        productoRepository.save(producto);
     }
 }
