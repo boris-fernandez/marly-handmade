@@ -14,7 +14,7 @@ function obtenerSubDesdeToken(token) {
   } catch {
     return null;
   }
-} 
+}
 
 function verificarAdmin(token) {
   try {
@@ -29,13 +29,12 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
-  const [open, setOpen] = useState(false); // Dropdown del usuario
+  const [open, setOpen] = useState(false);
 
   const menuRef = useRef(null);
   const { openCart } = useCart();
   const { token, logout } = useContext(AuthContext);
 
-  // 🔹 Nombre de usuario (Memoizado)
   const userName = useMemo(() => {
     if (!token?.token) return null;
     const name = obtenerSubDesdeToken(token.token);
@@ -44,13 +43,13 @@ export default function Header() {
       : null;
   }, [token]);
 
-  // Verificar si es admin (Memoizado)
+
   const isAdmin = useMemo(() => {
     if (!token?.token) return false;
     return verificarAdmin(token.token);
   }, [token]);
 
-  // Cerrar dropdown del usuario al hacer click fuera
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -235,12 +234,15 @@ export default function Header() {
 
         {/* COLLECTIONS */}
         <li className="relative group cursor-pointer">
-          <a
-            href="/collections"
-            className="pb-2 border-b-2 border-transparent hover:border-[#040F2E] transition-colors duration-300"
+          <button
+            type="button"
+            onClick={(e) => e.preventDefault()}
+            className="pb-2 border-b-2 border-transparent hover:border-[#040F2E] 
+             transition-colors duration-300 inline-block font-inherit 
+             text-inherit cursor-pointer bg-transparent relative top-[5px]"
           >
             Collections
-          </a>
+          </button>
           <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
