@@ -1,18 +1,18 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { AuthContext } from "../contexts/AuthContext"; // Importamos el AuthContext
+import { AuthContext } from "../contexts/AuthContext";
 
 export const ProductoContext = createContext();
 
 export const useProductos = () => useContext(ProductoContext);
 
 export const ProductoProvider = ({ children }) => {
-  // Estados para listar productos
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [product, setProduct] = useState();
 
-  // Estados para el registro de productos
+  const API_URL = "http://localhost:8080/producto";
+
   const [formData, setFormData] = useState({
     productName: "",
     description: "",
@@ -26,9 +26,7 @@ export const ProductoProvider = ({ children }) => {
     shippingInfo: "",
   });
 
-  const API_URL = "http://localhost:8080/producto";
 
-  // Función: Listar productos
   const listarProductos = async () => {
     setLoading(true);
     setError(null);
@@ -37,7 +35,6 @@ export const ProductoProvider = ({ children }) => {
       if (!response.ok) throw new Error("Error al obtener productos");
       const data = await response.json();
 
-      // Adaptar los datos al formato del frontend
       const formatted = data.map((item) => ({
         id: item.id,
         name: item.nombre,
@@ -48,7 +45,7 @@ export const ProductoProvider = ({ children }) => {
         description: item.descripcion,
         details: item.details,
         care: item.care,
-        shippingInfo: item.shipping_info,
+        shippingInfo: item.shippingInfo,
         status: item.status,
         slug: item.nombre
           .replace(/\s+/g, " ")
@@ -62,7 +59,6 @@ export const ProductoProvider = ({ children }) => {
       }));
 
       setProductos(formatted);
-      // console.log("Productos cargados:", formatted);
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -71,11 +67,11 @@ export const ProductoProvider = ({ children }) => {
     }
   };
 
-  const [previewUrl, setPreviewUrl] = useState(null); // 🟢 <--- aquí está la línea que faltaba
-  const { token } = useContext(AuthContext); // Usamos useContext para obtener el token
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const { token } = useContext(AuthContext);
 
   const CLOUD_NAME = "cloudjosue";
-  const UPLOAD_PRESET = "MarlyCloud"; // asegúrate de que este nombre coincida en Cloudinary
+  const UPLOAD_PRESET = "MarlyCloud";
 
   const handleImageUpload = async (e, type = "main") => {
     const file = e.target.files?.[0];
@@ -108,7 +104,6 @@ export const ProductoProvider = ({ children }) => {
 
       console.log("✅ Subida exitosa:", data.secure_url);
 
-      // 🔧 Actualizar según el tipo de imagen
       setFormData((prev) => {
         if (type === "main") {
           return { ...prev, mainImage: data.secure_url };
@@ -128,22 +123,17 @@ export const ProductoProvider = ({ children }) => {
     }
   };
 
-  // Función: Registrar producto
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // Obtener token de admin
-      // const token = localStorage.getItem("token");
-
       if (!token) {
         alert("No hay token disponible. No se puede subir el producto.");
         setLoading(false);
         return;
       }
 
-      // Preparar payload en JSON
       const payload = {
         nombre: formData.productName,
         descripcion: formData.description,
@@ -152,7 +142,7 @@ export const ProductoProvider = ({ children }) => {
         fotoPrincipal: formData.mainImage || "",
         fotoSecundario: formData.additionalImages[0] || "",
         fotoTerciario: formData.additionalImages[1] || "",
-        categoria: "artesania", // o puedes permitir cambiarlo desde un input
+        categoria: "artesania",
         details: formData.details,
         care: formData.care,
         shippingInfo: formData.shippingInfo,
@@ -162,12 +152,11 @@ export const ProductoProvider = ({ children }) => {
       console.log("📤 Payload a enviar:", payload);
       console.log("📦 Token a enviar:", token.token);
 
-      // Enviar POST al backend
       const response = await fetch("http://localhost:8080/producto", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token.token}`, // tu token de admin
+          Authorization: `Bearer ${token.token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -178,7 +167,6 @@ export const ProductoProvider = ({ children }) => {
       console.log("✅ Producto registrado:", data);
       alert("Producto registrado exitosamente");
 
-      // Reset del formulario
       setFormData({
         productName: "",
         description: "",
@@ -192,7 +180,6 @@ export const ProductoProvider = ({ children }) => {
         shippingInfo: "",
       });
 
-      // Refrescar lista de productos
       listarProductos();
     } catch (error) {
       console.error("❌ Error:", error);
@@ -201,26 +188,7 @@ export const ProductoProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
-  const getProductoById = async (id) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${API_URL}?id=${id}`);
-      if (!response.ok) throw new Error("Error al obtener el producto");
-      const item = await response.json();
-
-      setProduct(item);
-    } catch (err) {
-      console.error(err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-
-  // Cargar productos al montar el contexto
+ 
   useEffect(() => {
     listarProductos();
   }, []);
@@ -236,7 +204,7 @@ export const ProductoProvider = ({ children }) => {
         setFormData,
         handleImageUpload,
         handleSubmit,
-        getProductoById,
+        // getProductoById,
         product
       }}
     >

@@ -14,7 +14,7 @@ import ShopInPerson from "../components/ShopInPerson";
 import heroImg from "../assets/hero.png";
 
 import { Link } from "react-router-dom";
-
+ 
 export default function Landing() {
   useEffect(() => {
     AOS.init({

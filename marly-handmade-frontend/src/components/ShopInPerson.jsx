@@ -3,7 +3,7 @@ import bgImage from "/ShopIn-person1.png";
 
 export default function ShopInPerson() {
   return (
-    <section className="my-20"> {/* 🔹 espacio arriba y abajo uniforme */}
+    <section className="my-20"> 
       <div 
         className="relative w-full h-[500px] bg-cover bg-center"
         style={{ backgroundImage: `url(${bgImage})` }}

@@ -261,7 +261,7 @@ const ProductEdit = () => {
           <div className="col-span-2 text-right mt-4">
             <button
               type="submit"
-              className="bg-[#997C71] hover:bg-[#85695F] text-[#F5E3C3] font-semibold py-3 px-6 rounded-lg shadow-sm transition-all"
+              className="bg-[#1B2A40] hover:bg-[#85695F] text-[#F5E3C3] font-semibold py-3 px-6 rounded-lg shadow-sm transition-all"
             >
               Actualizar producto
             </button>

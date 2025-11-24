@@ -15,7 +15,7 @@ export default function Footer() {
             <li><a href="/exchange" className="hover:text-[#040F2E]">Exchange & Repair Policy</a></li>
             <li><a href="/faq" className="hover:text-[#040F2E]">FAQ</a></li>
           </ul>
-        </div>
+        </div> 
 
         {/* QUICK LINKS */}
         <div>
