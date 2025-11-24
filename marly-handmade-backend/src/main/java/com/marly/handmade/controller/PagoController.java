@@ -1,7 +1,6 @@
 package com.marly.handmade.controller;
 
 import com.mercadopago.exceptions.MPApiException;
-import com.mercadopago.exceptions.MPException;
 import com.marly.handmade.dto.CrearPreferenciaRequest;
 import com.marly.handmade.dto.EstadoPagoResponse;
 import com.marly.handmade.dto.PreferenciaResponse;
@@ -29,7 +28,6 @@ public class PagoController {
         try {
             log.info("Recibida solicitud para crear preferencia de pago");
             
-            // Validaciones 
             if (request.getItems() == null || request.getItems().isEmpty()) {
                 return ResponseEntity.badRequest()
                     .body(Map.of("error", "Debe incluir al menos un producto"));

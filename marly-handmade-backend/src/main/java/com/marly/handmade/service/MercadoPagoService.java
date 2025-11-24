@@ -11,7 +11,6 @@ import com.mercadopago.resources.preference.Preference;
 import com.marly.handmade.domain.Pago;
 import com.marly.handmade.dto.*;
 import com.marly.handmade.repository.PagoRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

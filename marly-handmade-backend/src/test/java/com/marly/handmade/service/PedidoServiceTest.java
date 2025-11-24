@@ -92,7 +92,7 @@ class PedidoServiceTest {
     @Test
     void listarYMostrarYListarPorEstado() {
         Cliente cliente = Cliente.builder().id(2L).nombres("Juan").build();
-        Pedido pedido = Pedido.builder().idPedido(1L).cliente(cliente).build();
+        Pedido pedido = Pedido.builder().idPedido(1L).cliente(cliente).estado(true).build();
         DetallePedido detalle = DetallePedido.builder().cantidad(1).precioUnitario(10.0).pedido(pedido).build();
 
         BDDMockito.given(pedidoRepository.findAll()).willReturn(List.of(pedido));

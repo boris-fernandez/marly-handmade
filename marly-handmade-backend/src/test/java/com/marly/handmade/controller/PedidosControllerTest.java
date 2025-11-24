@@ -1,5 +1,6 @@
 package com.marly.handmade.controller;
 
+import com.marly.handmade.domain.cliente.data.response.DatosCliente;
 import com.marly.handmade.domain.pedido.data.PedidoResponse;
 import com.marly.handmade.service.PedidoService;
 import com.marly.handmade.service.ReporteService;
@@ -44,7 +45,8 @@ class PedidosControllerTest extends ControllerTestBase {
     @Test
     void listarPedidos() throws Exception {
         PedidoResponse pedido = new PedidoResponse(1L, new java.util.Date(),
-                "Calle Falsa 123", 200.0, null, List.of());
+                "Calle Falsa 123", 200.0, false, new DatosCliente("", "", "", "")
+                ,List.of());
         BDDMockito.given(pedidoService.listarPedidos()).willReturn(List.of(pedido));
 
         mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/pedido"))
@@ -56,7 +58,8 @@ class PedidosControllerTest extends ControllerTestBase {
     @Test
     void listarPedidoPorCliente() throws Exception {
         PedidoResponse pedido = new PedidoResponse(1L, new java.util.Date(),
-                "Calle Falsa 123", 200.0, null, List.of());
+                "Calle Falsa 123", 200.0, false, new DatosCliente("", "", "", "")
+                ,List.of());
         BDDMockito.given(pedidoService.listarPedidoPorCliente("Juan")).willReturn(List.of(pedido));
 
         mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/pedido/cliente/nombre/Juan"))
@@ -68,7 +71,8 @@ class PedidosControllerTest extends ControllerTestBase {
     @Test
     void mostrarPedidosPorId() throws Exception {
         PedidoResponse pedido = new PedidoResponse(1L, new java.util.Date(),
-                "Calle Falsa 123", 200.0, null, List.of());
+                "Calle Falsa 123", 200.0, false, new DatosCliente("", "", "", "")
+                ,List.of());
         BDDMockito.given(pedidoService.mostrarPedidosPorId(1L)).willReturn(pedido);
 
         mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/pedido/mostrar/1"))
@@ -80,7 +84,8 @@ class PedidosControllerTest extends ControllerTestBase {
     @Test
     void listarPedidoPorestado() throws Exception {
         PedidoResponse pedido = new PedidoResponse(1L, new java.util.Date(),
-                "Calle Falsa 123", 200.0, null, List.of());
+                "Calle Falsa 123", 200.0, false, new DatosCliente("", "", "", "")
+                ,List.of());
         BDDMockito.given(pedidoService.listarPedidoPorestado(false)).willReturn(List.of(pedido));
 
         mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/pedido/estado/false"))
