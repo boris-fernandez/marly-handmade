@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { useProductos } from "../contexts/ProductoContext.jsx";
 import Pagination from "../components/Pagination.jsx";
 import FiltersBar from "../components/FiltersBar";
-/*import { AuthContext } from "../contexts/AuthContext";*/
+import { AuthContext } from "../contexts/AuthContext";
 
 import "../styles/Inventory.css";
-
+ 
 function Inventory() {
   const { productos, error, loading, listarProductos } = useProductos();
   const { token } = useContext(AuthContext);
@@ -35,12 +35,11 @@ function Inventory() {
     });
   const uniqueCategories = ["Todos", ...new Set(productos.map((p) => p.category))];
 
-  // 🧮 Paginación
+
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
 
-  // 🗑️ Eliminar producto
   const handleDelete = async (productId, productName) => {
     if (!window.confirm(`¿Estás seguro de eliminar el producto "${productName}"?`)) return;
 
@@ -55,14 +54,14 @@ function Inventory() {
       if (!response.ok) throw new Error("Error al eliminar el producto");
 
       alert(`Producto "${productName}" eliminado correctamente`);
-      listarProductos(); // refresca la lista
+      listarProductos(); 
     } catch (error) {
       console.error(error);
       alert("No se pudo eliminar el producto");
     }
   };
 
-  // ⏳ Loading y errores
+
   if (loading) return <div className="loading">Cargando productos...</div>;
   if (error) return <div className="error">Error al cargar productos: {error}</div>;
 
@@ -71,7 +70,7 @@ function Inventory() {
       <div className="admin-content">
         <main className="inventory-main">
           <div className="inv-section-header">
-            <h1 className="inv-title">Inventario</h1>
+            <h1 className="inv-title">Inventary</h1>
             <Link to="/admin/product-gallery">
               <button className="gallery-button">Product Gallery</button>
             </Link>
@@ -87,37 +86,6 @@ function Inventory() {
             sortDirection={sortDirection}
             onSortDirectionChange={setSortDirection}
           />
-
-          /*<div className="filter-panel">
-            <input
-              type="text"
-              placeholder="Buscar por nombre"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
-              {["Todos", ...new Set(productos.map((p) => p.category))].map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-
-            <div className="sort-combo">
-              <label>Ordenar por:</label>
-              <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
-                <option value="id">ID</option>
-                <option value="name">Nombre</option>
-                <option value="price">Precio</option>
-                <option value="stock">Stock</option>
-              </select>
-              <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
-                <option value="asc">Ascendente</option>
-                <option value="desc">Descendente</option>
-              </select>
-            </div>
-          </div>*/
 
           <div className="inventory-table-wrapper">
             <table className="inventory-table">
