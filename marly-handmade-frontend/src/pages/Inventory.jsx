@@ -98,6 +98,7 @@ function Inventory() {
                   <th>Categoría</th>
                   <th>Detalles</th>
                   <th>Cuidado</th>
+                  <th>Envio</th>
                   <th>Stock</th>
                   <th>Acción</th>
                 </tr>
@@ -114,6 +115,7 @@ function Inventory() {
                     <td>{item.category}</td>
                     <td>{item.details}</td>
                     <td>{item.care}</td>
+                    <td>{item.shippingInfo}</td>
                     <td>{item.stock}</td>
                     <td>
                       <div className="action-buttons">
