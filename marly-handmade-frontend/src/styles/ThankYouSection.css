@@ -1,0 +1,10 @@
+.thank-you-message {
+  width: 1100px; 
+  max-width: 90%;
+  margin: 40px auto;
+  text-align: left;
+  color: #997C71;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: serif;
+}
