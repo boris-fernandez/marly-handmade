@@ -5,7 +5,7 @@ export default function ShortMarlyDescriptionLanding() {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "center", 
                 textAlign: "center",
                 padding: "40px",
                 margin: "20px auto",

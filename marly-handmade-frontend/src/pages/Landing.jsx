@@ -3,7 +3,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Footer from "../components/Footer"; 
 import Hero from "../components/Hero";
 import ShortMarlyDescriptionLanding from "../components/ShortMarlyDescriptionLanding";
 import MostLoved from "../components/MostLoved";
