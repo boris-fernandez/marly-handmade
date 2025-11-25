@@ -108,7 +108,7 @@ class ProductoServiceTest {
         BDDMockito.given(productoRepository.findById(anyLong())).willReturn(Optional.of(producto));
         BDDMockito.given(productoRepository.save(any(Producto.class))).willReturn(null);
 
-        ProductoUpdate productoUpdate = new ProductoUpdate( "hola", 20.0, 5, "foto1", "foto2", "foto3", "CategoriaX", "", "", "", "", true);
+        ProductoUpdate productoUpdate = new ProductoUpdate( "hola", "", 20.0, 5, "foto1", "foto2", "foto3", "CategoriaX", "", "", "", true);
         ProductoResponse productoResponse = productoService.update(1L, productoUpdate);
 
         assertThat(productoResponse.nombre()).isEqualTo("hola");
@@ -123,7 +123,7 @@ class ProductoServiceTest {
         BDDMockito.given(productoRepository.findById(anyLong())).willReturn(Optional.empty());
 
         ProductoUpdate productoUpdate = new ProductoUpdate(
-                "Pulsera", 20.0, 5, "foto1", "foto2", "foto3", "CategoriaX", "", "", "",
+                "Pulsera", "",20.0, 5, "foto1", "foto2", "foto3", "CategoriaX", "", "",
                 "", true
         );
         Assertions.assertThrows(RuntimeException.class, ()->{
