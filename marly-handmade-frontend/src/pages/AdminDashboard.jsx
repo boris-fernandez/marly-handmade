@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Package, ShoppingBag, Users, BarChart, FileSpreadsheet } from "lucide-react";
+import { Package, ShoppingBag, Users, FileSpreadsheet, Book } from "lucide-react";
 import { useEffect, useState, useContext } from "react";
 import { API_BASE_URL } from "../contexts/DashboardContext";
 
@@ -79,10 +79,10 @@ useEffect(() => {
       color: "bg-purple-50 text-purple-600",
     },
     {
-      title: "Analytics",
-      description: "View sales and statistics",
-      icon: BarChart,
-      link: "/admin/analytics",
+      title: "Complaints Book",
+      description: "View complaints",
+      icon: Book,
+      link: "/admin/complaints",
       color: "bg-orange-50 text-orange-600",
     },
   ];
