@@ -50,7 +50,8 @@ public class SecurityConfigurations {
                                 "/producto/all",
                                 "/promociones/**",
                                 "/usuario/all",
-                                "/clientes/all"
+                                "/clientes/all",
+                                "/clientes/me"
                         ).permitAll()
 
                         // 🔔 Mercado Pago WEBHOOK (debe ser público)
@@ -62,7 +63,7 @@ public class SecurityConfigurations {
                         // 🔐 Cualquier otra ruta requiere login
                         .anyRequest().authenticated()
                 )
-
+          
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
