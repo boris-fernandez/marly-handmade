@@ -40,8 +40,14 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/producto/all", "/promociones/{nombre}",
                                 "/promociones/mostrar/{id}", "/promociones", "/usuario/all", "/clientes/all")
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/clientes/me").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/auth/update-password")
                         .permitAll()
+                        //faltacorregir----------------
+                        .requestMatchers(HttpMethod.GET, "/clientes/me")
+                        .authenticated()
+                        //--------------------------------
+                        .requestMatchers(HttpMethod.PATCH, "/auth/update-password").permitAll()
                         .anyRequest()
                         .authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

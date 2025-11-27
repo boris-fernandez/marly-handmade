@@ -35,6 +35,13 @@ import ProductRegister from "./pages/ProductRegister";
 import Buy from "./pages/Buy.jsx";
 import ComplaintsBookAdmin from "./pages/ComplaintsBookAdmin.jsx";
 
+import UserLayout from "./layouts/UserLayout";
+import PerfilForm from "./components/PerfilForm";
+import Direcciones from "./pages/ProfileAddresses.jsx";
+import Historial from "./pages/ProfileRecord.jsx";
+import Autenticacion from "./pages/ProfileAuthentication.jsx";
+import Tarjetas from "./pages/ProfilePaymentMethods.jsx";
+
 import { FilterProvider } from "./contexts/FilterContext.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import ProductUpload from "./pages/ProductEdit.jsx"
@@ -69,6 +76,15 @@ function App() {
         <Route path="/shop" element={<SeaCollectionDetail />} />
         <Route path="/confirm-new-password/:token" element={<ConfirmNewPassword />} />
         <Route path="/buy" element={<Buy />} />
+
+        {/*PERFIL Usuario*/}
+        <Route path="/cuenta" element={<UserLayout />}>
+        <Route path="perfile" element={<PerfilForm />} />
+        <Route path="address" element={<Direcciones />} />
+        <Route path="record" element={<Historial />} />
+        <Route path="Authentication" element={<Autenticacion />} />
+        <Route path="cards" element={<Tarjetas />} />
+        </Route>
 
         {/* ADMIN */}
         <Route path="/admin" element={<AdminLayout />}>
