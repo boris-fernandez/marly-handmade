@@ -38,12 +38,11 @@ public class SecurityConfigurations {
                         .permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/producto/all", "/promociones/{nombre}",
-                                "/promociones/mostrar/{id}", "/promociones", "/usuario/all", "/clientes/all")
+                                "/promociones/mostrar/{id}", "/promociones", "/usuario/all", "/clientes/all", "/clientes/me")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/clientes/me").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/auth/update-password")
                         .permitAll()
-                        //faltacorregir----------------
                         .requestMatchers(HttpMethod.GET, "/clientes/me")
                         .authenticated()
                         //--------------------------------

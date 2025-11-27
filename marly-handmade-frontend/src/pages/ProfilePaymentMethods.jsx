@@ -21,9 +21,9 @@ export default function ProfilePaymentMethods() {
       </div>
 
       {/* Botón para agregar tarjeta */}
-      <button className="mt-6 bg-[#1B2A40] text-[#F5E3C3] px-4 py-2 rounded-md hover:opacity-90">
+      {/* <button className="mt-6 bg-[#1B2A40] text-[#F5E3C3] px-4 py-2 rounded-md hover:opacity-90">
         Agregar nueva tarjeta
-      </button>
+      </button> */}
     </div>
   );
 }

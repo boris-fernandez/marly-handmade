@@ -6,33 +6,31 @@ export default function PerfilForm() {
 
   const [cliente, setCliente] = useState(null);
 
-useEffect(() => {
-  async function fetchData() {
-    if (!user) return;
+  useEffect(() => {
+    async function fetchData() {
+      if (!user) return;
 
-    try {
-const response = await fetch("http://localhost:8080/clientes/me", {
-    headers: {
-        "Authorization": `Bearer ${token.token}`
-    }
-});
+      try {
+        const response = await fetch("http://localhost:8080/clientes/me", {
+          headers: {
+            Authorization: `Bearer ${token.token}`,
+          },
+        });
 
+        if (!response.ok) {
+          console.log("Error en backend:", response.status);
+          return;
+        }
 
-      if (!response.ok) {
-        console.log("Error en backend:", response.status);
-        return;
+        const data = await response.json();
+        setCliente(data);
+      } catch (e) {
+        console.error(e);
       }
-
-      const data = await response.json();
-      setCliente(data);
-
-    } catch (e) {
-      console.error(e);
     }
-  }
 
-  fetchData();
-}, [user]);
+    fetchData();
+  }, [user]);
 
   if (!cliente) return <p>Cargando datos...</p>;
 
@@ -87,9 +85,9 @@ const response = await fetch("http://localhost:8080/clientes/me", {
         </div>
       </div>
 
-      <button className="bg-[#1B2A40] text-[#F5E3C3] px-4 py-2 rounded mt-6">
+      {/* <button className="bg-[#1B2A40] text-[#F5E3C3] px-4 py-2 rounded mt-6">
         Editar información
-      </button>
+      </button> */}
     </div>
   );
 }

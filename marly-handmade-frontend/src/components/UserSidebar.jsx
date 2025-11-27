@@ -38,7 +38,7 @@ export default function UserSidebar() {
             Medio de pago
           </NavLink>
 
-          <NavLink
+          {/* <NavLink
             to="record"
             className={({ isActive }) =>
               `user-sidebar-link ${isActive ? "bg-[#1B2A40] text-[#F5E3C3] rounded-[5px]" : ""}`
@@ -54,7 +54,7 @@ export default function UserSidebar() {
             }
           >
             Authentication
-          </NavLink>
+          </NavLink> */}
 
         </nav>
       </div>
