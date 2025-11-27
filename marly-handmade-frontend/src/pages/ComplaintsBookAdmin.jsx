@@ -11,14 +11,25 @@ const ComplaintsBookAdmin = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
 
 
-  const getUserFromReclamo = (r) => {
-    if (!users) return null;
-    return users.find(
-      (u) =>
-        `${u.nombres} ${u.apellidos}`.trim().toLowerCase() ===
-        r.clienteNombre.trim().toLowerCase()
-    );
-  };
+  const normalizar = (s) =>
+  s?.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+
+const getUserFromReclamo = (r) => {
+  if (!users) return null;
+
+  const reclamo = normalizar(r.clienteNombre);
+
+  return users.find((u) => {
+    const nombre = normalizar(u.nombres);
+    const apellido = normalizar(u.apellidos);
+    const completo = normalizar(`${u.nombres} ${u.apellidos}`);
+
+    const posibles = [nombre, apellido, completo];
+
+    return posibles.some((p) => reclamo === p || p.includes(reclamo) || reclamo.includes(p));
+  });
+};
+
 
   const formatearFecha = (fecha) => {
     if (!fecha) return "—";
@@ -138,7 +149,7 @@ const ComplaintsBookAdmin = () => {
                   ["Dirección", selectedMessage.user?.direccion],
                   ["Fecha Nacimiento", formatearFecha(selectedMessage.user?.fechaNacimiento)],
                   ["Identificación", selectedMessage.user?.identificacion],
-                  ["Puntos Fidelización", selectedMessage.user?.puntosFidelizacion],
+                  //["Puntos Fidelización", selectedMessage.user?.puntosFidelizacion],
                   ["Correo", selectedMessage.user?.correo],
                   ["Teléfono", selectedMessage.user?.telefono],
                   ["ID Cliente", selectedMessage.user?.idCliente],

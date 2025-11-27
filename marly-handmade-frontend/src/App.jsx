@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import { AuthProviderWrapper } from "./contexts/AuthContext.jsx";
 import { useCart } from "./contexts/CartContext.jsx";
 import { CartDrawer } from "./components/CartDrawer";
+import CompraExitosa from './pages/CompraExitosa.jsx';
 
 import LandingPage from "./pages/Landing";
 import CartPage from "./pages/Cart";

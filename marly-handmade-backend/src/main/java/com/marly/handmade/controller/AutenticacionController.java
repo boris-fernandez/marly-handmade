@@ -65,4 +65,10 @@ public class AutenticacionController {
         log.info("Actualizado correctamente: msj={}", forgotPassword.mensage());
         return ResponseEntity.ok(forgotPassword);
     }
+
+    @GetMapping("test")
+    public ResponseEntity<?> testEndpoint() {
+        return ResponseEntity.ok("The authentication service is up and running!");
+    }
+
 }

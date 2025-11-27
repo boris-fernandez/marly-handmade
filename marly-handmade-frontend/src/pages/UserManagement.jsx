@@ -79,7 +79,7 @@ function UserManagement() {
                   "Dirección",
                   "Fecha Nacimiento",
                   "Identificación",
-                  "Puntos Fidelización",
+                  //"Puntos Fidelización",
                   "Correo",
                   "Teléfono",
                   "ID Cliente",
@@ -109,7 +109,7 @@ function UserManagement() {
                     <td>{u.direccion}</td>
                     <td>{formatearFecha(u.fechaNacimiento)}</td>
                     <td>{u.identificacion}</td>
-                    <td>{u.puntosFidelizacion}</td>
+                    
                     <td>{u.correo}</td>
                     <td>{u.telefono}</td>
                     <td>{u.idCliente}</td>
@@ -149,7 +149,7 @@ function UserManagement() {
                   ["Dirección", selectedUser.direccion],
                   ["Fecha Nacimiento", formatearFecha(selectedUser.fechaNacimiento)],
                   ["Identificación", selectedUser.identificacion],
-                  ["Puntos Fidelización", selectedUser.puntosFidelizacion],
+                  //["Puntos Fidelización", selectedUser.puntosFidelizacion],
                   ["Correo", selectedUser.correo],
                   ["Teléfono", selectedUser.telefono],
                   ["ID Cliente", selectedUser.idCliente],

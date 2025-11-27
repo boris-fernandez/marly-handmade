@@ -32,8 +32,9 @@ class SecurityFilterTest {
         MockFilterChain chain = new MockFilterChain();
 
         Mockito.when(tokenService.getSubject(anyString())).thenThrow(new RuntimeException("Token inválido"));
-
-        Assertions.assertThrows(RuntimeException.class, () -> filter.doFilterInternal(req, resp, chain));
+        org.springframework.security.core.context.SecurityContextHolder.clearContext();
+        Assertions.assertDoesNotThrow(() -> filter.doFilterInternal(req, resp, chain));
+        Assertions.assertNull(org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication());
     }
 
 }

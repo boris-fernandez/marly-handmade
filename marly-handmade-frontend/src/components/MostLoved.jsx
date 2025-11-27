@@ -7,7 +7,7 @@ export default function MostLoved() {
       link: "/product/sea-conchitas",
     },
     {
-      name: "Wild Flowers",
+      name: "Wild Flowers", 
       price: 80,
       image: "/WildFlowers.png",
       link: "/product/wild-flowers",

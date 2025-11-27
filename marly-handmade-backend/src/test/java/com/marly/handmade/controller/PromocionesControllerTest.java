@@ -40,7 +40,7 @@ class PromocionesControllerTest extends ControllerTestBase {
     @Test
     void crearPromociones() throws Exception {
         PromocionesRequest request = new PromocionesRequest("PromoA", "Desc", LocalDate.now(), LocalDate.now().plusDays(5), 10.0f, 1L);
-        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 20.0, 1, "f1", "f2", "f3", "cat");
+        ProductoResponse productoResponse = new ProductoResponse(1L, "joya","" ,20.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "", true);
         PromocionesResponse responseStub = new PromocionesResponse(1L, "PromoA", "Desc", LocalDate.now(), LocalDate.now().plusDays(5), 10.0f, productoResponse);
 
         BDDMockito.given(promocionesService.crearPromociones(request)).willReturn(responseStub);
@@ -59,7 +59,7 @@ class PromocionesControllerTest extends ControllerTestBase {
 
     @Test
     void listarPromociones() throws Exception {
-        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 20.0, 1, "f1", "f2", "f3", "cat");
+        ProductoResponse productoResponse = new ProductoResponse(1L, "joya","" ,20.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "", true);
         PromocionesResponse responseStub = new PromocionesResponse(1L, "PromoA", "Desc", LocalDate.now(), LocalDate.now().plusDays(5), 10.0f, productoResponse);
         BDDMockito.given(promocionesService.listarPromociones()).willReturn(List.of(responseStub));
 
@@ -72,7 +72,7 @@ class PromocionesControllerTest extends ControllerTestBase {
 
     @Test
     void mostrarPorNombre() throws Exception {
-        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 20.0, 1, "f1", "f2", "f3", "cat");
+        ProductoResponse productoResponse = new ProductoResponse(1L, "joya","" ,20.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "", true);
         PromocionesResponse responseStub = new PromocionesResponse(1L, "PromoA", "Desc", LocalDate.now(), LocalDate.now().plusDays(5), 10.0f, productoResponse);
         BDDMockito.given(promocionesService.mostrarPorNombre("joya")).willReturn(responseStub);
 
@@ -86,7 +86,7 @@ class PromocionesControllerTest extends ControllerTestBase {
     @Test
     void update() throws Exception {
         PromocionesUpdate update = new PromocionesUpdate("PromoB", "Desc2", LocalDate.now(), LocalDate.now().plusDays(3), 5.0f, 1L);
-        ProductoResponse productoResponse = new ProductoResponse(1L, "joya", 20.0, 1, "f1", "f2", "f3", "cat");
+        ProductoResponse productoResponse = new ProductoResponse(1L, "joya","" ,20.0, 1, "foto1", "foto2", "foto3", "categoriaA", "", "", "", true);
         PromocionesResponse responseStub = new PromocionesResponse(1L, "PromoB", "Desc2", LocalDate.now(), LocalDate.now().plusDays(3), 5.0f, productoResponse);
         BDDMockito.given(promocionesService.update(1L, update)).willReturn(responseStub);
 

@@ -27,7 +27,7 @@ export function CartDrawer({ open, onClose }) {
   };
 
   const subtotal = getCartTotal();
-  const shipping = cartItems.length > 0 ? 10 : 0; // Solo cobra envío si hay productos
+  const shipping = cartItems.length > 0 ? 0.5 : 0; // Solo cobra envío si hay productos
   const total = subtotal + shipping;
 
   return (
@@ -75,6 +75,7 @@ export function CartDrawer({ open, onClose }) {
                   subtitle={item.category}
                   price={item.price}
                   quantity={item.quantity}
+                  stock={item.stock}
                   onAdd={() => handleAdd(item.id)}
                   onDecrease={() => handleDecrease(item.id)}
                   onDelete={() => handleDelete(item.id)}

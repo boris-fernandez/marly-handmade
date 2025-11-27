@@ -85,7 +85,7 @@ public class UsuarioService {
 
         String tipo = decodedJWT.getClaim("tipo").asString();
         GuavaUtils.requireNonNullRuntime(tipo, "Token inválido para resetear contraseña");
-        GuavaUtils.checkArgumentRuntime(!"reset-password".equals(tipo), "Token inválido para resetear contraseña");
+        GuavaUtils.checkArgumentRuntime("reset-password".equals(tipo), "Token inválido para resetear contraseña");
 
         String username = decodedJWT.getSubject();
         Usuario usuario = usuarioRepository.findByUsername(username);

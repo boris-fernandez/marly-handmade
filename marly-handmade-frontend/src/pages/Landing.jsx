@@ -3,7 +3,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Footer from "../components/Footer"; 
 import Hero from "../components/Hero";
 import ShortMarlyDescriptionLanding from "../components/ShortMarlyDescriptionLanding";
 import MostLoved from "../components/MostLoved";
@@ -14,7 +14,7 @@ import ShopInPerson from "../components/ShopInPerson";
 import heroImg from "../assets/hero.png";
 
 import { Link } from "react-router-dom";
-
+ 
 export default function Landing() {
   useEffect(() => {
     AOS.init({

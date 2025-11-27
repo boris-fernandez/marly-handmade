@@ -37,7 +37,7 @@ class ProductoServiceTest {
     @DisplayName("Test para verificar que se esta creando un producto y no sale exceptiones")
     @Test
     void crearProducto() {
-        ProductoRequest request = new ProductoRequest("Collar", 20.0, 10, "", "", "", "");
+        ProductoRequest request = new ProductoRequest("Collar", "", 20.0, 10, "", "", "", "", "", "", "");
         BDDMockito.given(productoRepository.save(any(Producto.class))).willReturn(null);
         BDDMockito.given(productoRepository.findByNombre(Mockito.anyString())).willReturn(null);
 
@@ -52,8 +52,8 @@ class ProductoServiceTest {
     @DisplayName("Test para verificar que trae todos los productos")
     @Test
     void listarProductos() {
-        List<Producto> productoList = Arrays.asList(new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", ""),
-                new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", ""));
+        List<Producto> productoList = Arrays.asList(new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "", true),
+                new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "", true));
         BDDMockito.given(productoRepository.findAll()).willReturn(productoList);
 
         List<ProductoResponse> productoResponses = productoService.listarProductos();
@@ -67,7 +67,7 @@ class ProductoServiceTest {
     @DisplayName("Test para comprobar que devuelve producto buscado por id")
     @Test
     void buscarPorId(){
-        Producto producto = new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "");
+        Producto producto = new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "", true);
         BDDMockito.given(productoRepository.findById(anyLong())).willReturn(Optional.of(producto));
 
         ProductoResponse productoResponse = productoService.buscar(null, anyLong());
@@ -80,7 +80,7 @@ class ProductoServiceTest {
     @DisplayName("Test para comprobar que devuelve producto buscado por nombre")
     @Test
     void buscarPorNombre(){
-        Producto producto = new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "");
+        Producto producto = new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "", true);
         BDDMockito.given(productoRepository.findByNombre(anyString())).willReturn(producto);
 
         ProductoResponse productoResponse = productoService.buscar(anyString(), null);
@@ -104,11 +104,11 @@ class ProductoServiceTest {
     @DisplayName("Test para comprbar que se actualizan los datos")
     @Test
     void update() {
-        Producto producto = new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "");
+        Producto producto = new Producto(1L,"Collar","", 10.0, 3, "", "", "", "", "", "", "", true);
         BDDMockito.given(productoRepository.findById(anyLong())).willReturn(Optional.of(producto));
         BDDMockito.given(productoRepository.save(any(Producto.class))).willReturn(null);
 
-        ProductoUpdate productoUpdate = new ProductoUpdate( "hola", 20.0, 5, "foto1", "foto2", "foto3", "CategoriaX");
+        ProductoUpdate productoUpdate = new ProductoUpdate( "hola", "", 20.0, 5, "foto1", "foto2", "foto3", "CategoriaX", "", "", "", true);
         ProductoResponse productoResponse = productoService.update(1L, productoUpdate);
 
         assertThat(productoResponse.nombre()).isEqualTo("hola");
@@ -123,7 +123,8 @@ class ProductoServiceTest {
         BDDMockito.given(productoRepository.findById(anyLong())).willReturn(Optional.empty());
 
         ProductoUpdate productoUpdate = new ProductoUpdate(
-                "Pulsera", 20.0, 5, "foto1", "foto2", "foto3", "CategoriaX"
+                "Pulsera", "",20.0, 5, "foto1", "foto2", "foto3", "CategoriaX", "", "",
+                "", true
         );
         Assertions.assertThrows(RuntimeException.class, ()->{
             productoService.update(1L, productoUpdate);

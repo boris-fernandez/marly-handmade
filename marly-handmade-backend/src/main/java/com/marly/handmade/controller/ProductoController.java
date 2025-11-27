@@ -9,7 +9,7 @@ import com.marly.handmade.domain.producto.data.ProductoUpdate;
 import com.marly.handmade.service.ProductoService;
 
 import jakarta.validation.Valid;
-
+ 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
@@ -88,6 +88,13 @@ public class ProductoController {
 
         return ResponseEntity.ok(productoService.update(id, productoUpdate));
 
+    }
+
+    @DeleteMapping("{id}")
+    @Transactional
+    public ResponseEntity<Void> delete(@PathVariable long id) {
+        productoService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 }
