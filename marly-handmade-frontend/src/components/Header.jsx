@@ -189,8 +189,10 @@ export default function Header() {
           >
             Shop
           </a>
-          <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="absolute left-0 mt-2 hidden group-hover:block z-[1000]">
+            <div className="absolute -top-2 left-0 w-full h-2 bg-transparent"></div>
+            <div className="bg-white shadow-lg rounded-lg py-6 px-4 max-w-[95vw] w-[700px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               <div>
                 <h3 className="font-semibold mb-2 text-[#1B2A40]">Category</h3>
                 <ul className="space-y-1 text-sm text-[#2C3E5E]">
@@ -230,6 +232,7 @@ export default function Header() {
               </div>
             </div>
           </div>
+          </div>
         </li>
 
         {/* COLLECTIONS */}
@@ -243,7 +246,9 @@ export default function Header() {
           >
             Collections
           </button>
-          <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
+            <div className="absolute left-0 mt-2 hidden group-hover:block z-[1000]">
+            <div className="absolute -top-2 left-0 w-full h-2 bg-transparent"></div>
+            <div className="bg-white shadow-lg rounded-lg py-6 px-4 max-w-[95vw] w-[700px]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <ul className="space-y-1 text-sm text-[#2C3E5E]">
@@ -272,6 +277,7 @@ export default function Header() {
                 </a>
               </div>
             </div>
+          </div>
           </div>
         </li>
 
