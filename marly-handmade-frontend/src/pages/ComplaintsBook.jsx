@@ -7,7 +7,7 @@ function ComplaintsBook() {
   const { crearReclamacion, loading } = useReclamaciones();
   const [fecha, setFecha] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const maxChars = 500;
+  const maxChars = 250;
 
     useEffect(() => {
   const ahora = new Date();

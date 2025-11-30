@@ -30,38 +30,43 @@ const ProductEdit = () => {
 
   const API_URL = "http://localhost:8080/producto";
 
-  useEffect(
+  useEffect(() => {
+  const fetchProducto = async () => {
+    try {
+      const stored = localStorage.getItem("token");
+      const parsed = stored ? JSON.parse(stored) : null;
+      const tokenValue = parsed?.token || parsed;
 
-    () => {
-      const fetchProducto = async () => {
-        try {
-          const response = await fetch(`${API_URL}/${id}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${tokenValue}`,
-            },
-            body: JSON.stringify(payload),
-          });
+      const response = await fetch(`${API_URL}?id=${id}`, {
+        headers: {
+          "Authorization": `Bearer ${tokenValue}`,
+        },
+      });
 
-          if (!response.ok) {
-            console.error(await response.text());
-            throw new Error("Error al actualizar el producto");
-          }
+      if (!response.ok) throw new Error("Error al obtener el producto");
 
-          console.log("✅ Producto actualizado con éxito");
+      const data = await response.json();
+      setFormData({
+        name: data.nombre,
+        description: data.descripcion,
+        price: data.precio,
+        stock: data.stock,
+        category: data.categoria,
+        details: data.details,
+        care: data.care,
+        shippingInfo: data.shippingInfo,
+        fotoPrincipal: data.fotoPrincipal,
+        fotoSecundario: data.fotoSecundario,
+        fotoTerciario: data.fotoTerciario,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-          await listarProductos();
+  fetchProducto();
+}, [id]);
 
-          navigate("/admin/inventory");
-        } catch (err) {
-          console.error("❌ Error al actualizar el producto:", err);
-        }
-
-      };
-
-      fetchProducto();
-    }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -159,6 +164,7 @@ const ProductEdit = () => {
       }
 
       console.log("✅ Producto actualizado con éxito");
+      await listarProductos();
       navigate("/admin/inventory");
     } catch (err) {
       console.error("❌ Error al actualizar el producto:", err);

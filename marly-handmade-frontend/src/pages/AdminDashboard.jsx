@@ -15,11 +15,11 @@ export default function AdminDashboard() {
   const { productos } = useContext(ProductoContext);
   const { users, fetchUsers } = useContext(AdminContext);
 
-  const [stats, setStats] = useState({
+ /* const [stats, setStats] = useState({
     totalProducts: 0,
     pendingOrders: 0,
     totalUsers: 0,
-  });
+  });*/ //Comentarlo quita errores del devtools, desconozco su funcionalidad
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
@@ -50,10 +50,11 @@ useEffect(() => {
     }
   };
 
-  fetchStats();
+/*  fetchStats();
   listarPedidoPorestado(false);
   fetchUsers();
-}, [token]);
+}, [token]);*/
+},);
 
 
   const adminCards = [
