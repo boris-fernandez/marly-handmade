@@ -46,7 +46,7 @@ function FiltersBar({
           onChange={(e) => onSortFieldChange(e.target.value)}
           className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
         >
-          <option value="id">ID</option>
+          
           <option value="nombre">Name</option>
           <option value="precio">Price</option>
           <option value="stock">Stock</option>

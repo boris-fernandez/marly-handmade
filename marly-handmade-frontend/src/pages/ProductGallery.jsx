@@ -2,12 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/ProductGallery.css";
 import FiltersBar from "../components/FiltersBar";
+import DeleteProduct from "../components/DeleteProduct.jsx";
 
 const getProductsData = async () => {
   const response = await fetch("http://localhost:8080/producto/all");
   if (!response.ok) throw new Error("Error al obtener productos");
   return await response.json();
 };
+const handleDeleteFront = (id) => {
+  setProducts((prev) => prev.filter((p) => p.id !== id));
+  setFilteredProducts((prev) => prev.filter((p) => p.id !== id));
+};
+
 
 function ProductGallery() {
   const [products, setProducts] = useState([]);
@@ -18,15 +24,17 @@ function ProductGallery() {
   const [sortField, setSortField] = useState("id");
   const [sortDirection, setSortDirection] = useState("asc");
 
-  useEffect(() => {
-    getProductsData()
-      .then((data) => {
-        setProducts(data);
-        setFilteredProducts(data);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
+useEffect(() => {
+  getProductsData()
+    .then((data) => {
+      const activos = data.filter(p => p.stock > 0); 
+      setProducts(activos);
+      setFilteredProducts(activos);
+    })
+    .catch(console.error)
+    .finally(() => setLoading(false));
+}, []);
+
 
   useEffect(() => {
     let filtered = products;
@@ -69,9 +77,6 @@ function ProductGallery() {
       <main className="gallery-main">
         <div className="gallery-header">
           <h1 className="gallery-title">Product Gallery</h1>
-          <Link to="/admin/inventory">
-            <button className="gallery-button">Inventory</button>
-          </Link>
         </div>
 
         <FiltersBar
@@ -118,8 +123,12 @@ function ProductGallery() {
                 <div className="gallery-actions">
                   <Link to={`/admin/inventory/edit/${product.id}`} className="gallery-edit-button">
                     Editar
-                  </Link>
-                  <button onClick={() => alert(`Editar producto: ${product.nombre}`)} className="gallery-edit-button" > Eliminar </button>
+                  </Link>   
+                  <DeleteProduct
+                    id={product.id}
+                    name={product.nombre}
+                    onDelete={handleDeleteFront}
+                  />    
                 </div>
               </div>
             </div>
