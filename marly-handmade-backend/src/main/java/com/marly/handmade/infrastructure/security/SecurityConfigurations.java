@@ -37,6 +37,13 @@ public class SecurityConfigurations {
 
                 .authorizeHttpRequests(req -> req
 
+                        // 🔓 Actuator público
+                        .requestMatchers(
+                                "/actuator/health",
+                                "/actuator/info",
+                                "/actuator/prometheus"
+                        ).permitAll()
+
                         // 🔓 Auth público
                         .requestMatchers(
                                 "/auth/login",
