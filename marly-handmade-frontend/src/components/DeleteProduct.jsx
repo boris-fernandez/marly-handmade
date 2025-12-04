@@ -7,7 +7,7 @@ function DeleteProduct({ id, name, onDelete }) {
   const handleDelete = async () => {
     if (!window.confirm(`¿Eliminar "${name}"?`)) return;
 
-    const response = await fetch(`http://localhost:8080/producto/${id}`, {
+    const response = await fetch(`https://marlybackend.azurewebsites.net/producto/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token.token}` },
     });

@@ -12,7 +12,7 @@ const CompraExitosa = () => {
     const { clearCart } = useCart(); // Obtener la función para limpiar el carrito
 
     // URL del endpoint de tu backend para consultar el estado del pago
-    const API_URL_ESTADO = 'http://localhost:8080/api/pagos/estado';
+    const API_URL_ESTADO = 'https://marlybackend.azurewebsites.net/api/pagos/estado';
 
     useEffect(() => {
         verificarPago();

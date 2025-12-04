@@ -32,7 +32,7 @@ const ComplaintsBookAdmin = () => {
         const parsed = stored ? JSON.parse(stored) : null;
         const tokenValue = parsed?.token || parsed;
 
-        const response = await fetch("http://localhost:8080/reclamaciones", {
+        const response = await fetch("https://marlybackend.azurewebsites.net/reclamaciones", {
           headers: { Authorization: `Bearer ${tokenValue}` },
         });
 

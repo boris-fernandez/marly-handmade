@@ -12,8 +12,8 @@ const CheckoutComponent = React.forwardRef(({ carrito, totalCompra, datosCliente
 
     const CardPaymentComp = MP.CardPayment || (MP.default && MP.default.CardPayment) || null;
 
-    const PAYMENT_URL = 'http://localhost:8080/api/pagos/crear-preferencia';
-    const SUCCESS_URL = 'http://localhost:5173/compra-exitosa';
+    const PAYMENT_URL = 'https://marlybackend.azurewebsites.net/api/pagos/crear-preferencia';
+    const SUCCESS_URL = 'https://marly.azurewebsites.net/compra-exitosa';
 
     useEffect(() => {
         // Initialize MercadoPago once. For testing use your TEST public key (starts with "TEST-")
