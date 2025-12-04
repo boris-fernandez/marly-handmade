@@ -1,0 +1,47 @@
+.maker-section {
+  width: 100%;
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.maker-container {
+  max-width: 1100px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.maker-image-wrapper {
+  flex: 1;
+}
+
+.maker-image {
+  width: 90%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.maker-content {
+  flex: 1;
+}
+
+.maker-title {
+  font-size: 40px;
+  color: #040f2f;
+  margin-bottom: 20px;
+}
+
+.maker-text {
+  font-size: 20px;
+  margin-bottom: 16px;
+  line-height: 1.6;
+  color: #1b2a40;
+}
+
+@media (max-width: 768px) {
+  .maker-container {
+    flex-direction: column;
+    text-align: center;
+  }
+}

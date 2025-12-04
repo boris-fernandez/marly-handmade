@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Package, ShoppingBag, Users, BarChart, FileSpreadsheet } from "lucide-react";
+import { Package, ShoppingBag, Users, FileSpreadsheet, Book } from "lucide-react";
 import { useEffect, useState, useContext } from "react";
 import { API_BASE_URL } from "../contexts/DashboardContext";
 
@@ -15,11 +15,11 @@ export default function AdminDashboard() {
   const { productos } = useContext(ProductoContext);
   const { users, fetchUsers } = useContext(AdminContext);
 
-  const [stats, setStats] = useState({
+ /* const [stats, setStats] = useState({
     totalProducts: 0,
     pendingOrders: 0,
     totalUsers: 0,
-  });
+  });*/ //Comentarlo quita errores del devtools, desconozco su funcionalidad
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
@@ -50,10 +50,11 @@ useEffect(() => {
     }
   };
 
-  fetchStats();
+/*  fetchStats();
   listarPedidoPorestado(false);
   fetchUsers();
-}, [token]);
+}, [token]);*/
+},);
 
 
   const adminCards = [
@@ -79,10 +80,10 @@ useEffect(() => {
       color: "bg-purple-50 text-purple-600",
     },
     {
-      title: "Analytics",
-      description: "View sales and statistics",
-      icon: BarChart,
-      link: "/admin/analytics",
+      title: "Complaints Book",
+      description: "View complaints",
+      icon: Book,
+      link: "/admin/complaints",
       color: "bg-orange-50 text-orange-600",
     },
   ];

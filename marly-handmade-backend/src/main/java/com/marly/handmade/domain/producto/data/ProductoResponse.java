@@ -5,6 +5,7 @@ import com.marly.handmade.domain.producto.modal.Producto;
 public record ProductoResponse(
         Long id,
         String nombre,
+        String descripcion,
         Double precio,
         Integer stock,
         String fotoPrincipal,
@@ -14,25 +15,23 @@ public record ProductoResponse(
         String details,
         String care,
         String shippingInfo,
-        String descripcion,
-        Boolean status) {
-
-    public ProductoResponse(Producto producto) {
-    this(
-        producto.getIdProducto(),     // Long id
-        producto.getNombre(),         // String nombre
-        producto.getPrecio(),         // Double precio
-        producto.getStock(),          // Integer stock
-        producto.getFotoPrincipal(),  // String fotoPrincipal
-        producto.getFotoSecundario(), // String fotoSecundario
-        producto.getFotoTerciario(),  // String fotoTerciario
-        producto.getCategoria(),      // String categoria
-        producto.getDetails(),        // String details
-        producto.getCare(),           // String care
-        producto.getShippingInfo(),
-        producto.getDescripcion(),
-            producto.getStatus()
-    );
-}
-
+        Boolean status
+) {
+    public ProductoResponse(Producto p) {
+        this(
+            p.getIdProducto(),
+            p.getNombre(),
+            p.getDescripcion(),
+            p.getPrecio(),
+            p.getStock(),
+            p.getFotoPrincipal(),
+            p.getFotoSecundario(),
+            p.getFotoTerciario(),
+            p.getCategoria(),
+            p.getDetails(),
+            p.getCare(),
+            p.getShippingInfo(),
+            p.getStatus()
+        );
+    }
 }

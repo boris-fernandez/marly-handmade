@@ -37,6 +37,13 @@ public class SecurityConfigurations {
 
                 .authorizeHttpRequests(req -> req
 
+                        // 🔓 Actuator público
+                        .requestMatchers(
+                                "/actuator/health",
+                                "/actuator/info",
+                                "/actuator/prometheus"
+                        ).permitAll()
+
                         // 🔓 Auth público
                         .requestMatchers(
                                 "/auth/login",
@@ -50,7 +57,8 @@ public class SecurityConfigurations {
                                 "/producto/all",
                                 "/promociones/**",
                                 "/usuario/all",
-                                "/clientes/all"
+                                "/clientes/all",
+                                "/clientes/me"
                         ).permitAll()
 
                         // 🔔 Mercado Pago WEBHOOK (debe ser público)
@@ -62,7 +70,7 @@ public class SecurityConfigurations {
                         // 🔐 Cualquier otra ruta requiere login
                         .anyRequest().authenticated()
                 )
-
+          
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

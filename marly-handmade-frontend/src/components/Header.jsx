@@ -14,7 +14,7 @@ function obtenerSubDesdeToken(token) {
   } catch {
     return null;
   }
-} 
+}
 
 function verificarAdmin(token) {
   try {
@@ -29,13 +29,12 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
-  const [open, setOpen] = useState(false); // Dropdown del usuario
+  const [open, setOpen] = useState(false);
 
   const menuRef = useRef(null);
   const { openCart } = useCart();
   const { token, logout } = useContext(AuthContext);
 
-  // 🔹 Nombre de usuario (Memoizado)
   const userName = useMemo(() => {
     if (!token?.token) return null;
     const name = obtenerSubDesdeToken(token.token);
@@ -44,13 +43,13 @@ export default function Header() {
       : null;
   }, [token]);
 
-  // Verificar si es admin (Memoizado)
+
   const isAdmin = useMemo(() => {
     if (!token?.token) return false;
     return verificarAdmin(token.token);
   }, [token]);
 
-  // Cerrar dropdown del usuario al hacer click fuera
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -150,7 +149,7 @@ export default function Header() {
             )}
 
             <Link
-              to="/perfil"
+              to="/cuenta/perfile"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
             >
               Mi Perfil
@@ -190,8 +189,10 @@ export default function Header() {
           >
             Shop
           </a>
-          <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="absolute left-0 mt-2 hidden group-hover:block z-[1000]">
+            <div className="absolute -top-2 left-0 w-full h-2 bg-transparent"></div>
+            <div className="bg-white shadow-lg rounded-lg py-6 px-4 max-w-[95vw] w-[700px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               <div>
                 <h3 className="font-semibold mb-2 text-[#1B2A40]">Category</h3>
                 <ul className="space-y-1 text-sm text-[#2C3E5E]">
@@ -231,17 +232,23 @@ export default function Header() {
               </div>
             </div>
           </div>
+          </div>
         </li>
 
         {/* COLLECTIONS */}
         <li className="relative group cursor-pointer">
-          <a
-            href="/collections"
-            className="pb-2 border-b-2 border-transparent hover:border-[#040F2E] transition-colors duration-300"
+          <button
+            type="button"
+            onClick={(e) => e.preventDefault()}
+            className="pb-2 border-b-2 border-transparent hover:border-[#040F2E] 
+             transition-colors duration-300 inline-block font-inherit 
+             text-inherit cursor-pointer bg-transparent relative top-[5px]"
           >
             Collections
-          </a>
-          <div className="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg rounded-lg py-6 px-4 z-[1000] max-w-[95vw] w-[700px]">
+          </button>
+            <div className="absolute left-0 mt-2 hidden group-hover:block z-[1000]">
+            <div className="absolute -top-2 left-0 w-full h-2 bg-transparent"></div>
+            <div className="bg-white shadow-lg rounded-lg py-6 px-4 max-w-[95vw] w-[700px]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <ul className="space-y-1 text-sm text-[#2C3E5E]">
@@ -270,6 +277,7 @@ export default function Header() {
                 </a>
               </div>
             </div>
+          </div>
           </div>
         </li>
 
