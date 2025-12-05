@@ -11,7 +11,7 @@ export const ProductoProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [product, setProduct] = useState();
 
-  const API_URL = "http://localhost:8080/producto";
+  const API_URL = "https://marlybackend.azurewebsites.net/producto";
 
   const [formData, setFormData] = useState({
     productName: "",
@@ -152,7 +152,7 @@ export const ProductoProvider = ({ children }) => {
       console.log("📤 Payload a enviar:", payload);
       console.log("📦 Token a enviar:", token.token);
 
-      const response = await fetch("http://localhost:8080/producto", {
+      const response = await fetch("https://marlybackend.azurewebsites.net/producto", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

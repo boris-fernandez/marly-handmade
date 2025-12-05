@@ -12,7 +12,7 @@ export default function ProfileAddresses() {
       if (!user) return;
 
       try {
-        const response = await fetch("http://localhost:8080/clientes/me", {
+        const response = await fetch("https://marlybackend.azurewebsites.net/clientes/me", {
           headers: {
             Authorization: `Bearer ${token.token}`,
           },
@@ -37,7 +37,7 @@ export default function ProfileAddresses() {
 
   // const eliminarDireccion = async (id) => {
   //   try {
-  //     const res = await fetch(`http://localhost:8080/clientes/direcciones/${id}`, {
+  //     const res = await fetch(`https://marlybackend.azurewebsites.net/clientes/direcciones/${id}`, {
   //       method: "DELETE",
   //       headers: {
   //         "Authorization": `Bearer ${token.token}`

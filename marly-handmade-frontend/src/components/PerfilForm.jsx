@@ -11,7 +11,7 @@ export default function PerfilForm() {
       if (!user) return;
 
       try {
-        const response = await fetch("http://localhost:8080/clientes/me", {
+        const response = await fetch("https://marlybackend.azurewebsites.net/clientes/me", {
           headers: {
             Authorization: `Bearer ${token.token}`,
           },

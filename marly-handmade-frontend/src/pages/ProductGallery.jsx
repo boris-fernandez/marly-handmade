@@ -5,7 +5,7 @@ import FiltersBar from "../components/FiltersBar";
 import DeleteProduct from "../components/DeleteProduct.jsx";
 
 const getProductsData = async () => {
-  const response = await fetch("http://localhost:8080/producto/all");
+  const response = await fetch("https://marlybackend.azurewebsites.net/producto/all");
   if (!response.ok) throw new Error("Error al obtener productos");
   return await response.json();
 };
